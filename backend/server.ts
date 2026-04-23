@@ -1,4 +1,4 @@
-import app from './src/app';
+import app from './src/app.ts';
 import pool from './src/config/database';
 import dotenv from 'dotenv';
 
