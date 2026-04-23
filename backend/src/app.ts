@@ -1,64 +1,67 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 
-import authRoutes from './routes/auth';
-import transactionRoutes from './routes/transactions';
-import categoryRoutes from './routes/categories';
-import subscriptionRoutes from './routes/subscriptions';
-import analyticsRoutes from './routes/analytics';
-import reportRoutes from './routes/reports';
-
 dotenv.config();
 
-const app = express();
+const app: Application = express();
 
-// Security & Middleware
+
 app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health Check
-app.get('/health', (_req, res) => {
+
+app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     success: true,
-    message: '✅ SpendGuard API is running',
+    message: 'SpendGuard API is running',
     timestamp: new Date().toISOString(),
-    version: '1.0.0',
+    environment: process.env.NODE_ENV,
   });
 });
 
-app.get('/api/health', (_req, res) => {
-  res.json({
-    success: true,
-    message: '✅ SpendGuard API is healthy',
-    services: { api: 'up', database: 'connected' },
-    timestamp: new Date().toISOString(),
+
+app.get('/api/health/db', async (req: Request, res: Response) => {
+  try {
+    const db = require('./config/database');
+    const result = await db.query('SELECT NOW()');
+    
+    res.json({
+      success: true,
+      message: 'Database connected',
+      timestamp: result.rows[0].now,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({
+      success: false,
+      message: 'Database connection failed',
+      error: message,
+    });
+  }
+});
+
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found',
   });
 });
 
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/subscriptions', subscriptionRoutes);
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/reports', reportRoutes);
-
-// 404 Handler
-app.use((_req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
-});
-
-// Global Error Handler
-app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('Unhandled error:', err);
-  res.status(500).json({ success: false, message: 'Internal server error' });
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error('Error:', err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal server error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+  });
 });
 
 export default app;
