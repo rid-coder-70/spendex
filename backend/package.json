@@ -1,7 +1,7 @@
 {
   "name": "speedx-backend",
   "version": "1.0.0",
-  "description": "SpeedX Backend Server - Handles API requests, user authentication, and data management for the SpeedX application.",
+  "description": "SpendeX Backend Server - Handles API requests, user authentication, and data management for the SpendeX application.",
   "main": "server.ts",
   "directories": {
     "test": "tests"
