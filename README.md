@@ -1,19 +1,18 @@
 <div align="center">
 
-<img src="docs/diagrams/System_Design.png" alt="SpendGuard System Design" width="100%"/>
-
 # 🛡️ SpendGuard
 ### Personal Finance Management System
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)](https://nextjs.org)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=flat-square&logo=postgresql)](https://postgresql.org)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-336791?style=flat-square&logo=postgresql)](https://postgresql.org)
+[![Express](https://img.shields.io/badge/Express-5.x-000000?style=flat-square&logo=express)](https://expressjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 **Track income, expenses, subscriptions, and gain smart financial insights — all in one place.**
 
-[🚀 Get Started](#-getting-started) · [📐 Architecture](#-system-architecture) · [🗄️ Database](#️-database-design) · [🔌 API](#-api-reference) · [✅ Progress](#-week-1-progress)
+[🚀 Get Started](#-getting-started) · [📐 Architecture](#-system-architecture) · [🗄️ Database](#️-database-design) · [🔌 API](#-api-reference) · [✅ Progress](#-current-progress)
 
 </div>
 
@@ -38,18 +37,11 @@ The system follows a classic **3-layer architecture**:
 
 | Layer | Technology | Port |
 |---|---|---|
-| Client (Frontend) | Next.js 15 + TypeScript + Recharts | 3000 |
-| Application (Backend) | Node.js + Express + TypeScript | 5000 |
-| Data (Database) | PostgreSQL 15 | 5432 |
+| Client (Frontend) | Next.js 16 + TypeScript + Recharts + Tailwind CSS | 3000 |
+| Application (Backend) | Node.js + Express 5 + TypeScript | 5000 |
+| Data (Database) | PostgreSQL 17 | 5433 |
 
 Background jobs (Node-Cron) handle: Monthly Report Generation, Subscription Detection, Email Scheduling.
-
-<details>
-<summary>📸 View System Design Diagram</summary>
-
-![System Design](docs/diagrams/System_Design.png)
-
-</details>
 
 ---
 
@@ -66,19 +58,19 @@ USERS ──────────────── TRANSACTIONS ─── CA
 
 | Table | Purpose |
 |---|---|
-| `users` | Auth, profile, currency/timezone preferences |
-| `transactions` | Income & expense records with categories |
-| `categories` | System + custom labels with icon/color/keywords |
-| `subscriptions` | Auto-detected recurring payments |
-| `monthly_reports` | Pre-computed monthly financial summaries |
-| `upload_history` | CSV import audit log |
+| `users` | Auth, profile, currency (BDT) & timezone (Asia/Dhaka) preferences |
+| `transactions` | Income & expense records with categories, merchant & payment method |
+| `categories` | System + custom labels with icon, color & keyword arrays |
+| `subscriptions` | Auto-detected recurring payments with confidence scoring |
+| `monthly_reports` | Pre-computed monthly financial summaries (income, expenses, savings) |
+| `upload_history` | CSV import audit log with row-level pass/fail tracking |
 
-<details>
-<summary>📸 View Database ER Diagram</summary>
-
-![Database Design](docs/diagrams/Database_Design.png)
-
-</details>
+### Key Schema Details
+- UUID extension enabled (`uuid-ossp`)
+- Auto-updating `updated_at` via PostgreSQL triggers on `users` and `transactions`
+- Cascading deletes: removing a user removes all their data
+- All monetary values stored as `DECIMAL(12, 2)`
+- Default currency: **BDT**, default timezone: **Asia/Dhaka**
 
 ---
 
@@ -89,12 +81,11 @@ All endpoints are prefixed with `/api`. Protected routes require:
 Authorization: Bearer <JWT_TOKEN>
 ```
 
-<details>
-<summary>📸 View Full API Flow Diagram</summary>
-
-![API Design](docs/diagrams/API_Design.png)
-
-</details>
+### 🏥 Health Checks
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/health` | Server status |
+| `GET` | `/api/health/db` | Database connectivity check |
 
 ### 🔐 Authentication
 | Method | Endpoint | Access | Description |
@@ -154,7 +145,7 @@ User selects CSV → POST /api/transactions/upload
 
 ### Prerequisites
 - **Node.js** v18+
-- **PostgreSQL** v15+
+- **PostgreSQL** v17 (running on port **5433**)
 - **npm** v9+
 
 ### 1. Clone the Repository
@@ -163,41 +154,32 @@ git clone https://github.com/ridoy-pc/spendex.git
 cd spendex
 ```
 
-### 2. Backend Setup
+### 2. Database Setup
+```bash
+# Create the database (using sudo -u postgres or PGPASSWORD)
+PGPASSWORD=your_password psql -h localhost -p 5433 -U postgres -c "CREATE DATABASE spendguard;"
+
+# Run schema (creates all 6 tables + triggers)
+PGPASSWORD=your_password psql -h localhost -p 5433 -U postgres -d spendguard -f database/schema.sql
+```
+
+### 3. Backend Setup
 ```bash
 cd backend
 npm install
 cp .env.example .env
-# Edit .env with your DB credentials and JWT secret
-```
-
-### 3. Database Setup
-```bash
-# Create the database
-psql -U postgres -c "CREATE DATABASE spendguard;"
-
-# Run schema (creates all tables + seeds categories)
-psql -U postgres -d spendguard -f src/database/schema.sql
-```
-
-### 4. Start the Backend
-```bash
+# Edit .env — set DB_PASSWORD, JWT_SECRET, and EMAIL credentials
 npm run dev
-# Server running on http://localhost:5000
-# Health check: http://localhost:5000/health
+# ✅ Server running on http://localhost:5000
 ```
 
-### 5. Frontend Setup
+### 4. Frontend Setup
 ```bash
 cd ../frontend
 npm install
-# .env.local already configured to point to localhost:5000
-```
-
-### 6. Start the Frontend
-```bash
+# .env.local already configured → NEXT_PUBLIC_API_URL=http://localhost:5000/api
 npm run dev
-# App running on http://localhost:3000
+# ✅ App running on http://localhost:3000
 ```
 
 ---
@@ -207,46 +189,42 @@ npm run dev
 ```
 spendex/
 ├── backend/
-│   ├── server.ts                  # Entry point
-│   └── src/
-│       ├── app.ts                 # Express app config
-│       ├── config/
-│       │   └── database.ts        # PostgreSQL pool
-│       ├── middleware/
-│       │   └── auth.ts            # JWT middleware
-│       ├── routes/
-│       │   ├── auth.ts
-│       │   ├── transactions.ts
-│       │   ├── categories.ts
-│       │   ├── subscriptions.ts
-│       │   ├── analytics.ts
-│       │   └── reports.ts
-│       └── database/
-│           └── schema.sql         # Full DB schema + seeds
+│   ├── src/
+│   │   ├── server.ts              # Entry point + graceful shutdown
+│   │   ├── app.ts                 # Express app config + middleware
+│   │   ├── config/
+│   │   │   └── database.ts        # PostgreSQL pool + query helper
+│   │   ├── controllers/           # Route handler logic (in progress)
+│   │   ├── middleware/            # JWT auth middleware (in progress)
+│   │   ├── models/                # Data models (in progress)
+│   │   ├── routes/                # API route definitions (in progress)
+│   │   ├── services/              # Business logic (in progress)
+│   │   ├── jobs/                  # Node-Cron background jobs (in progress)
+│   │   ├── utils/                 # Shared utility functions
+│   │   └── types/
+│   │       └── express.d.ts       # Express Request type augmentation
+│   ├── tests/                     # Test suite (in progress)
+│   ├── .env.example               # Environment variable template
+│   ├── package.json
+│   └── tsconfig.json
 ├── frontend/
 │   └── src/
 │       ├── app/
-│       │   ├── dashboard/page.tsx
-│       │   ├── transactions/page.tsx
-│       │   ├── categories/page.tsx
-│       │   ├── subscriptions/page.tsx
-│       │   ├── analytics/page.tsx
-│       │   ├── reports/page.tsx
-│       │   ├── login/page.tsx
-│       │   └── register/page.tsx
-│       ├── components/
-│       │   ├── Sidebar.tsx
-│       │   └── AppShell.tsx
-│       ├── context/
-│       │   └── AuthContext.tsx
-│       └── lib/
-│           ├── api.ts             # Axios instance
-│           └── utils.ts           # Helpers
-└── docs/
-    └── diagrams/
-        ├── System_Design.png
-        ├── Database_Design.png
-        └── API_Design.png
+│       │   ├── layout.tsx         # Root layout
+│       │   ├── page.tsx           # Home page
+│       │   └── globals.css        # Global styles + design tokens
+│       ├── components/            # Reusable UI components (in progress)
+│       ├── contexts/              # React context providers (in progress)
+│       ├── hooks/                 # Custom React hooks (in progress)
+│       ├── lib/                   # Axios instance + utilities (in progress)
+│       ├── styles/                # Additional stylesheets
+│       └── types/                 # TypeScript type definitions
+├── database/
+│   └── schema.sql                 # Full DB schema (6 tables + triggers)
+├── docs/
+│   └── diagrams/                  # Architecture & DB diagrams
+├── package.json
+└── README.md
 ```
 
 ---
@@ -259,18 +237,22 @@ PORT=5000
 NODE_ENV=development
 
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=5433
 DB_NAME=spendguard
 DB_USER=postgres
 DB_PASSWORD=your_password
 
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
 JWT_EXPIRE=7d
 
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
+EMAIL_SECURE=false
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASSWORD=your_app_password
+
+MAX_FILE_SIZE=5242880
+ALLOWED_FILE_TYPES=text/csv,application/vnd.ms-excel
 
 FRONTEND_URL=http://localhost:3000
 ```
@@ -285,61 +267,74 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ## 🛠️ Tech Stack
 
 ### Frontend
-| Tech | Purpose |
-|---|---|
-| Next.js 15 (App Router) | React framework + routing |
-| TypeScript | Type safety |
-| Recharts | Analytics charts (area, bar, pie, line) |
-| Axios | HTTP client with JWT interceptors |
-| Lucide React | Icon library |
+| Tech | Version | Purpose |
+|---|---|---|
+| Next.js | 16.2.4 | React framework + App Router |
+| React | 19.2.4 | UI library |
+| TypeScript | 5.x | Type safety |
+| Tailwind CSS | 4.x | Utility-first styling |
+| Recharts | 3.x | Analytics charts (area, bar, pie, line) |
+| Axios | 1.x | HTTP client with JWT interceptors |
+| React Hook Form | 7.x | Form state management |
+| Zod | 4.x | Schema validation |
+| Zustand | 5.x | Global state management |
+| Lucide React | 1.x | Icon library |
+| date-fns | 4.x | Date formatting utilities |
+| clsx | 2.x | Conditional class names |
 
 ### Backend
-| Tech | Purpose |
-|---|---|
-| Node.js + Express | HTTP server & REST API |
-| TypeScript | Type safety |
-| PostgreSQL + `pg` | Primary database |
-| JWT (`jsonwebtoken`) | Authentication tokens |
-| bcryptjs | Password hashing |
-| Multer | CSV file upload handling |
-| csv-parser | Parse CSV rows |
-| Nodemailer | Email notifications |
-| Node-Cron | Background jobs |
-| Helmet + CORS | Security middleware |
+| Tech | Version | Purpose |
+|---|---|---|
+| Node.js + Express | 5.x | HTTP server & REST API |
+| TypeScript | 6.x | Type safety |
+| PostgreSQL + `pg` | 17 / 8.x | Primary database |
+| JWT (`jsonwebtoken`) | 9.x | Authentication tokens |
+| bcryptjs | 3.x | Password hashing |
+| Multer | 2.x | CSV file upload handling |
+| csv-parser + PapaParse | 3.x / 5.x | Parse CSV rows |
+| Nodemailer | 8.x | Email notifications |
+| Node-Cron | 4.x | Background scheduled jobs |
+| express-validator | 7.x | Request validation |
+| Helmet + CORS | 8.x / 2.x | Security middleware |
+| nodemon + ts-node | Dev | Hot reload development server |
 
 ---
 
-## ✅ Week 1 Progress
+## ✅ Current Progress
 
+### Foundation (Complete)
 | Task | Status |
 |---|---|
 | GitHub repository setup | ✅ Done |
 | Project structure created | ✅ Done |
-| PostgreSQL installed & configured | ✅ Done |
-| All database tables created (6 tables) | ✅ Done |
-| Categories seeded (12 system categories) | ✅ Done |
-| Express server running with health checks | ✅ Done |
-| Full backend routes (auth, transactions, categories, subscriptions, analytics, reports) | ✅ Done |
-| JWT authentication middleware | ✅ Done |
-| CSV upload with auto-categorisation | ✅ Done |
-| Next.js frontend scaffold | ✅ Done |
-| Dark-theme design system (globals.css) | ✅ Done |
-| Auth pages (Login + Register) | ✅ Done |
-| Dashboard (stats + charts + recent transactions) | ✅ Done |
-| Transactions CRUD + CSV import modal | ✅ Done |
-| Categories management + emoji/color picker | ✅ Done |
-| Subscriptions auto-detect page | ✅ Done |
-| Analytics page (line + bar + pie charts) | ✅ Done |
-| Monthly reports + email | ✅ Done |
-| System Design, DB ER & API Flow diagrams | ✅ Done |
-| README.md completed | ✅ Done |
+| PostgreSQL 17 installed & configured (port 5433) | ✅ Done |
+| All 6 database tables created | ✅ Done |
+| Auto-update triggers on `users` & `transactions` | ✅ Done |
+| Express server with health check endpoints (`/api/health`, `/api/health/db`) | ✅ Done |
+| PostgreSQL connection pool with named `query` helper | ✅ Done |
+| Graceful shutdown handling (SIGTERM / SIGINT) | ✅ Done |
+| Express type augmentation for `req.user` | ✅ Done |
+| Next.js 16 frontend scaffold | ✅ Done |
+| Global CSS design system | ✅ Done |
+| Environment configuration (`.env` / `.env.local`) | ✅ Done |
 
----
+### In Progress
+| Task | Status |
+|---|---|
+| JWT authentication middleware | 🔄 In Progress |
+| Auth routes (register, login, me) | 🔄 In Progress |
+| Transaction CRUD routes | 🔄 In Progress |
+| Category management routes | 🔄 In Progress |
+| Subscription detection routes | 🔄 In Progress |
+| Analytics endpoints | 🔄 In Progress |
+| CSV upload + auto-categorisation | 🔄 In Progress |
+| Frontend components (Sidebar, AppShell) | 🔄 In Progress |
+| Auth pages (Login + Register) | 🔄 In Progress |
+| Dashboard with charts | 🔄 In Progress |
 
-## 📅 Upcoming (Week 2)
-
-- [ ] Nodemailer email integration (monthly reports scheduler)
-- [ ] Node-Cron background jobs
+### Upcoming
+- [ ] Nodemailer email integration (monthly reports)
+- [ ] Node-Cron background jobs (subscription detection, report generation)
 - [ ] Budget limits & alerts
 - [ ] Unit & integration tests
 - [ ] Docker Compose setup
@@ -349,7 +344,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 
 ## 👤 Author
 
-**Ridoy Baidya**  
+**Ridoy Baidya**
 Personal Finance Management System — SpendGuard
 
 ---

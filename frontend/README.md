@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🖥️ SpendGuard — Frontend
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.4-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=flat-square&logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 
-First, run the development server:
+The **Next.js 16** frontend for SpendGuard — a personal finance dashboard with analytics charts, transaction management, and CSV import capabilities.
 
+---
+
+## 📋 Prerequisites
+
+- **Node.js** v18+
+- **npm** v9+
+- SpendGuard backend running on `http://localhost:5000`
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure Environment
+The `.env.local` file is already set up to point to the local backend:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+If your backend runs on a different port, update this value.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Run the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Build for Production
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx         # Root layout (metadata, font, global providers)
+│   │   ├── page.tsx           # Home / landing page
+│   │   └── globals.css        # Global styles & design tokens
+│   ├── components/            # Reusable UI components (in progress)
+│   ├── contexts/              # React context providers (in progress)
+│   │   └── AuthContext.tsx    # JWT auth state (in progress)
+│   ├── hooks/                 # Custom React hooks (in progress)
+│   ├── lib/                   # Shared utilities (in progress)
+│   │   ├── api.ts             # Axios instance with JWT interceptors
+│   │   └── utils.ts           # Helper functions
+│   ├── styles/                # Additional stylesheets
+│   └── types/                 # TypeScript type definitions
+├── public/                    # Static assets
+├── .env.local                 # Environment variables (not committed)
+├── next.config.ts             # Next.js configuration
+├── tailwind.config            # Tailwind CSS configuration
+├── tsconfig.json              # TypeScript configuration
+└── package.json
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛠️ Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Package | Version | Purpose |
+|---|---|---|
+| `next` | 16.2.4 | React framework + App Router + SSR |
+| `react` | 19.2.4 | UI component library |
+| `typescript` | 5.x | Static type checking |
+| `tailwindcss` | 4.x | Utility-first CSS framework |
+| `axios` | 1.x | HTTP client with JWT interceptors |
+| `recharts` | 3.x | Charts — area, bar, pie, line |
+| `react-hook-form` | 7.x | Performant form state management |
+| `zod` | 4.x | Runtime schema validation |
+| `zustand` | 5.x | Lightweight global state |
+| `lucide-react` | 1.x | Clean SVG icon library |
+| `date-fns` | 4.x | Date parsing & formatting |
+| `clsx` | 2.x | Conditional className utility |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🧩 Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server on port 3000 |
+| `npm run build` | Build optimised production bundle |
+| `npm start` | Serve production build |
+| `npm run lint` | Run ESLint |
+
+---
+
+## 🔗 API Connection
+
+All API calls go through the `NEXT_PUBLIC_API_URL` environment variable. The Axios instance (in `src/lib/api.ts`) automatically attaches the JWT from local storage to every protected request.
+
+Backend health checks:
+- `GET /api/health` — server status
+- `GET /api/health/db` — database connectivity
+
+---
+
+## 🗺️ Planned Pages
+
+| Route | Page | Status |
+|---|---|---|
+| `/` | Home / Landing | ✅ Scaffold |
+| `/login` | Login | 🔄 In Progress |
+| `/register` | Register | 🔄 In Progress |
+| `/dashboard` | Overview + Charts | 🔄 In Progress |
+| `/transactions` | CRUD + CSV Import | 🔄 In Progress |
+| `/categories` | Category Management | 🔄 In Progress |
+| `/subscriptions` | Subscription Detection | 🔄 In Progress |
+| `/analytics` | Spending Trends | 🔄 In Progress |
+| `/reports` | Monthly Reports + Email | 🔄 In Progress |
+
+---
+
+## 🔙 Related
+
+- [Backend README](../backend/README.md)
+- [Main Project README](../README.md)
+- [Database Schema](../database/schema.sql)
