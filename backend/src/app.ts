@@ -3,15 +3,15 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { query } from './config/database';
+import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 
 const app: Application = express();
 
-// Security middleware
+
 app.use(helmet());
 
-// CORS configuration
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -19,20 +19,14 @@ app.use(
   })
 );
 
-// Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logger middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`${req.method} ${req.path}`, {
-    body: req.body,
-    query: req.query,
-  });
+  console.log(`${req.method} ${req.path}`);
   next();
 });
 
-// Health check endpoints
 app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     success: true,
@@ -59,7 +53,8 @@ app.get('/api/health/db', async (req: Request, res: Response) => {
   }
 });
 
-// 404 handler
+app.use('/api/auth', authRoutes);
+
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     success: false,
@@ -67,7 +62,7 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-// Global error handler
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('Error:', err);
   res.status(500).json({
