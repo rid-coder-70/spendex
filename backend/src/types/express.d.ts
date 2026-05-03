@@ -1,9 +1,9 @@
-import { User } from './index';
+export {};
 
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      user?: import('./index').User;
     }
   }
 }
