@@ -318,11 +318,15 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 | Global CSS design system | ✅ Done |
 | Environment configuration (`.env` / `.env.local`) | ✅ Done |
 
+### Core Auth (Complete)
+| Task | Status |
+|---|---|
+| JWT authentication middleware | ✅ Done |
+| Auth routes (register, login, me) | ✅ Done |
+
 ### In Progress
 | Task | Status |
 |---|---|
-| JWT authentication middleware | 🔄 In Progress |
-| Auth routes (register, login, me) | 🔄 In Progress |
 | Transaction CRUD routes | 🔄 In Progress |
 | Category management routes | 🔄 In Progress |
 | Subscription detection routes | 🔄 In Progress |
@@ -332,7 +336,21 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 | Auth pages (Login + Register) | 🔄 In Progress |
 | Dashboard with charts | 🔄 In Progress |
 
-### Upcoming
+### 📈 Week 2 Summary - Authentication System
+
+#### ✅ Completed Tasks
+- **User Model:** CRUD operations for users, email existence check, optimized DB queries
+- **Utilities:** Password hashing (bcrypt), strength validation, JWT generation/verification, email/phone validation, string sanitization
+- **Middleware:** Auth middleware, Validation middleware (register/login), error handling
+- **Controllers & Routes:** AuthController (register, login, getMe), Auth routes configured & integrated
+- **Testing:** Manual API testing completed via Postman collection, endpoints verified
+
+#### 🔌 API Endpoints
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user (protected)
+
+### Upcoming (Week 3)
 - [ ] Nodemailer email integration (monthly reports)
 - [ ] Node-Cron background jobs (subscription detection, report generation)
 - [ ] Budget limits & alerts

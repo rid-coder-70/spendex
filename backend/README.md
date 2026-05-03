@@ -153,7 +153,8 @@ All routes are prefixed with `/api`. Protected routes require `Authorization: Be
 | `GET` | `/api/health` | Public | Server alive check |
 | `GET` | `/api/health/db` | Public | PostgreSQL connectivity |
 
-### 🔐 Auth *(in progress)*
+### 🔐 Auth
+
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Public | Register new user |
@@ -197,6 +198,23 @@ All routes are prefixed with `/api`. Protected routes require `Authorization: Be
 |---|---|---|
 | `GET` | `/api/reports/monthly` | Full monthly report |
 | `POST` | `/api/reports/email` | Email report |
+
+---
+
+## 📈 Week 2 Summary - Authentication System
+
+### ✅ Completed Tasks
+- **User Model:** CRUD operations for users, email existence check, optimized DB queries
+- **Utilities:** Password hashing (bcrypt), strength validation, JWT generation/verification, email/phone validation, string sanitization
+- **Middleware:** Auth middleware, Validation middleware (register/login), error handling
+- **Controllers & Routes:** AuthController (register, login, getMe), Auth routes configured & integrated
+- **Testing:** Manual API testing completed via Postman collection, endpoints verified
+
+### 🔌 Next Week (Week 3)
+- Transaction model
+- Transaction CRUD endpoints
+- Category endpoints
+- Pagination and filtering
 
 ---
 
