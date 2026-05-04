@@ -75,3 +75,72 @@ export const validateLogin = (
 
   next();
 };
+
+export const validateTransaction = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { amount, type, transaction_date } = req.body;
+  const errors: string[] = [];
+
+  if (!amount || isNaN(amount) || amount <= 0) {
+    errors.push('Amount must be a positive number');
+  }
+
+  if (!type || !['expense', 'income'].includes(type)) {
+    errors.push('Type must be either "expense" or "income"');
+  }
+
+  if (!transaction_date) {
+    errors.push('Transaction date is required');
+  } else {
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(transaction_date)) {
+      errors.push('Transaction date must be in YYYY-MM-DD format');
+    }
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        message: 'Validation failed',
+        code: 'VALIDATION_ERROR',
+        details: errors,
+      },
+    });
+  }
+
+  next();
+};
+
+export const validateCategory = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { name, type } = req.body;
+  const errors: string[] = [];
+
+  if (!name || name.trim().length < 2) {
+    errors.push('Category name must be at least 2 characters');
+  }
+
+  if (!type || !['expense', 'income'].includes(type)) {
+    errors.push('Type must be either "expense" or "income"');
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      success: false,
+      error: {
+        message: 'Validation failed',
+        code: 'VALIDATION_ERROR',
+        details: errors,
+      },
+    });
+  }
+
+  next();
+};
