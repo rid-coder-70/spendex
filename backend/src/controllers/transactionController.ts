@@ -111,6 +111,20 @@ export class TransactionController {
       } = req.body;
 
       let finalCategoryId = category_id;
+
+      if (finalCategoryId) {
+        const category = await CategoryModel.findById(Number(finalCategoryId));
+        if (!category) {
+          return res.status(400).json({
+            success: false,
+            error: {
+              message: 'Invalid category ID',
+              code: 'INVALID_CATEGORY',
+            },
+          });
+        }
+      }
+
       if (!finalCategoryId && (description || merchant)) {
         finalCategoryId = await CategoryModel.autoCategorize(
           description || '',
@@ -161,6 +175,19 @@ export class TransactionController {
 
       if (updates.amount) {
         updates.amount = parseFloat(updates.amount);
+      }
+
+      if (updates.category_id) {
+        const category = await CategoryModel.findById(Number(updates.category_id));
+        if (!category) {
+          return res.status(400).json({
+            success: false,
+            error: {
+              message: 'Invalid category ID',
+              code: 'INVALID_CATEGORY',
+            },
+          });
+        }
       }
 
       const transaction = await TransactionModel.update(

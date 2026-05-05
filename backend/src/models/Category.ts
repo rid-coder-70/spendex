@@ -48,6 +48,125 @@ export class CategoryModel {
     return result.rows[0];
   }
 
+  static async seedDefaults(): Promise<void> {
+    const defaultCategories = [
+      {
+        name: 'Food',
+        type: 'expense' as const,
+        icon: 'utensils',
+        color: '#FF6B6B',
+        keywords: [
+          'restaurant',
+          'food',
+          'coffee',
+          'meal',
+          'grocery',
+          'supermarket',
+          'dinner',
+          'lunch',
+        ],
+      },
+      {
+        name: 'Transport',
+        type: 'expense' as const,
+        icon: 'bus',
+        color: '#4D96FF',
+        keywords: [
+          'uber',
+          'taxi',
+          'bus',
+          'train',
+          'metro',
+          'transport',
+          'rideshare',
+          'flight',
+          'travel',
+        ],
+      },
+      {
+        name: 'Shopping',
+        type: 'expense' as const,
+        icon: 'shopping-bag',
+        color: '#FFB800',
+        keywords: [
+          'amazon',
+          'shop',
+          'shopping',
+          'store',
+          'mall',
+          'purchase',
+          'order',
+        ],
+      },
+      {
+        name: 'Utilities',
+        type: 'expense' as const,
+        icon: 'lightbulb',
+        color: '#7C3AED',
+        keywords: [
+          'electricity',
+          'water bill',
+          'internet',
+          'gas bill',
+          'utility',
+          'utilities',
+        ],
+      },
+      {
+        name: 'Entertainment',
+        type: 'expense' as const,
+        icon: 'play',
+        color: '#F97316',
+        keywords: [
+          'netflix',
+          'movie',
+          'game',
+          'concert',
+          'entertainment',
+          'spotify',
+          'show',
+        ],
+      },
+      {
+        name: 'Salary',
+        type: 'income' as const,
+        icon: 'wallet',
+        color: '#22C55E',
+        keywords: ['salary', 'payroll', 'paycheck', 'income', 'deposit'],
+      },
+      {
+        name: 'Savings',
+        type: 'income' as const,
+        icon: 'piggy-bank',
+        color: '#10B981',
+        keywords: ['savings', 'interest', 'investment', 'dividend'],
+      },
+    ];
+
+    for (const category of defaultCategories) {
+      const existing = await query(
+        'SELECT id FROM categories WHERE name = $1',
+        [category.name]
+      );
+
+      if (existing.rows.length === 0) {
+        await query(
+          `
+            INSERT INTO categories (name, type, icon, color, keywords, is_system)
+            VALUES ($1, $2, $3, $4, $5, TRUE)
+          `,
+          [
+            category.name,
+            category.type,
+            category.icon,
+            category.color,
+            category.keywords,
+          ]
+        );
+      }
+    }
+  }
+
   static async autoCategorize(
     description: string,
     merchant?: string
