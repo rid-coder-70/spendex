@@ -324,17 +324,31 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 | JWT authentication middleware | ✅ Done |
 | Auth routes (register, login, me) | ✅ Done |
 
+### Transaction Management (Complete)
+| Task | Status |
+|---|---|
+| Transaction model with CRUD operations | ✅ Done |
+| Pagination support (page, limit) | ✅ Done |
+| Filtering by type, category, date range, merchant | ✅ Done |
+| Auto-categorization based on keywords | ✅ Done |
+| Transaction summary calculation | ✅ Done |
+| Category model (get, create, filter by type) | ✅ Done |
+| TransactionController & CategoryController | ✅ Done |
+| Transaction & Category routes with auth | ✅ Done |
+| Validation middleware | ✅ Done |
+| Test data seed script (10 sample transactions) | ✅ Done |
+
 ### In Progress
 | Task | Status |
 |---|---|
-| Transaction CRUD routes | 🔄 In Progress |
-| Category management routes | 🔄 In Progress |
+| CSV upload + auto-categorisation | 🔄 In Progress |
 | Subscription detection routes | 🔄 In Progress |
 | Analytics endpoints | 🔄 In Progress |
-| CSV upload + auto-categorisation | 🔄 In Progress |
 | Frontend components (Sidebar, AppShell) | 🔄 In Progress |
 | Auth pages (Login + Register) | 🔄 In Progress |
 | Dashboard with charts | 🔄 In Progress |
+
+---
 
 ### 📈 Week 2 Summary - Authentication System
 
@@ -350,13 +364,46 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 - `POST /api/auth/login` - User login
 - `GET /api/auth/me` - Get current user (protected)
 
-### Upcoming (Week 3)
+---
+
+### 📈 Week 3 Summary - Transaction Management
+
+#### ✅ Completed Tasks
+- **Transaction System:** Transaction model with CRUD operations, pagination support, advanced filtering (type, category, date range, merchant), auto-categorization based on keywords, transaction summary calculation
+- **Category System:** Category model, get all categories (with type filter), get single category, create custom categories, auto-categorization logic
+- **Controllers & Routes:** TransactionController (getAll, getOne, create, update, delete), CategoryController (getAll, getOne, create), transaction & category routes with authentication, validation middleware
+- **Testing:** Test data seed script, 10 sample transactions created, complete Postman collection, all endpoints tested manually
+
+#### 🔌 API Endpoints Added
+**Transactions**
+- `GET /api/transactions` — Get all (paginated, filterable)
+- `GET /api/transactions/:id` — Get single
+- `POST /api/transactions` — Create
+- `PUT /api/transactions/:id` — Update
+- `DELETE /api/transactions/:id` — Delete
+
+**Categories**
+- `GET /api/categories` — Get all
+- `GET /api/categories/:id` — Get single
+- `POST /api/categories` — Create custom
+
+#### 🗄️ Database State
+- Users: 2 (john@example.com, test@example.com)
+- Categories: 21 (14 expense, 7 income)
+- Transactions: 10 sample transactions
+
+#### 🔑 Test Credentials
+- Email: `test@example.com`
+- Password: `Test123!`
+
+### Upcoming (Week 4)
+- [ ] CSV file upload & parsing logic
+- [ ] Bulk transaction import
+- [ ] Auto-categorization enhancement
+- [ ] Error handling for invalid CSV
+- [ ] Upload history tracking
 - [ ] Nodemailer email integration (monthly reports)
-- [ ] Node-Cron background jobs (subscription detection, report generation)
-- [ ] Budget limits & alerts
-- [ ] Unit & integration tests
-- [ ] Docker Compose setup
-- [ ] Vercel + Railway deployment
+- [ ] Node-Cron background jobs
 
 ---
 
