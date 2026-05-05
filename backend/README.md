@@ -153,30 +153,30 @@ All routes are prefixed with `/api`. Protected routes require `Authorization: Be
 | `GET` | `/api/health` | Public | Server alive check |
 | `GET` | `/api/health/db` | Public | PostgreSQL connectivity |
 
-### 🔐 Auth *(in progress)*
+### 🔐 Auth
+
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Public | Register new user |
 | `POST` | `/api/auth/login` | Public | Login, receive JWT |
 | `GET` | `/api/auth/me` | Protected | Current user profile |
 
-### 💳 Transactions *(in progress)*
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/transactions` | Paginated list with filters |
-| `POST` | `/api/transactions` | Create |
-| `GET` | `/api/transactions/:id` | Get single |
-| `PUT` | `/api/transactions/:id` | Update |
-| `DELETE` | `/api/transactions/:id` | Delete |
-| `POST` | `/api/transactions/upload` | CSV bulk import |
+### 💳 Transactions
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/transactions` | Protected | Paginated list with filters (type, category, date, merchant) |
+| `POST` | `/api/transactions` | Protected | Create transaction (auto-categorized) |
+| `GET` | `/api/transactions/:id` | Protected | Get single |
+| `PUT` | `/api/transactions/:id` | Protected | Update |
+| `DELETE` | `/api/transactions/:id` | Protected | Delete |
+| `POST` | `/api/transactions/upload` | Protected | CSV bulk import *(Week 4)* |
 
-### 🏷️ Categories *(in progress)*
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/categories` | List all |
-| `POST` | `/api/categories` | Create custom |
-| `PUT` | `/api/categories/:id` | Update |
-| `DELETE` | `/api/categories/:id` | Delete (non-system) |
+### 🏷️ Categories
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `GET` | `/api/categories` | Protected | List all (filterable by type) |
+| `GET` | `/api/categories/:id` | Protected | Get single |
+| `POST` | `/api/categories` | Protected | Create custom category |
 
 ### ⭐ Subscriptions *(in progress)*
 | Method | Endpoint | Description |
@@ -200,6 +200,70 @@ All routes are prefixed with `/api`. Protected routes require `Authorization: Be
 
 ---
 
+## 📈 Week 2 Summary - Authentication System
+
+### ✅ Completed Tasks
+- **User Model:** CRUD operations for users, email existence check, optimized DB queries
+- **Utilities:** Password hashing (bcrypt), strength validation, JWT generation/verification, email/phone validation, string sanitization
+- **Middleware:** Auth middleware, Validation middleware (register/login), error handling
+- **Controllers & Routes:** AuthController (register, login, getMe), Auth routes configured & integrated
+- **Testing:** Manual API testing completed via Postman collection, endpoints verified
+
+---
+
+## 📈 Week 3 Summary - Transaction Management
+
+### ✅ Completed Tasks
+
+#### Transaction System
+- Transaction model with full CRUD operations
+- Pagination support (`page`, `limit` query params)
+- Advanced filtering: by type (expense/income), category, date range, merchant
+- Auto-categorization based on category keywords
+- Transaction summary calculation
+
+#### Category System
+- Category model
+- Get all categories (with optional type filter)
+- Get single category by ID
+- Create custom categories
+- Auto-categorization logic integrated into transaction creation
+
+#### Controllers & Routes
+- `TransactionController` — getAll, getOne, create, update, delete
+- `CategoryController` — getAll, getOne, create
+- Transaction routes with JWT authentication
+- Category routes with JWT authentication
+- Validation middleware for all inputs
+
+#### Testing
+- Test data seed script (`npm run seed:test`) — fully idempotent (re-runnable)
+- 19 system categories seeded
+- 10 sample transactions created (8 expense, 2 income)
+- Complete Postman collection — all endpoints tested manually
+
+### 🗄️ Database State
+| Table | Count |
+|---|---|
+| Users | 2 (john@example.com, test@example.com) |
+| Categories | 21 (14 expense, 7 income) |
+| Transactions | 10 sample transactions |
+
+### 🔑 Test Credentials
+```
+Email:    test@example.com
+Password: Test123!
+```
+
+### 🔜 Next (Week 4)
+- CSV file upload & parsing logic
+- Bulk transaction import
+- Auto-categorization enhancement
+- Error handling for invalid CSV
+- Upload history tracking
+
+---
+
 ## 🧩 Available Scripts
 
 | Command | Description |
@@ -207,6 +271,7 @@ All routes are prefixed with `/api`. Protected routes require `Authorization: Be
 | `npm run dev` | Start nodemon hot-reload server |
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm start` | Run compiled production build |
+| `npm run seed:test` | Seed categories + test user + 10 sample transactions |
 | `npm run lint` | ESLint type-aware lint |
 | `npm run format` | Prettier format all `src/**/*.ts` |
 
