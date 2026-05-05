@@ -30,7 +30,6 @@ const startServer = async () => {
 
 startServer();
 
-// Graceful shutdown
 const gracefulShutdown = () => {
   console.log('\n🛑 Received shutdown signal, closing server...');
   server.close(() => {
@@ -38,7 +37,6 @@ const gracefulShutdown = () => {
     process.exit(0);
   });
 
-  // Force close after 10 seconds
   setTimeout(() => {
     console.error('❌ Forced shutdown');
     process.exit(1);

@@ -1,6 +1,7 @@
 {
   "info": {
     "name": "SpendGuard API",
+    "description": "Complete API collection for SpendGuard",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -11,12 +12,7 @@
           "name": "Register",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"phone\": \"+8801712345678\"\n}"
@@ -30,17 +26,25 @@
         },
         {
           "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('token', jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Test123!\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/auth/login",
@@ -53,16 +57,222 @@
           "name": "Get Me",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}"
-              }
-            ],
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
             "url": {
               "raw": "{{baseUrl}}/auth/me",
               "host": ["{{baseUrl}}"],
               "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Get Expense Categories",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/categories?type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [{"key": "type", "value": "expense"}]
+            }
+          }
+        },
+        {
+          "name": "Get Income Categories",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/categories?type=income",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [{"key": "type", "value": "income"}]
+            }
+          }
+        },
+        {
+          "name": "Get Single Category",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/categories/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Custom Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pet Care\",\n  \"type\": \"expense\",\n  \"icon\": \"🐾\",\n  \"color\": \"#95E1D3\",\n  \"keywords\": [\"pet\", \"vet\", \"dog\", \"cat\", \"animal\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions with Pagination",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Expense Transactions",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [{"key": "type", "value": "expense"}]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions by Date Range",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?start_date=2025-01-01&end_date=2025-01-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                {"key": "start_date", "value": "2025-01-01"},
+                {"key": "end_date", "value": "2025-01-31"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions by Category",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?category_id=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [{"key": "category_id", "value": "1"}]
+            }
+          }
+        },
+        {
+          "name": "Get Single Transaction",
+          "request": {
+            "method": "GET",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1500.50,\n  \"type\": \"expense\",\n  \"description\": \"Lunch at restaurant\",\n  \"merchant\": \"Pizza Hut\",\n  \"category_id\": 1,\n  \"payment_method\": \"bKash\",\n  \"transaction_date\": \"2025-01-21\",\n  \"notes\": \"Team lunch\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Update Transaction",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"},
+              {"key": "Content-Type", "value": "application/json"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1800.00,\n  \"description\": \"Updated: Lunch with dessert\",\n  \"notes\": \"Added dessert\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Transaction",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": {
+              "raw": "{{baseUrl}}/transactions/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "1"]
             }
           }
         }
@@ -72,11 +282,13 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:5000/api"
+      "value": "http://localhost:5000/api",
+      "type": "string"
     },
     {
       "key": "token",
-      "value": ""
+      "value": "",
+      "type": "string"
     }
   ]
 }
