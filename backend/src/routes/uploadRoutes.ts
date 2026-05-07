@@ -8,10 +8,10 @@ import {
 
 const router = Router();
 
-// All upload routes require authentication
+
 router.use(authenticate);
 
-// Upload CSV file
+
 router.post(
   '/',
   uploadSingleCSV,
@@ -19,13 +19,10 @@ router.post(
   UploadController.uploadCSV
 );
 
-// Get upload history
 router.get('/history', UploadController.getUploadHistory);
 
-// Get single upload record
 router.get('/history/:id', UploadController.getUploadById);
 
-// Download CSV template
 router.get('/template', UploadController.downloadTemplate);
 
 export default router;

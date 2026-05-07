@@ -90,7 +90,6 @@ export class UploadHistoryModel {
     return result.rows;
   }
 
-  // Get single upload record
   static async findById(
     id: number,
     userId: number

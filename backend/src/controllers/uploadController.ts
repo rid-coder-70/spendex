@@ -8,7 +8,6 @@ import { UploadHistoryModel } from '../models/UploadHistory';
 import { deleteUploadedFile } from '../middleware/uploadMiddleware';
 
 export class UploadController {
-  // Upload and process CSV file
   static async uploadCSV(req: Request, res: Response) {
     let uploadId: number | null = null;
     let filePath: string | null = null;
@@ -24,7 +23,6 @@ export class UploadController {
         });
       }
 
-      // Check if file was uploaded
       if (!req.file) {
         return res.status(400).json({
           success: false,
@@ -41,7 +39,6 @@ export class UploadController {
 
       console.log(`📁 Processing CSV file: ${originalName} (${fileSize} bytes)`);
 
-      // Create upload history record
       const uploadRecord = await UploadHistoryModel.create({
         user_id: req.user.id,
         filename: originalName,
@@ -50,7 +47,6 @@ export class UploadController {
       });
       uploadId = uploadRecord.id;
 
-      // Parse CSV file
       const parseResult = await CSVParserService.parseCSV(filePath);
 
       if (!parseResult.success) {
@@ -78,7 +74,6 @@ export class UploadController {
         `📊 Parsed ${parseResult.totalRows} rows: ${parseResult.validTransactions.length} valid, ${parseResult.errors.length} errors`
       );
 
-      // Import valid transactions
       let importedCount = 0;
       const importErrors: Array<{ index: number; error: string }> = [];
 
@@ -86,7 +81,6 @@ export class UploadController {
         const transaction = parseResult.validTransactions[i];
 
         try {
-          // Auto-categorize if no category provided
           let categoryId = transaction.category_id;
           if (!categoryId && (transaction.description || transaction.merchant)) {
             categoryId =
@@ -95,8 +89,6 @@ export class UploadController {
                 transaction.merchant
               )) || undefined;
           }
-
-          // Create transaction
           await TransactionModel.create({
             user_id: req.user.id,
             category_id: categoryId,
@@ -119,7 +111,6 @@ export class UploadController {
         }
       }
 
-      // Update upload history
       await UploadHistoryModel.update(uploadId, {
         status: importedCount > 0 ? 'completed' : 'failed',
         rows_processed: parseResult.totalRows,
@@ -131,10 +122,8 @@ export class UploadController {
             : undefined,
       });
 
-      // Delete uploaded file
       deleteUploadedFile(filePath);
 
-      // Prepare response
       const allErrors = [
         ...parseResult.errors.map((e) => ({
           row: e.row,
@@ -162,15 +151,12 @@ export class UploadController {
     } catch (error: any) {
       console.error('❌ CSV upload error:', error);
 
-      // Update upload history if record was created
       if (uploadId) {
         await UploadHistoryModel.update(uploadId, {
           status: 'failed',
           error_message: error.message,
         });
       }
-
-      // Delete uploaded file
       if (filePath) {
         deleteUploadedFile(filePath);
       }
@@ -186,7 +172,6 @@ export class UploadController {
     }
   }
 
-  // Get upload history
   static async getUploadHistory(req: Request, res: Response) {
     try {
       if (!req.user) {
@@ -219,7 +204,6 @@ export class UploadController {
     }
   }
 
-  // Get single upload record
   static async getUploadById(req: Request, res: Response) {
     try {
       if (!req.user) {
@@ -262,7 +246,6 @@ export class UploadController {
     }
   }
 
-  // Download CSV template
   static async downloadTemplate(req: Request, res: Response) {
     try {
       const template = CSVParserService.generateTemplate();
