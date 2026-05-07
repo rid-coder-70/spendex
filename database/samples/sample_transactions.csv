@@ -1,0 +1,11 @@
+date,description,amount,type,merchant,payment_method,notes
+2025-01-21,Lunch at restaurant,1500.00,expense,Pizza Hut,bKash,Team lunch
+2025-01-20,Freelance project payment,15000.00,income,Client ABC,Bank Transfer,Project completed
+2025-01-19,Grocery shopping,3500.00,expense,Shwapno,Cash,Weekly groceries
+2025-01-18,Internet bill,2500.00,expense,ISP Provider,bKash,Monthly bill
+2025-01-17,Uber ride,450.00,expense,Uber,Credit Card,Office commute
+2025-01-16,Netflix subscription,799.00,expense,Netflix,Credit Card,Monthly subscription
+2025-01-15,Coffee,250.00,expense,Starbucks,Cash,Morning coffee
+2025-01-14,Salary,50000.00,income,Company XYZ,Bank Transfer,Monthly salary
+2025-01-13,Gym membership,3000.00,expense,Fitness Club,bKash,Monthly membership
+2025-01-12,Book purchase,1200.00,expense,Amazon,Credit Card,Learning material

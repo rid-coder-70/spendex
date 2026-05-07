@@ -7,6 +7,7 @@ import { query } from './config/database';
 import authRoutes from './routes/authRoutes';
 import transactionRoutes from './routes/transactionRoutes';
 import categoryRoutes from './routes/categoryRoutes';
+import uploadRoutes from './routes/uploadRoutes';
 
 dotenv.config();
 
@@ -69,7 +70,7 @@ app.get('/api/health/db', async (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/categories', categoryRoutes);
-
+app.use('/api/upload', uploadRoutes);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({

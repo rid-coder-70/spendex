@@ -1,0 +1,8 @@
+date,description,amount,type,merchant,payment_method,notes
+2025-01-21,Valid transaction,1500.00,expense,Pizza Hut,bKash,This is valid
+2025-13-32,Invalid date,500.00,expense,Store,Cash,This will fail
+2025-01-20,Missing amount,,expense,Store,Cash,This will fail
+2025-01-19,Negative amount,-100.00,expense,Store,Cash,This will fail
+2025-01-18,Invalid type,500.00,invalid_type,Store,Cash,This will fail
+,Missing date,500.00,expense,Store,Cash,This will fail
+2025-01-17,Valid transaction 2,2500.00,income,Client,Bank,This is valid
