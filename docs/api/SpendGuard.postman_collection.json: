@@ -277,7 +277,93 @@
           }
         }
       ]
+    },
+    {
+  "name": "Upload",
+  "item": [
+    {
+      "name": "Upload CSV",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/path/to/your/file.csv"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["upload"]
+        }
+      }
+    },
+    {
+      "name": "Get Upload History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload/history",
+          "host": ["{{baseUrl}}"],
+          "path": ["upload", "history"]
+        }
+      }
+    },
+    {
+      "name": "Get Upload History with Limit",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload/history?limit=5",
+          "host": ["{{baseUrl}}"],
+          "path": ["upload", "history"],
+          "query": [{"key": "limit", "value": "5"}]
+        }
+      }
+    },
+    {
+      "name": "Get Single Upload Record",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload/history/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["upload", "history", "1"]
+        }
+      }
+    },
+    {
+      "name": "Download CSV Template",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/upload/template",
+          "host": ["{{baseUrl}}"],
+          "path": ["upload", "template"]
+        }
+      }
     }
+  ]
+}
   ],
   "variable": [
     {
