@@ -11,6 +11,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "seed:test": "ts-node src/scripts/seedTestData.ts",
+    "seed:subscriptions": "ts-node src/scripts/seedSubscriptionData.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\""
   },
