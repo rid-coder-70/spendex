@@ -1,5 +1,6 @@
 import { TransactionModel } from '../models/Transaction';
 import { SubscriptionDetectorService } from '../services/subscriptionDetector';
+import { query } from '../config/database';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -9,6 +10,16 @@ async function seedSubscriptionData() {
     console.log('🌱 Seeding subscription test data...');
 
     const userId = 1; 
+
+    // Clear existing subscription transactions for this user
+    await query('DELETE FROM transactions WHERE user_id = $1 AND merchant IN ($2, $3, $4, $5, $6)', [
+      userId,
+      'Netflix',
+      'Spotify',
+      'Fitness First',
+      'ISP Provider',
+      'Google'
+    ]);
 
 
     const subscriptionTransactions = [
@@ -21,12 +32,12 @@ async function seedSubscriptionData() {
         merchant: 'Netflix',
         payment_method: 'Credit Card',
         dates: [
-          '2024-08-15',
-          '2024-09-15',
-          '2024-10-15',
-          '2024-11-15',
-          '2024-12-15',
-          '2025-01-15',
+          '2025-11-15',
+          '2025-12-15',
+          '2026-01-15',
+          '2026-02-15',
+          '2026-03-15',
+          '2026-04-15',
         ],
       },
       {
@@ -38,12 +49,12 @@ async function seedSubscriptionData() {
         merchant: 'Spotify',
         payment_method: 'Credit Card',
         dates: [
-          '2024-08-10',
-          '2024-09-10',
-          '2024-10-10',
-          '2024-11-10',
-          '2024-12-10',
-          '2025-01-10',
+          '2025-11-10',
+          '2025-12-10',
+          '2026-01-10',
+          '2026-02-10',
+          '2026-03-10',
+          '2026-04-10',
         ],
       },
       {
@@ -55,12 +66,12 @@ async function seedSubscriptionData() {
         merchant: 'Fitness First',
         payment_method: 'bKash',
         dates: [
-          '2024-08-01',
-          '2024-09-01',
-          '2024-10-01',
-          '2024-11-01',
-          '2024-12-01',
-          '2025-01-01',
+          '2025-11-01',
+          '2025-12-01',
+          '2026-01-01',
+          '2026-02-01',
+          '2026-03-01',
+          '2026-04-01',
         ],
       },
       {
@@ -72,12 +83,12 @@ async function seedSubscriptionData() {
         merchant: 'ISP Provider',
         payment_method: 'bKash',
         dates: [
-          '2024-08-05',
-          '2024-09-05',
-          '2024-10-05',
-          '2024-11-05',
-          '2024-12-05',
-          '2025-01-05',
+          '2025-11-05',
+          '2025-12-05',
+          '2026-01-05',
+          '2026-02-05',
+          '2026-03-05',
+          '2026-04-05',
         ],
       },
       {
@@ -89,12 +100,12 @@ async function seedSubscriptionData() {
         merchant: 'Google',
         payment_method: 'Credit Card',
         dates: [
-          '2024-08-20',
-          '2024-09-20',
-          '2024-10-20',
-          '2024-11-20',
-          '2024-12-20',
-          '2025-01-20',
+          '2025-11-20',
+          '2025-12-20',
+          '2026-01-20',
+          '2026-02-20',
+          '2026-03-20',
+          '2026-04-20',
         ],
       },
     ];

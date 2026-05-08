@@ -55,12 +55,12 @@ export class AnalyticsService {
         COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) as total_expenses,
         COUNT(*) as transaction_count,
         COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) / 
-          NULLIF(EXTRACT(DAY FROM DATE_TRUNC('month', DATE($2 || '-' || $3 || '-01')) + INTERVAL '1 month' - INTERVAL '1 day'), 0), 0) 
+          NULLIF(EXTRACT(DAY FROM DATE_TRUNC('month', DATE($3 || '-' || LPAD($2::text, 2, '0') || '-01')) + INTERVAL '1 month' - INTERVAL '1 day'), 0), 0) 
           as average_daily_expense
       FROM transactions
-      WHERE user_id = $1
-        AND EXTRACT(MONTH FROM transaction_date) = $2
-        AND EXTRACT(YEAR FROM transaction_date) = $3
+      WHERE user_id = $1::int
+        AND EXTRACT(MONTH FROM transaction_date) = $2::int
+        AND EXTRACT(YEAR FROM transaction_date) = $3::int
     `;
 
     const result = await query(sql, [userId, month, year]);
@@ -78,10 +78,10 @@ export class AnalyticsService {
         SUM(t.amount) as total_amount
       FROM transactions t
       JOIN categories c ON t.category_id = c.id
-      WHERE t.user_id = $1
+      WHERE t.user_id = $1::int
         AND t.type = 'expense'
-        AND EXTRACT(MONTH FROM t.transaction_date) = $2
-        AND EXTRACT(YEAR FROM t.transaction_date) = $3
+        AND EXTRACT(MONTH FROM t.transaction_date) = $2::int
+        AND EXTRACT(YEAR FROM t.transaction_date) = $3::int
       GROUP BY c.id, c.name, c.icon, c.color
       ORDER BY total_amount DESC
       LIMIT 1

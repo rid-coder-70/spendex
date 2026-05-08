@@ -68,6 +68,167 @@
       ]
     },
     {
+  "name": "Analytics",
+  "item": [
+    {
+      "name": "Get Monthly Summary",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/summary?month=1&year=2025",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "summary"],
+          "query": [
+            {"key": "month", "value": "1"},
+            {"key": "year", "value": "2025"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Category Breakdown",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/category-breakdown?type=expense",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "category-breakdown"],
+          "query": [{"key": "type", "value": "expense"}]
+        }
+      }
+    },
+    {
+      "name": "Get Spending Trends",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/spending-trends?months=6",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "spending-trends"],
+          "query": [{"key": "months", "value": "6"}]
+        }
+      }
+    },
+    {
+      "name": "Get Top Merchants",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/top-merchants?limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "top-merchants"],
+          "query": [{"key": "limit", "value": "10"}]
+        }
+      }
+    },
+    {
+      "name": "Get Income vs Expense",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/analytics/income-vs-expense?start_date=2025-01-01&end_date=2025-01-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["analytics", "income-vs-expense"],
+          "query": [
+            {"key": "start_date", "value": "2025-01-01"},
+            {"key": "end_date", "value": "2025-01-31"}
+          ]
+        }
+      }
+    }
+  ]
+},
+{
+  "name": "Subscriptions",
+  "item": [
+    {
+      "name": "Detect Subscriptions",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions/detect",
+          "host": ["{{baseUrl}}"],
+          "path": ["subscriptions", "detect"]
+        }
+      }
+    },
+    {
+      "name": "Get All Subscriptions",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions",
+          "host": ["{{baseUrl}}"],
+          "path": ["subscriptions"]
+        }
+      }
+    },
+    {
+      "name": "Get Active Subscriptions",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions?is_active=true",
+          "host": ["{{baseUrl}}"],
+          "path": ["subscriptions"],
+          "query": [{"key": "is_active", "value": "true"}]
+        }
+      }
+    },
+    {
+      "name": "Get Subscription Stats",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions/stats",
+          "host": ["{{baseUrl}}"],
+          "path": ["subscriptions", "stats"]
+        }
+      }
+    },
+    {
+      "name": "Get Single Subscription",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["subscriptions", "1"]
+        }
+      }
+    },
+    {
+      "name": "Update Subscription",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"is_active\": false,\n  \"notes\": \"Cancelled subscription\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/subscriptions/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["subscriptions", "1"]
+        }
+      }
+    }
+  ]
+},
+    {
       "name": "Categories",
       "item": [
         {
