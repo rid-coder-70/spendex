@@ -29,6 +29,13 @@ SpendGuard is a full-stack personal finance management system built with **Next.
 - 📧 **Receive** monthly financial reports via email
 - 🔐 **Secure** all data with JWT authentication
 
+### Key Features
+- **Monthly Analytics**: Income/expense summaries, category breakdowns, spending trends
+- **Subscription Detection**: Automatic recurring payment identification with confidence scoring
+- **CSV Import**: Bulk transaction upload with auto-categorization
+- **Category Management**: System and custom categories with icons and colors
+- **Secure Authentication**: JWT-based user authentication and authorization
+
 ---
 
 ## 📐 System Architecture
@@ -116,6 +123,8 @@ Authorization: Bearer <JWT_TOKEN>
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/api/subscriptions` | List active subscriptions |
+| `GET` | `/api/subscriptions/stats` | Subscription statistics |
+| `GET` | `/api/subscriptions/:id` | Get single subscription |
 | `PUT` | `/api/subscriptions/:id` | Update subscription |
 | `POST` | `/api/subscriptions/detect` | Trigger auto-detection |
 
@@ -125,6 +134,8 @@ Authorization: Bearer <JWT_TOKEN>
 | `GET` | `/api/analytics/summary` | Monthly income/expense totals |
 | `GET` | `/api/analytics/category-breakdown` | Spend per category |
 | `GET` | `/api/analytics/spending-trends` | Multi-month trend data |
+| `GET` | `/api/analytics/top-merchants` | Top spending merchants |
+| `GET` | `/api/analytics/income-vs-expense` | Income/expense comparison |
 
 ### 📄 Reports
 | Method | Endpoint | Description |
@@ -338,15 +349,52 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 | Validation middleware | ✅ Done |
 | Test data seed script (10 sample transactions) | ✅ Done |
 
-### In Progress
+### CSV Upload (Complete)
 | Task | Status |
 |---|---|
-| CSV upload + auto-categorisation | 🔄 In Progress |
-| Subscription detection routes | 🔄 In Progress |
-| Analytics endpoints | 🔄 In Progress |
-| Frontend components (Sidebar, AppShell) | 🔄 In Progress |
-| Auth pages (Login + Register) | 🔄 In Progress |
-| Dashboard with charts | 🔄 In Progress |
+| Multer middleware for file upload | ✅ Done |
+| CSV parsing with validation | ✅ Done |
+| Auto-categorization during import | ✅ Done |
+| Upload history tracking | ✅ Done |
+| UploadController & routes | ✅ Done |
+| Postman collection updated | ✅ Done |
+
+### Analytics System (Complete)
+| Task | Status |
+|---|---|
+| Monthly summary calculations | ✅ Done |
+| Category-wise breakdown with percentages | ✅ Done |
+| Spending trends (last N months) | ✅ Done |
+| Top merchants analysis | ✅ Done |
+| Income vs expense comparison | ✅ Done |
+| Average daily spending | ✅ Done |
+| Savings rate calculation | ✅ Done |
+| AnalyticsController with 5 endpoints | ✅ Done |
+| Analytics routes configured | ✅ Done |
+
+### Subscription Detection (Complete)
+| Task | Status |
+|---|---|
+| Automatic recurring transaction detection | ✅ Done |
+| Pattern recognition algorithm | ✅ Done |
+| Confidence scoring (0-1 scale) | ✅ Done |
+| Frequency determination (daily/weekly/monthly/yearly) | ✅ Done |
+| Next billing date prediction | ✅ Done |
+| Auto-categorization | ✅ Done |
+| Inactive subscription marking | ✅ Done |
+| SubscriptionController with 5 endpoints | ✅ Done |
+| Subscription routes configured | ✅ Done |
+| Test subscription data generated | ✅ Done |
+
+### Next Steps (Week 6)
+| Task | Status |
+|---|---|
+| Background jobs (Node-Cron) | 🔄 In Progress |
+| Monthly report generation | 🔄 In Progress |
+| Email notification system | 🔄 In Progress |
+| Report templates (HTML) | 🔄 In Progress |
+| Email service integration | 🔄 In Progress |
+| Scheduled report delivery | 🔄 In Progress |
 
 ---
 
@@ -486,6 +534,100 @@ The system accepts variations:
 - Upload history table utilized
 - Sample data: 10+ transactions imported
 - Upload records tracked
+
+---
+
+### 📊 Week 5 Summary - Analytics & Subscription Detection
+
+## Completed Tasks
+
+### ✅ Analytics System
+- Monthly summary calculations
+- Category-wise breakdown with percentages
+- Spending trends (last N months)
+- Top merchants analysis
+- Income vs expense comparison
+- Average daily spending
+- Savings rate calculation
+
+### ✅ Subscription Detection
+- Automatic recurring transaction detection
+- Pattern recognition algorithm
+- Confidence scoring (0-1 scale)
+- Frequency determination (daily/weekly/monthly/yearly)
+- Next billing date prediction
+- Auto-categorization
+- Inactive subscription marking
+
+### ✅ Controllers & Routes
+- Analytics controller with 5 endpoints
+- Subscription controller with 5 endpoints
+- Input validation
+- Error handling
+
+### ✅ Testing
+- Subscription test data generated
+- All analytics endpoints tested
+- Subscription detection verified
+- Postman collection updated
+
+## API Endpoints Created
+
+### Analytics
+- GET /api/analytics/summary - Monthly summary
+- GET /api/analytics/category-breakdown - Category analysis
+- GET /api/analytics/spending-trends - Spending over time
+- GET /api/analytics/top-merchants - Top spending merchants
+- GET /api/analytics/income-vs-expense - Income/expense comparison
+
+### Subscriptions
+- GET /api/subscriptions - Get all subscriptions
+- GET /api/subscriptions/stats - Subscription statistics
+- GET /api/subscriptions/:id - Get single subscription
+- PUT /api/subscriptions/:id - Update subscription
+- POST /api/subscriptions/detect - Trigger detection
+
+## Features Implemented
+1. ✅ Monthly financial summaries
+2. ✅ Category-wise spending breakdown
+3. ✅ Spending trend analysis (6-24 months)
+4. ✅ Top merchants identification
+5. ✅ Savings rate calculation
+6. ✅ Recurring transaction detection
+7. ✅ Subscription frequency analysis
+8. ✅ Confidence scoring
+9. ✅ Next billing date prediction
+10. ✅ Subscription cancellation tracking
+
+## Algorithm Highlights
+
+### Subscription Detection Logic:
+1. Group transactions by merchant and amount
+2. Calculate intervals between transactions
+3. Determine average interval and consistency
+4. Classify frequency (daily/weekly/monthly/yearly)
+5. Calculate confidence score based on:
+   - Standard deviation (consistency)
+   - Sample size (reliability)
+6. Only store subscriptions with confidence >= 60%
+
+### Confidence Scoring:
+- Consistency Score: Based on interval regularity
+- Sample Score: Based on number of occurrences
+- Final Score = (Consistency * 0.7) + (Sample * 0.3)
+
+## Database Summary
+- 30+ recurring transactions created
+- 5 subscriptions detected
+- Test data spans 6 months
+
+## Next Week (Week 6)
+- Background jobs (Cron)
+- Monthly report generation
+- Email notification system
+- Report templates (HTML)
+- Email service integration
+- Scheduled report delivery
 
 ## Next Week (Week 5)
 - Analytics endpoints

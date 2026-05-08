@@ -77,14 +77,42 @@ backend/
 │   ├── app.ts                 # Express app — middleware, routes, error handlers
 │   ├── config/
 │   │   └── database.ts        # PostgreSQL Pool + named query() helper
-│   ├── controllers/           # Route handler business logic (in progress)
+│   ├── controllers/           # Route handler business logic
+│   │   ├── analyticsController.ts    # Analytics endpoints
+│   │   ├── authController.ts         # Authentication logic
+│   │   ├── categoryController.ts     # Category management
+│   │   ├── subscriptionController.ts # Subscription CRUD & detection
+│   │   ├── transactionController.ts  # Transaction operations
+│   │   └── uploadController.ts       # CSV upload handling
 │   ├── middleware/            # Custom middleware
-│   │   └── (auth.ts)          # JWT auth guard (in progress)
-│   ├── models/                # Data access layer / query builders (in progress)
-│   ├── routes/                # Express Router definitions (in progress)
-│   ├── services/              # Business logic services (in progress)
+│   │   ├── authMiddleware.ts         # JWT authentication guard
+│   │   ├── uploadMiddleware.ts       # Multer file upload
+│   │   └── validation.ts             # Request validation
+│   ├── models/                # Data access layer / query builders
+│   │   ├── Category.ts        # Category model
+│   │   ├── Transaction.ts     # Transaction model
+│   │   ├── UploadHistory.ts   # Upload audit model
+│   │   └── User.ts            # User model
+│   ├── routes/                # Express Router definitions
+│   │   ├── analyticsRoutes.ts # Analytics API routes
+│   │   ├── authRoutes.ts      # Authentication routes
+│   │   ├── categoryRoutes.ts  # Category routes
+│   │   ├── subscriptionRoutes.ts # Subscription routes
+│   │   ├── transactionRoutes.ts # Transaction routes
+│   │   └── uploadRoutes.ts    # Upload routes
+│   ├── services/              # Business logic services
+│   │   ├── analyticsService.ts      # Analytics calculations
+│   │   ├── csvParser.ts             # CSV processing
+│   │   ├── subscriptionDetector.ts  # Recurring pattern detection
+│   │   └── utils/                   # Service utilities
 │   ├── jobs/                  # Node-Cron scheduled tasks (in progress)
+│   ├── scripts/               # Database seeding scripts
+│   │   ├── seedSubscriptionData.ts # Generate test subscriptions
+│   │   └── seedTestData.ts          # Generate test transactions
 │   ├── utils/                 # Shared helper utilities
+│   │   ├── jwt.ts             # JWT token utilities
+│   │   ├── password.ts        # Password hashing
+│   │   └── validation.ts      # Validation helpers
 │   └── types/
 │       └── express.d.ts       # Extends Express Request with req.user
 ├── tests/                     # Test suite (in progress)
@@ -94,6 +122,33 @@ backend/
 ├── tsconfig.json
 └── server.ts                  # Root-level alias for entry point
 ```
+
+---
+
+## 🔧 Core Services
+
+### Analytics Service (`analyticsService.ts`)
+Provides comprehensive financial analytics including:
+- Monthly summaries (income, expenses, savings)
+- Category-wise spending breakdowns with percentages
+- Multi-month spending trends
+- Top merchants analysis
+- Income vs expense comparisons
+
+### Subscription Detector (`subscriptionDetector.ts`)
+Automatically identifies recurring transactions:
+- Groups transactions by merchant and amount
+- Calculates intervals and consistency
+- Determines frequency (daily/weekly/monthly/yearly)
+- Assigns confidence scores (0-1)
+- Predicts next billing dates
+
+### CSV Parser (`csvParser.ts`)
+Handles bulk transaction imports:
+- Validates CSV format and headers
+- Auto-categorizes transactions using keywords
+- Batch inserts with error tracking
+- Returns detailed import statistics
 
 ---
 
@@ -140,6 +195,19 @@ backend/
 | `cors` | 2.x | Cross-Origin Resource Sharing |
 | `dotenv` | 17.x | `.env` file loader |
 | `nodemon` + `ts-node` | Dev | Hot-reload development |
+
+---
+
+## 📜 Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server with hot-reload |
+| `npm run build` | Compile TypeScript to JavaScript |
+| `npm run start` | Start production server (requires build) |
+| `npm run seed:test-data` | Generate sample transactions |
+| `npm run seed:subscriptions` | Generate sample subscriptions |
+| `npm test` | Run test suite |
 
 ---
 
@@ -346,13 +414,99 @@ The system accepts variations:
 - Sample data: 10+ transactions imported
 - Upload records tracked
 
-## Next Week (Week 5)
-- Analytics endpoints
-- Monthly summary calculation
-- Category-wise breakdown
-- Spending trends analysis
-- Subscription detection algorithm
-- Top merchants report
+---
+
+### 📊 Week 5 Summary - Analytics & Subscription Detection
+
+## Completed Tasks
+
+### ✅ Analytics System
+- Monthly summary calculations
+- Category-wise breakdown with percentages
+- Spending trends (last N months)
+- Top merchants analysis
+- Income vs expense comparison
+- Average daily spending
+- Savings rate calculation
+
+### ✅ Subscription Detection
+- Automatic recurring transaction detection
+- Pattern recognition algorithm
+- Confidence scoring (0-1 scale)
+- Frequency determination (daily/weekly/monthly/yearly)
+- Next billing date prediction
+- Auto-categorization
+- Inactive subscription marking
+
+### ✅ Controllers & Routes
+- Analytics controller with 5 endpoints
+- Subscription controller with 5 endpoints
+- Input validation
+- Error handling
+
+### ✅ Testing
+- Subscription test data generated
+- All analytics endpoints tested
+- Subscription detection verified
+- Postman collection updated
+
+## API Endpoints Created
+
+### Analytics
+- GET /api/analytics/summary - Monthly summary
+- GET /api/analytics/category-breakdown - Category analysis
+- GET /api/analytics/spending-trends - Spending over time
+- GET /api/analytics/top-merchants - Top spending merchants
+- GET /api/analytics/income-vs-expense - Income/expense comparison
+
+### Subscriptions
+- GET /api/subscriptions - Get all subscriptions
+- GET /api/subscriptions/stats - Subscription statistics
+- GET /api/subscriptions/:id - Get single subscription
+- PUT /api/subscriptions/:id - Update subscription
+- POST /api/subscriptions/detect - Trigger detection
+
+## Features Implemented
+1. ✅ Monthly financial summaries
+2. ✅ Category-wise spending breakdown
+3. ✅ Spending trend analysis (6-24 months)
+4. ✅ Top merchants identification
+5. ✅ Savings rate calculation
+6. ✅ Recurring transaction detection
+7. ✅ Subscription frequency analysis
+8. ✅ Confidence scoring
+9. ✅ Next billing date prediction
+10. ✅ Subscription cancellation tracking
+
+## Algorithm Highlights
+
+### Subscription Detection Logic:
+1. Group transactions by merchant and amount
+2. Calculate intervals between transactions
+3. Determine average interval and consistency
+4. Classify frequency (daily/weekly/monthly/yearly)
+5. Calculate confidence score based on:
+   - Standard deviation (consistency)
+   - Sample size (reliability)
+6. Only store subscriptions with confidence >= 60%
+
+### Confidence Scoring:
+- Consistency Score: Based on interval regularity
+- Sample Score: Based on number of occurrences
+- Final Score = (Consistency * 0.7) + (Sample * 0.3)
+
+## Database Summary
+- 30+ recurring transactions created
+- 5 subscriptions detected
+- Test data spans 6 months
+
+## Next Week (Week 6)
+- Background jobs (Cron)
+- Monthly report generation
+- Email notification system
+- Report templates (HTML)
+- Email service integration
+- Scheduled report delivery
 
 ---
 
@@ -363,7 +517,8 @@ The system accepts variations:
 | `npm run dev` | Start nodemon hot-reload server |
 | `npm run build` | Compile TypeScript to `dist/` |
 | `npm start` | Run compiled production build |
-| `npm run seed:test` | Seed categories + test user + 10 sample transactions |
+| `npm run seed:test-data` | Seed categories + test user + 10 sample transactions |
+| `npm run seed:subscriptions` | Generate sample subscription data |
 | `npm run lint` | ESLint type-aware lint |
 | `npm run format` | Prettier format all `src/**/*.ts` |
 
