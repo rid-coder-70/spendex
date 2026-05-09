@@ -8,25 +8,36 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, async () => {
-  const env = (process.env.NODE_ENV || 'development').padEnd(28);
-  const port = String(PORT).padEnd(32);
-  console.log(`
-╔═══════════════════════════════════════╗
-║   💰 SpendGuard API Server          ║
-║   Environment: ${env}║
-║   Port: ${port}║
-║   URL: http://localhost:${PORT} ║
-╚═══════════════════════════════════════╝
-  `);
+  // Print server startup banner
+  console.log('\n╔═══════════════════════════════════════╗');
+  console.log('║   💰 SpendGuard API Server          ║');
+  console.log(`║   Environment: ${String(process.env.NODE_ENV || 'development').padEnd(23)}║`);
+  console.log(`║   Port: ${String(PORT).padEnd(31)}║`);
+  console.log(`║   URL: http://localhost:${PORT}     ║`);
+  console.log('╚═══════════════════════════════════════╝\n');
+
+  console.log('🔄 Initializing services...');
 
   // Initialize email service
-  const emailInitialized = EmailService.initialize();
-  if (emailInitialized) {
-    await EmailService.verifyConnection();
+  try {
+    console.log('📧 Setting up email service...');
+    const emailInitialized = EmailService.initialize();
+    if (emailInitialized) {
+      console.log('🔗 Verifying email connection...');
+      await EmailService.verifyConnection();
+    }
+  } catch (error) {
+    console.error('❌ Email service error:', error);
   }
 
   // Start cron jobs
-  JobScheduler.startAll();
+  try {
+    console.log('⏰ Starting cron jobs...');
+    JobScheduler.startAll();
+    console.log('✅ Services initialized successfully');
+  } catch (error) {
+    console.error('❌ Cron job scheduler error:', error);
+  }
 });
 
 // Graceful shutdown

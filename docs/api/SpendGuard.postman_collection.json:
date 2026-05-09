@@ -228,6 +228,79 @@
     }
   ]
 },
+{
+  "name": "Reports",
+  "item": [
+    {
+      "name": "Generate Monthly Report",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "url": {
+          "raw": "{{baseUrl}}/reports/monthly?month=1&year=2025",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "monthly"],
+          "query": [
+            {"key": "month", "value": "1"},
+            {"key": "year", "value": "2025"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Send Monthly Report Email",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"month\": 1,\n  \"year\": 2025\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reports/send",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "send"]
+        }
+      }
+    },
+    {
+      "name": "Trigger Monthly Report Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"},
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"month\": 1,\n  \"year\": 2025\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reports/trigger-monthly-job",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "trigger-monthly-job"]
+        }
+      }
+    },
+    {
+      "name": "Trigger Subscription Detection Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Authorization", "value": "Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/reports/trigger-subscription-job",
+          "host": ["{{baseUrl}}"],
+          "path": ["reports", "trigger-subscription-job"]
+        }
+      }
+    }
+  ]
+},
     {
       "name": "Categories",
       "item": [
