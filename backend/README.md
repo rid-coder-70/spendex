@@ -500,13 +500,116 @@ The system accepts variations:
 - 5 subscriptions detected
 - Test data spans 6 months
 
-## Next Week (Week 6)
-- Background jobs (Cron)
-- Monthly report generation
-- Email notification system
-- Report templates (HTML)
-- Email service integration
-- Scheduled report delivery
+---
+
+### 📧 Week 6 Summary - Background Jobs & Email Notifications
+
+## Completed Tasks
+
+### ✅ Email System
+- Nodemailer integration with Gmail SMTP
+- Email configuration validation
+- Email service initialization and connection verification
+- Handlebars template engine for HTML emails
+- Welcome email template with feature highlights
+- Monthly report email template with financial data visualization
+- Template helpers for currency formatting, date formatting, and percentages
+- Error handling and retry logic
+
+### ✅ Report Generation
+- Monthly report data aggregation from multiple services
+- Automatic insight generation with personalized recommendations
+- Previous month comparison for progress tracking
+- Savings rate calculation and analysis
+- Report controller and routes for manual report generation
+- Email delivery integration
+
+### ✅ Background Jobs
+- Node-Cron scheduler implementation
+- Monthly report job (1st of month at 9:00 AM)
+- Subscription detection job (daily at 2:00 AM)
+- Manual job triggers for testing
+- Graceful shutdown handling with job cleanup
+- Job scheduler with start/stop functionality
+
+### ✅ Features Implemented
+1. ✅ Automated monthly reports
+2. ✅ Email notification system
+3. ✅ Welcome emails for new users on registration
+4. ✅ Scheduled report delivery
+5. ✅ Daily subscription detection
+6. ✅ Personalized financial insights
+7. ✅ Beautifully designed email templates
+8. ✅ Manual job triggers for testing
+
+## API Endpoints Created
+
+### Reports
+- GET /api/reports/monthly - Generate report (view only)
+- POST /api/reports/send - Send report via email
+- POST /api/reports/trigger-monthly-job - Trigger monthly job
+- POST /api/reports/trigger-subscription-job - Trigger subscription job
+
+## Email Templates
+
+### Monthly Report Email
+- Financial summary (income, expenses, savings)
+- Top expense categories with icons and percentages
+- Active subscriptions overview with billing dates
+- Top merchants by spending
+- Personalized insights and recommendations
+- Call-to-action button to dashboard
+- Unsubscribe link
+
+### Welcome Email
+- Personalized greeting with user name
+- Feature highlights (transaction tracking, analytics, reports)
+- Dashboard quick-start link
+- Help center link
+
+## Cron Job Schedules
+
+1. **Monthly Report Job**
+   - Schedule: 1st of every month at 9:00 AM
+   - Sends reports to all users with notifications enabled
+   - Triggered via: `POST /api/reports/trigger-monthly-job` (manual)
+
+2. **Subscription Detection Job**
+   - Schedule: Daily at 2:00 AM
+   - Detects recurring subscriptions for all users
+   - Triggered via: `POST /api/reports/trigger-subscription-job` (manual)
+
+## Configuration
+
+### Environment Variables Added:
+- EMAIL_HOST - SMTP server host (default: smtp.gmail.com)
+- EMAIL_PORT - SMTP port (default: 587)
+- EMAIL_SECURE - Use TLS (default: false)
+- EMAIL_USER - SMTP authentication email
+- EMAIL_PASSWORD - SMTP authentication password/app-password
+- EMAIL_ENABLED - Enable/disable email service (default: true)
+- MONTHLY_REPORT_ENABLED - Enable/disable monthly reports (default: true)
+
+## Testing
+
+- ✅ Email service initialization tested
+- ✅ SMTP connection verification working
+- ✅ Welcome email sent successfully on user registration
+- ✅ Monthly report email sent and rendered correctly
+- ✅ Cron jobs scheduled correctly
+- ✅ Manual job triggers working via API
+- ✅ Email templates rendering properly with data
+- ✅ Insights generation verified
+- ✅ Graceful shutdown handles job cleanup
+
+## Next Week (Week 7)
+- Frontend development with Next.js
+- Authentication pages (Login/Register)
+- Dashboard layout and components
+- Transaction list interface
+- API integration with axios
+- State management with Zustand
+- Routing setup
 
 ---
 
