@@ -3,6 +3,7 @@ import { UserModel } from '../models/User';
 import { PasswordUtils } from '../utils/password';
 import { JWTUtils } from '../utils/jwt';
 import { ValidationUtils } from '../utils/validation';
+import { ReportService } from '../services/reportService';
 
 export class AuthController {
 
@@ -51,6 +52,11 @@ export class AuthController {
           token,
         },
       });
+
+      // Send welcome email (don't wait for it)
+      ReportService.sendWelcomeEmail(user.name, user.email).catch((err) =>
+        console.error('Failed to send welcome email:', err)
+      );
     } catch (error: any) {
       console.error('Registration error:', error);
       res.status(500).json({

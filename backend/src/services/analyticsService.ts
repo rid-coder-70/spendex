@@ -36,6 +36,7 @@ export interface SpendingTrend {
 }
 
 export interface TopMerchant {
+  amount: any;
   merchant: string;
   total_amount: number;
   transaction_count: number;
@@ -260,6 +261,7 @@ export class AnalyticsService {
     const result = await query(sql, values);
 
     return result.rows.map((row) => ({
+      amount: parseFloat(row.total_amount),
       merchant: row.merchant,
       total_amount: parseFloat(row.total_amount),
       transaction_count: parseInt(row.transaction_count),
