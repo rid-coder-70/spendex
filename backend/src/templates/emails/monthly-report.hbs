@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Financial Report</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid #1E3A8A;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #1E3A8A;
+      margin: 0;
+      font-size: 28px;
+    }
+    .header p {
+      color: #666;
+      margin: 10px 0 0 0;
+      font-size: 16px;
+    }
+    .summary-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    .summary-item:last-child {
+      margin-bottom: 0;
+      padding-top: 15px;
+      border-top: 2px solid rgba(255,255,255,0.3);
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .section h2 {
+      color: #1E3A8A;
+      font-size: 20px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+    }
+    .category-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background-color: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .category-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .category-icon {
+      font-size: 24px;
+    }
+    .category-name {
+      font-weight: 500;
+      color: #333;
+    }
+    .category-amount {
+      font-weight: bold;
+      color: #1E3A8A;
+    }
+    .progress-bar {
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.3s ease;
+    }
+    .subscription-item {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .subscription-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .subscription-details {
+      color: #666;
+      font-size: 14px;
+    }
+    .merchant-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .merchant-item:last-child {
+      border-bottom: none;
+    }
+    .insights {
+      background-color: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 20px;
+      border-radius: 4px;
+      margin-bottom: 30px;
+    }
+    .insights h3 {
+      color: #1976d2;
+      margin-top: 0;
+      font-size: 18px;
+    }
+    .insights ul {
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    .insights li {
+      margin-bottom: 8px;
+      color: #555;
+    }
+    .footer {
+      text-align: center;
+      padding-top: 20px;
+      margin-top: 30px;
+      border-top: 2px solid #f0f0f0;
+      color: #666;
+      font-size: 14px;
+    }
+    .positive {
+      color: #10b981;
+    }
+    .negative {
+      color: #ef4444;
+    }
+    .button {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #1E3A8A;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💰 Monthly Financial Report</h1>
+      <p>{{monthName}} {{year}}</p>
+    </div>
+
+    <div class="summary-box">
+      <div class="summary-item">
+        <span>Total Income</span>
+        <span>{{formatCurrency totalIncome}}</span>
+      </div>
+      <div class="summary-item">
+        <span>Total Expenses</span>
+        <span>{{formatCurrency totalExpenses}}</span>
+      </div>
+      <div class="summary-item">
+        <span>Net Savings</span>
+        <span class="{{#if (gt netSavings 0)}}positive{{else}}negative{{/if}}">
+          {{formatCurrency netSavings}}
+        </span>
+      </div>
+    </div>
+
+    {{#if insights}}
+    <div class="insights">
+      <h3>📊 Key Insights</h3>
+      <ul>
+        {{#each insights}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+
+    {{#if topCategories}}
+    <div class="section">
+      <h2>Top Expense Categories</h2>
+      {{#each topCategories}}
+      <div class="category-item">
+        <div class="category-info">
+          <span class="category-icon">{{icon}}</span>
+          <span class="category-name">{{name}}</span>
+        </div>
+        <span class="category-amount">{{formatCurrency amount}}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: {{percentage}}%"></div>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if subscriptions}}
+    <div class="section">
+      <h2>🔄 Active Subscriptions</h2>
+      {{#each subscriptions}}
+      <div class="subscription-item">
+        <div class="subscription-header">
+          <span>{{merchant}}</span>
+          <span>{{formatCurrency amount}}/{{frequency}}</span>
+        </div>
+        <div class="subscription-details">
+          Next billing: {{formatDate nextBillingDate}}
+        </div>
+      </div>
+      {{/each}}
+      <p style="margin-top: 15px; color: #666; font-size: 14px;">
+        <strong>Total monthly subscription cost: {{formatCurrency totalSubscriptionCost}}</strong>
+      </p>
+    </div>
+    {{/if}}
+
+    {{#if topMerchants}}
+    <div class="section">
+      <h2>🏪 Top Merchants</h2>
+      {{#each topMerchants}}
+      <div class="merchant-item">
+        <span>{{merchant}}</span>
+        <span style="font-weight: bold;">{{formatCurrency totalAmount}}</span>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <div style="text-align: center;">
+      <a href="{{dashboardUrl}}" class="button">View Full Dashboard</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This is an automated report from SpendGuard</p>
+      <p>You received this email because you have email notifications enabled</p>
+      <p style="margin-top: 10px;">
+        <a href="{{unsubscribeUrl}}" style="color: #666;">Unsubscribe from reports</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

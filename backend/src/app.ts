@@ -10,6 +10,7 @@ import categoryRoutes from './routes/categoryRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
 import subscriptionRoutes from './routes/subscriptionRoutes';
+import reportRoutes from './routes/reportRoutes';
 
 dotenv.config();
 
@@ -75,6 +76,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/reports', reportRoutes);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({
