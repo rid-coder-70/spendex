@@ -44,7 +44,19 @@ class APIClient {
 
   private getToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem('token');
+    
+    // Try localStorage first
+    const localToken = localStorage.getItem('token');
+    if (localToken) return localToken;
+    
+    // Fallback to cookie
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'token') return value;
+    }
+    
+    return null;
   }
 
   private clearToken(): void {

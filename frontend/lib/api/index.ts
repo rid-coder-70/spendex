@@ -4,3 +4,4 @@ export * from './transactions';
 export * from './categories';
 export * from './analytics';
 export * from './subscriptions';
+export * from './public';

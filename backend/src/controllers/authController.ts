@@ -161,4 +161,57 @@ export class AuthController {
       });
     }
   }
+
+  static async updateProfile(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        return res.status(401).json({
+          success: false,
+          error: {
+            message: 'Not authenticated',
+            code: 'NOT_AUTHENTICATED',
+          },
+        });
+      }
+
+      const { name, email, phone, currency, timezone, email_notifications } = req.body;
+      const updates: any = {};
+
+      if (name) updates.name = ValidationUtils.sanitizeString(name);
+      if (email) updates.email = email.toLowerCase().trim();
+      if (phone !== undefined) updates.phone = phone;
+      if (currency) updates.currency = currency;
+      if (timezone) updates.timezone = timezone;
+      if (email_notifications !== undefined) updates.email_notifications = email_notifications;
+
+      const updatedUser = await UserModel.update(req.user.id, updates);
+
+      if (!updatedUser) {
+        return res.status(404).json({
+          success: false,
+          error: {
+            message: 'User not found',
+            code: 'USER_NOT_FOUND',
+          },
+        });
+      }
+
+      const { password_hash: _, ...userWithoutPassword } = updatedUser;
+
+      res.json({
+        success: true,
+        message: 'Profile updated successfully',
+        data: userWithoutPassword,
+      });
+    } catch (error: any) {
+      console.error('Update profile error:', error);
+      res.status(500).json({
+        success: false,
+        error: {
+          message: 'Failed to update profile',
+          code: 'UPDATE_PROFILE_ERROR',
+        },
+      });
+    }
+  }
 }

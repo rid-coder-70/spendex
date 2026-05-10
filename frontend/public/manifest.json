@@ -1,0 +1,19 @@
+{
+  "name": "SpendGuard Premium",
+  "short_name": "SpendGuard",
+  "description": "Premium Intelligent Expense Tracking",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "scope": "/"
+}

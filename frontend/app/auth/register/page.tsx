@@ -7,6 +7,7 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { authAPI } from '@/lib/api';
 import { apiClient } from '@/lib/api/client';
 import { validateEmail, validatePassword } from '@/lib/utils';
+import { toast } from '@/lib/stores/toastStore';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -75,7 +76,6 @@ export default function RegisterPage() {
     if (!validate()) return;
 
     setIsLoading(true);
-
     try {
       const { confirmPassword, ...registerData } = formData;
       const response = await authAPI.register(registerData);
@@ -84,9 +84,12 @@ export default function RegisterPage() {
         setUser(response.data.user);
         setToken(response.data.token);
         apiClient.setAuthCookie(response.data.token);
+        toast.success('Welcome to SpendGuard!');
         router.push('/dashboard');
       } else {
-        setApiError('Registration failed. Please try again.');
+        const errorMsg = response.message || 'Registration failed. Please try again.';
+        setApiError(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (error: any) {
       console.error('Registration error:', error);
@@ -94,6 +97,7 @@ export default function RegisterPage() {
         error.response?.data?.error?.message ||
         'Registration failed. Please try again.';
       setApiError(message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
