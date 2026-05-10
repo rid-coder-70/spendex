@@ -159,11 +159,11 @@ export class AnalyticsService {
     const result = await query(sql, values);
 
     const total = result.rows.reduce(
-      (sum, row) => sum + parseFloat(row.total_amount),
+      (sum: number, row: any) => sum + parseFloat(row.total_amount),
       0
     );
 
-    return result.rows.map((row) => ({
+    return result.rows.map((row: any) => ({
       category_id: row.category_id,
       category_name: row.category_name,
       category_icon: row.category_icon,
@@ -194,7 +194,7 @@ export class AnalyticsService {
 
     const result = await query(sql, [userId]);
 
-    return result.rows.map((row) => {
+    return result.rows.map((row: any) => {
       const totalIncome = parseFloat(row.total_income);
       const totalExpenses = parseFloat(row.total_expenses);
 
@@ -260,7 +260,7 @@ export class AnalyticsService {
 
     const result = await query(sql, values);
 
-    return result.rows.map((row) => ({
+    return result.rows.map((row: any) => ({
       amount: parseFloat(row.total_amount),
       merchant: row.merchant,
       total_amount: parseFloat(row.total_amount),

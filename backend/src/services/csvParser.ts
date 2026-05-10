@@ -62,12 +62,12 @@ export class CSVParserService {
         transformHeader: (header: string) => {
           return header.toLowerCase().trim();
         },
-        complete: (results) => {
+        complete: (results: any) => {
           const validTransactions: ParsedTransaction[] = [];
           const errors: Array<{ row: number; data: CSVRow; error: string }> =
             [];
 
-          results.data.forEach((row, index) => {
+          results.data.forEach((row: CSVRow, index: number) => {
             const rowNumber = index + 2;
 
             try {

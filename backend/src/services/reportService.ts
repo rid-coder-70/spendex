@@ -78,8 +78,8 @@ export class ReportService {
     const subscriptions = subscriptionsResult.rows;
 
     const totalSubscriptionCost = subscriptions
-      .filter((s) => s.frequency === 'monthly')
-      .reduce((sum, s) => sum + parseFloat(s.amount), 0);
+      .filter((s: any) => s.frequency === 'monthly')
+      .reduce((sum: number, s: any) => sum + parseFloat(s.amount), 0);
 
     const merchants = await AnalyticsService.getTopMerchants(
       userId,
@@ -183,8 +183,8 @@ export class ReportService {
 
     if (subscriptions.length > 0) {
       const monthlySubCost = subscriptions
-        .filter((s) => s.frequency === 'monthly')
-        .reduce((sum, s) => sum + parseFloat(s.amount), 0);
+        .filter((s: any) => s.frequency === 'monthly')
+        .reduce((sum: number, s: any) => sum + parseFloat(s.amount), 0);
 
       if (monthlySubCost > summary.total_expenses * 0.1) {
         insights.push(
