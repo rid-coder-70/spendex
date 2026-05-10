@@ -15,8 +15,14 @@ const pool = new Pool({
   ssl: isProduction ? { rejectUnauthorized: false } : false,
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000, // Increased timeout for slower connections
+  connectionTimeoutMillis: 10000, 
 });
+
+// Log connection attempt (safely)
+if (isProduction) {
+  const connectionSource = process.env.DATABASE_URL ? 'DATABASE_URL' : 'manual config';
+  console.log(`📡 Attempting DB connection via ${connectionSource}...`);
+}
 
 pool.on('connect', () => {
   console.log('✅ Connected to PostgreSQL database');
