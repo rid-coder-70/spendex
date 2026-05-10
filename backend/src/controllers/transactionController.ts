@@ -30,7 +30,7 @@ export class TransactionController {
       res.json({
         success: true,
         data: {
-          transactions,
+          items: transactions,
           pagination: {
             page,
             limit,

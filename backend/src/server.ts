@@ -1,6 +1,8 @@
 import app from './app';
 import dotenv from 'dotenv';
 import { CategoryModel } from './models/Category';
+import { EmailService } from './services/emailService';
+import { JobScheduler } from './jobs';
 
 dotenv.config();
 
@@ -10,6 +12,12 @@ let server: ReturnType<typeof app.listen>;
 
 const startServer = async () => {
   try {
+    // Initialize services
+    EmailService.initialize();
+    
+    // Start background jobs
+    JobScheduler.startAll();
+
     await CategoryModel.seedDefaults();
     console.log('✅ Default categories seeded');
   } catch (error: any) {
