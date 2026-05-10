@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Wallet, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/lib/stores/authStore';
 
@@ -46,9 +46,7 @@ export default function Navbar() {
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group hover:opacity-90 transition-opacity duration-300">
-          <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-            <Wallet className="w-6 h-6" />
-          </div>
+          <img src="/logo.svg" alt="SpendGuard Logo" className="w-10 h-10 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" />
           <span className={cn(
             "text-xl font-bold tracking-tight transition-colors duration-300",
             isScrolled ? "text-slate-900" : "text-white"
