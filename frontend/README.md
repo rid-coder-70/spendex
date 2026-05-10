@@ -1,151 +1,89 @@
-# 🖥️ SpendGuard — Frontend
+# 🖥️ SpendGuard — Frontend Dashboard
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.x-ff0055?style=flat-square&logo=framer)](https://framer.com/motion)
 
-The frontend application for SpendGuard, a personal finance management system. Built with Next.js 14 App Router, TypeScript, and Tailwind CSS.
+The visual heart of SpendGuard. A premium, high-fidelity dashboard built with Next.js 14, focused on providing a fluid and intuitive user experience for personal finance management.
 
 ---
 
-## 🚀 Getting Started
+## ✨ Features
+- **Premium UI/UX**: Modern glassmorphism design with animated backgrounds and spring-physics interactions.
+- **Dynamic Charts**: Interactive financial trends and category breakdowns using Recharts.
+- **Smart Transactions**: Full CRUD support with search, filtering, and pagination.
+- **CSV Bulk Import**: Drag-and-drop interface for batch transaction processing.
+- **Mobile First**: Fully responsive sidebar and layout optimized for all devices.
+- **Notification Center**: Real-time alerts for budget milestones and subscriptions.
+
+---
+
+## 🚀 Installation & Setup
 
 ### 1. Install Dependencies
 ```bash
+cd frontend
 npm install
 ```
 
 ### 2. Configure Environment Variables
-Create a `.env.local` file in the `frontend` directory:
-```bash
+Create a `.env.local` file:
+```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-### 3. Run the Development Server
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
 ---
 
 ## 🛠️ Tech Stack
-
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS 4.x
-- **State Management:** Zustand
-- **HTTP Client:** Axios
-- **Forms:** React Hook Form
-- **Validation:** Zod
-- **Charts:** Recharts
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4.x
+- **Animations**: Framer Motion
+- **State Management**: Zustand (Persistent)
+- **Data Fetching**: Axios
+- **Charts**: Recharts
+- **Icons**: Lucide React
 
 ---
 
-## 📁 File Structure
+## 📁 Project Structure
 ```
 frontend/
-├── app/
-│   ├── auth/
-│   │   ├── layout.tsx
-│   │   ├── login/page.tsx
-│   │   └── register/page.tsx
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
+├── app/              # Next.js App Router (Pages & Layouts)
+├── components/
+│   ├── layout/       # Sidebar, Header, Global Layouts
+│   ├── ui/           # Reusable Atomic Components (Buttons, Cards)
+│   ├── analytics/    # Chart components
+│   └── transactions/ # List & Modal components
 ├── lib/
-│   ├── api/
-│   │   ├── auth.ts
-│   │   ├── transactions.ts
-│   │   ├── categories.ts
-│   │   ├── analytics.ts
-│   │   ├── subscriptions.ts
-│   │   └── client.ts
-│   ├── stores/
-│   │   ├── authStore.ts
-│   │   └── transactionStore.ts
-│   └── utils/
-│       ├── formatters.ts
-│       └── validators.ts
-├── types/
-│   └── index.ts
-└── middleware.ts
+│   ├── api/          # Axios service layer
+│   ├── stores/       # Zustand state management
+│   └── utils/        # Formatters & Helpers
+├── types/            # Global TypeScript interfaces
+└── public/           # Static assets & icons
 ```
 
 ---
 
-## 📈 Week 7 Summary - Frontend Development Part 1
+## 🧩 Scripts
 
-### ✅ Completed Tasks
+| Command | Description |
+| :--- | :--- |
+| `npm run dev` | Starts the development server with hot-reloading. |
+| `npm run build` | Generates an optimized production build. |
+| `npm start` | Starts the built application in production mode. |
+| `npm run lint` | Runs ESLint to check for code quality issues. |
 
-#### Next.js Setup
-- Next.js 14 with App Router
-- TypeScript configuration
-- Tailwind CSS with custom theme
-- Environment variables setup
-- Project structure organization
+---
 
-#### State Management
-- Zustand stores (auth, transactions)
-- Persistent auth state
-- Token management
-
-#### API Integration
-- Axios client with interceptors
-- Auto token attachment
-- Error handling
-- API service layer for all endpoints
-
-#### Utility Functions
-- Currency formatting
-- Date formatting
-- Email validation
-- Password validation
-- Number formatting
-
-#### Authentication Pages
-- Beautiful auth layout
-- Login page with validation
-- Register page with validation
-- Form error handling
-- Loading states
-- API error display
-
-#### Routing & Protection
-- Home/landing page
-- Protected routes middleware
-- Cookie-based authentication
-- Auto-redirect logic
-
-### ✅ Features Implemented
-1. Next.js 14 setup with TypeScript
-2. Tailwind CSS with custom theme
-3. State management with Zustand
-4. Complete API client
-5. Auth service layer
-6. Login page
-7. Registration page
-8. Form validation
-9. Protected routes
-10. Landing page
-
-### ✅ Testing Completed
-- Backend API connection
-- User registration flow
-- User login flow
-- Token storage
-- Form validation
-- Error handling
-- Protected routes
-- Auto-redirect
-
-## Next Week (Week 8)
-- Dashboard layout with sidebar
-- Transaction list component
-- Analytics charts
-- Subscription cards
-- CSV upload interface
-- Transaction creation form
-- Complete dashboard functionality
-- Final polish and deployment
+## 🔗 Related Links
+- [⚙️ Backend README](../backend/README.md)
+- [🌌 Main README](../README.md)
+- [📝 WEEK 8 Summary](../docs/WEEK8_SUMMARY.md)
