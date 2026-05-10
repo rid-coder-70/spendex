@@ -1,6 +1,18 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+// Automatically ensure the API URL ends with /api
+const getBaseURL = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!envUrl) return 'http://localhost:5000/api';
+  
+  // Remove trailing slash if present
+  const normalizedUrl = envUrl.endsWith('/') ? envUrl.slice(0, -1) : envUrl;
+  
+  // Append /api if not present
+  return normalizedUrl.endsWith('/api') ? normalizedUrl : `${normalizedUrl}/api`;
+};
+
+const API_URL = getBaseURL();
 
 class APIClient {
   private client: AxiosInstance;
