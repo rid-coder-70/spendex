@@ -22,7 +22,8 @@ app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
     origin: [
         process.env.FRONTEND_URL || 'http://localhost:3000',
-        'http://localhost:3001'
+        'http://localhost:3001',
+        'https://spendguard-ecru.vercel.app'
     ],
     credentials: true,
 }));
