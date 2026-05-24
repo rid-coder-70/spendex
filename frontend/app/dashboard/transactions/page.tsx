@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { Plus, FileDown, CreditCard, Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import useSWR, { mutate } from 'swr';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionModal from '@/components/transactions/TransactionModal';
 import Button from '@/components/ui/Button';
@@ -13,47 +14,40 @@ import { cn } from '@/lib/utils';
 
 function TransactionsContent() {
   const searchParams = useSearchParams();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
   const [filterType, setFilterType] = useState<'all' | 'expense' | 'income'>('all');
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const q = searchParams.get('q');
     if (q) setSearchTerm(q);
   }, [searchParams]);
 
-  const fetchTransactions = async (page = 1, search = '', type = 'all') => {
-    setIsLoading(true);
-    try {
-      const filters: any = { page, limit: 20 };
+  // SWR Fetcher
+  const { data: transactionsRes, isLoading } = useSWR(
+    ['transactions', currentPage, searchTerm, filterType],
+    async ([, page, search, type]) => {
+      const filters: any = { page: page as number, limit: 20 };
       if (search) filters.merchant = search;
       if (type !== 'all') filters.type = type;
-      const response = await transactionsAPI.getAll(filters);
-      if (response.success) {
-        setTransactions(response.data.items || []);
-        setTotalPages(response.data.pagination.pages);
-        setCurrentPage(page);
-      }
-    } catch (error) {
-      console.error('Failed to fetch transactions:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      return transactionsAPI.getAll(filters);
+    },
+    { keepPreviousData: true }
+  );
 
-  useEffect(() => {
-    const t = setTimeout(() => fetchTransactions(1, searchTerm, filterType), 400);
-    return () => clearTimeout(t);
-  }, [searchTerm, filterType]);
+  const transactions = transactionsRes?.data?.items || [];
+  const totalPages = transactionsRes?.data?.pagination?.pages || 1;
 
   const handleEdit  = (t: Transaction) => { setSelectedTransaction(t); setIsModalOpen(true); };
-  const handleDelete = async (id: number) => { await transactionsAPI.delete(id); fetchTransactions(currentPage, searchTerm, filterType); };
-  const handleSuccess = () => fetchTransactions(currentPage, searchTerm, filterType);
+  const handleDelete = async (id: number) => {
+    await transactionsAPI.delete(id);
+    mutate(['transactions', currentPage, searchTerm, filterType]);
+  };
+  const handleSuccess = () => {
+    mutate(['transactions', currentPage, searchTerm, filterType]);
+  };
   const handleAddNew  = () => { setSelectedTransaction(null); setIsModalOpen(true); };
 
   return (
@@ -150,14 +144,14 @@ function TransactionsContent() {
                 <button
                   className="btn-secondary text-xs py-1"
                   disabled={currentPage === 1}
-                  onClick={() => fetchTransactions(currentPage - 1, searchTerm, filterType)}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                 >
                   Previous
                 </button>
                 <button
                   className="btn-secondary text-xs py-1"
                   disabled={currentPage === totalPages}
-                  onClick={() => fetchTransactions(currentPage + 1, searchTerm, filterType)}
+                  onClick={() => setCurrentPage(currentPage + 1)}
                 >
                   Next
                 </button>

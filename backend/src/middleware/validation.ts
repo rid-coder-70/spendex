@@ -1,146 +1,81 @@
 import { Request, Response, NextFunction } from 'express';
-import { ValidationUtils } from '../utils/validation';
-import { PasswordUtils } from '../utils/password';
+import { z } from 'zod';
 
-export const validateRegister = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { name, email, password, phone } = req.body;
-  const errors: string[] = [];
+const formatZodErrors = (error: z.ZodError) => {
+  return error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
+};
 
-  if (!name || !ValidationUtils.isValidName(name)) {
-    errors.push('Name must be between 2 and 100 characters');
-  }
+const RegisterSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(100),
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  phone: z.string().optional(),
+});
 
-  if (!email || !ValidationUtils.isValidEmail(email)) {
-    errors.push('Invalid email format');
-  }
-
-  if (!password) {
-    errors.push('Password is required');
-  } else {
-    const passwordValidation = PasswordUtils.validate(password);
-    if (!passwordValidation.valid) {
-      errors.push(...passwordValidation.errors);
-    }
-  }
-
-
-  if (phone && !ValidationUtils.isValidPhone(phone)) {
-    errors.push('Invalid phone number format');
-  }
-
-  if (errors.length > 0) {
+export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
+  const result = RegisterSchema.safeParse(req.body);
+  if (!result.success) {
     return res.status(400).json({
       success: false,
-      error: {
-        message: 'Validation failed',
-        code: 'VALIDATION_ERROR',
-        details: errors,
-      },
+      error: { message: 'Validation failed', code: 'VALIDATION_ERROR', details: formatZodErrors(result.error) },
     });
   }
-
   next();
 };
 
-export const validateLogin = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { email, password } = req.body;
-  const errors: string[] = [];
+const LoginSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(1, 'Password is required'),
+});
 
-  if (!email || !ValidationUtils.isValidEmail(email)) {
-    errors.push('Invalid email format');
-  }
-
-  if (!password) {
-    errors.push('Password is required');
-  }
-
-  if (errors.length > 0) {
+export const validateLogin = (req: Request, res: Response, next: NextFunction) => {
+  const result = LoginSchema.safeParse(req.body);
+  if (!result.success) {
     return res.status(400).json({
       success: false,
-      error: {
-        message: 'Validation failed',
-        code: 'VALIDATION_ERROR',
-        details: errors,
-      },
+      error: { message: 'Validation failed', code: 'VALIDATION_ERROR', details: formatZodErrors(result.error) },
     });
   }
-
   next();
 };
 
-export const validateTransaction = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { amount, type, transaction_date } = req.body;
-  const errors: string[] = [];
+const TransactionSchema = z.object({
+  amount: z.number().positive('Amount must be a positive number'),
+  type: z.enum(['expense', 'income']),
+  transaction_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Transaction date must be in YYYY-MM-DD format'),
+  category_id: z.number().optional(),
+  description: z.string().optional(),
+  merchant: z.string().optional(),
+  payment_method: z.string().optional(),
+  notes: z.string().optional(),
+  is_recurring: z.boolean().optional()
+});
 
-  if (!amount || isNaN(amount) || amount <= 0) {
-    errors.push('Amount must be a positive number');
-  }
-
-  if (!type || !['expense', 'income'].includes(type)) {
-    errors.push('Type must be either "expense" or "income"');
-  }
-
-  if (!transaction_date) {
-    errors.push('Transaction date is required');
-  } else {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateRegex.test(transaction_date)) {
-      errors.push('Transaction date must be in YYYY-MM-DD format');
-    }
-  }
-
-  if (errors.length > 0) {
+export const validateTransaction = (req: Request, res: Response, next: NextFunction) => {
+  const result = TransactionSchema.safeParse(req.body);
+  if (!result.success) {
     return res.status(400).json({
       success: false,
-      error: {
-        message: 'Validation failed',
-        code: 'VALIDATION_ERROR',
-        details: errors,
-      },
+      error: { message: 'Validation failed', code: 'VALIDATION_ERROR', details: formatZodErrors(result.error) },
     });
   }
-
   next();
 };
 
-export const validateCategory = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { name, type } = req.body;
-  const errors: string[] = [];
+const CategorySchema = z.object({
+  name: z.string().min(2, 'Category name must be at least 2 characters'),
+  type: z.enum(['expense', 'income']),
+  icon: z.string().optional(),
+  color: z.string().optional()
+});
 
-  if (!name || name.trim().length < 2) {
-    errors.push('Category name must be at least 2 characters');
-  }
-
-  if (!type || !['expense', 'income'].includes(type)) {
-    errors.push('Type must be either "expense" or "income"');
-  }
-
-  if (errors.length > 0) {
+export const validateCategory = (req: Request, res: Response, next: NextFunction) => {
+  const result = CategorySchema.safeParse(req.body);
+  if (!result.success) {
     return res.status(400).json({
       success: false,
-      error: {
-        message: 'Validation failed',
-        code: 'VALIDATION_ERROR',
-        details: errors,
-      },
+      error: { message: 'Validation failed', code: 'VALIDATION_ERROR', details: formatZodErrors(result.error) },
     });
   }
-
   next();
 };

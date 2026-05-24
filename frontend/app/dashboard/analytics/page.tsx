@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR from 'swr';
 import { TrendingUp, DollarSign, Target, AlertCircle } from 'lucide-react';
 import MonthlySpendingChart from '@/components/analytics/MonthlySpendingChart';
 import CategoryPieChart from '@/components/analytics/CategoryPieChart';
@@ -12,34 +13,36 @@ import { formatCurrency, getMonthName } from '@/lib/utils';
 import { CategoryBreakdown } from '@/types';
 
 export default function AnalyticsPage() {
-  const [summary, setSummary] = useState<any>(null);
-  const [trends, setTrends] = useState<any[]>([]);
-  const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown[]>([]);
-  const [topMerchants, setTopMerchants] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear();
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const now = new Date();
-        const [summaryRes, trendsRes, categoryRes, merchantsRes] = await Promise.all([
-          analyticsAPI.getMonthlySummary(now.getMonth() + 1, now.getFullYear()),
-          analyticsAPI.getSpendingTrends(6),
-          analyticsAPI.getCategoryBreakdown({ type: 'expense' }),
-          analyticsAPI.getTopMerchants({ limit: 5 }),
-        ]);
-        if (summaryRes.success) setSummary(summaryRes.data || null);
-        if (trendsRes.success) setTrends(trendsRes.data || []);
-        if (categoryRes.success) setCategoryBreakdown(categoryRes.data || []);
-        if (merchantsRes.success) setTopMerchants(merchantsRes.data || []);
-      } catch (error) {
-        console.error('Failed to fetch analytics:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+  const { data: summaryRes, isLoading: isSummaryLoading } = useSWR(
+    ['monthlySummary', currentMonth, currentYear],
+    () => analyticsAPI.getMonthlySummary(currentMonth, currentYear)
+  );
+
+  const { data: trendsRes, isLoading: isTrendsLoading } = useSWR(
+    'spendingTrends',
+    () => analyticsAPI.getSpendingTrends(6)
+  );
+
+  const { data: categoryRes, isLoading: isCategoryLoading } = useSWR(
+    'categoryBreakdown_expense',
+    () => analyticsAPI.getCategoryBreakdown({ type: 'expense' })
+  );
+
+  const { data: merchantsRes, isLoading: isMerchantsLoading } = useSWR(
+    'topMerchants',
+    () => analyticsAPI.getTopMerchants({ limit: 5 })
+  );
+
+  const summary = summaryRes?.data || null;
+  const trends = trendsRes?.data || [];
+  const categoryBreakdown = categoryRes?.data || [];
+  const topMerchants = merchantsRes?.data || [];
+
+  const isLoading = isSummaryLoading || isTrendsLoading || isCategoryLoading || isMerchantsLoading;
 
   if (isLoading) {
     return (
@@ -56,7 +59,7 @@ export default function AnalyticsPage() {
     );
   }
 
-  const savingsRate = summary?.total_income > 0
+  const savingsRate = summary && summary.total_income > 0
     ? (summary.net_savings / summary.total_income) * 100
     : 0;
 

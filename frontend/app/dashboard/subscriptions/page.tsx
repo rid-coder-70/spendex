@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR, { mutate } from 'swr';
 import { RefreshCcw, XCircle, CheckCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import EmptyState from '@/components/ui/EmptyState';
@@ -10,34 +11,27 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import { toast } from '@/lib/stores/toastStore';
 
 export default function SubscriptionsPage() {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [stats, setStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: subsRes, isLoading: isSubsLoading } = useSWR(
+    'subscriptions',
+    () => subscriptionsAPI.getAll()
+  );
 
-  const fetchSubscriptions = async () => {
-    setIsLoading(true);
-    try {
-      const [subsRes, statsRes] = await Promise.all([
-        subscriptionsAPI.getAll(),
-        subscriptionsAPI.getStats(),
-      ]);
-      if (subsRes.success) setSubscriptions(subsRes.data || []);
-      if (statsRes.success) setStats(statsRes.data);
-    } catch {
-      toast.error('Failed to load subscriptions');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data: statsRes, isLoading: isStatsLoading } = useSWR(
+    'subscriptionStats',
+    () => subscriptionsAPI.getStats()
+  );
 
-  useEffect(() => { fetchSubscriptions(); }, []);
+  const subscriptions = subsRes?.data || [];
+  const stats = statsRes?.data;
+  const isLoading = isSubsLoading || isStatsLoading;
 
   const handleCancel = async (id: number) => {
     if (!confirm('Mark this subscription as cancelled?')) return;
     try {
       await subscriptionsAPI.update(id, { is_active: false });
       toast.success('Subscription cancelled');
-      fetchSubscriptions();
+      mutate('subscriptions');
+      mutate('subscriptionStats');
     } catch {
       toast.error('Failed to cancel subscription');
     }
@@ -45,10 +39,10 @@ export default function SubscriptionsPage() {
 
   const handleDetect = async () => {
     try {
-      setIsLoading(true);
       await subscriptionsAPI.detect();
       toast.success('Detection complete');
-      fetchSubscriptions();
+      mutate('subscriptions');
+      mutate('subscriptionStats');
     } catch {
       toast.error('Detection failed');
     }

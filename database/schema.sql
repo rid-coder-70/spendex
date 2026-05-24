@@ -36,7 +36,7 @@ CREATE TABLE transactions (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
-  amount DECIMAL(12, 2) NOT NULL,
+  amount DECIMAL(12, 2) NOT NULL CHECK (amount >= 0),
   type VARCHAR(20) CHECK (type IN ('expense', 'income')) NOT NULL,
   description TEXT,
   merchant VARCHAR(150),
@@ -45,6 +45,7 @@ CREATE TABLE transactions (
   is_recurring BOOLEAN DEFAULT FALSE,
   subscription_id INTEGER,
   notes TEXT,
+  deleted_at TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -52,6 +53,7 @@ CREATE TABLE transactions (
 CREATE INDEX idx_transactions_user_id ON transactions(user_id);
 CREATE INDEX idx_transactions_category_id ON transactions(category_id);
 CREATE INDEX idx_transactions_date ON transactions(transaction_date);
+CREATE INDEX idx_transactions_deleted_at ON transactions(deleted_at);
 CREATE INDEX idx_transactions_user_date ON transactions(user_id, transaction_date DESC);
 
 -- Subscriptions Table

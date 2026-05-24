@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import Link from 'next/link';
 import {
   TrendingUp,
@@ -29,65 +30,59 @@ const getGreeting = () => {
 };
 
 export default function DashboardPage() {
-  const [summary, setSummary] = useState<any>(null);
-  const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
-  const [subscriptionStats, setSubscriptionStats] = useState<any>(null);
-  const [weather, setWeather] = useState<{ temp: number; description: string } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuthStore();
+  const [weather, setWeather] = useState<{ temp: number; description: string } | null>(null);
+
+  const now = new Date();
+  
+  // SWR Fetchers
+  const { data: summaryRes, isLoading: isSummaryLoading } = useSWR(
+    user ? ['monthlySummary', now.getMonth() + 1, now.getFullYear()] : null,
+    ([, m, y]) => analyticsAPI.getMonthlySummary(m as number, y as number)
+  );
+  
+  const { data: transactionsRes, isLoading: isTxLoading } = useSWR(
+    user ? 'recentTransactions' : null,
+    () => transactionsAPI.getAll({ limit: 6 })
+  );
+
+  const { data: subscriptionRes, isLoading: isSubLoading } = useSWR(
+    user ? 'subscriptionStats' : null,
+    () => subscriptionsAPI.getStats()
+  );
+
+  const summary = summaryRes?.data;
+  const recentTransactions = transactionsRes?.data?.items || [];
+  const subscriptionStats = subscriptionRes?.data;
+  
+  const isLoading = isSummaryLoading || isTxLoading || isSubLoading;
 
   useEffect(() => {
-    const timeout = setTimeout(() => setIsLoading(false), 5000);
-    const fetchData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-      try {
-        const now = new Date();
-        const [summaryRes, transactionsRes, subscriptionRes] = await Promise.all([
-          analyticsAPI.getMonthlySummary(now.getMonth() + 1, now.getFullYear()),
-          transactionsAPI.getAll({ limit: 6 }),
-          subscriptionsAPI.getStats()
-        ]);
-        if (summaryRes.success) setSummary(summaryRes.data);
-        if (transactionsRes.success) setRecentTransactions(transactionsRes.data.items || []);
-        if (subscriptionRes.success) setSubscriptionStats(subscriptionRes.data);
-
-        // Fetch Weather
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            async (pos) => {
-              try {
-                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
-                const data = await res.json();
-                if (data.current_weather) {
-                  setWeather({
-                    temp: data.current_weather.temperature,
-                    description: '°C Local Weather',
-                  });
-                }
-              } catch (e) {
-                console.error('Weather fetch failed', e);
-              }
-            },
-            () => {
-              // Fallback to Dhaka
-              fetch('https://api.open-meteo.com/v1/forecast?latitude=23.81&longitude=90.41&current_weather=true')
-                .then(res => res.json())
-                .then(data => setWeather({ temp: data.current_weather.temperature, description: '°C (Dhaka)' }))
-                .catch(console.error);
+    if (!user) return;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          try {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
+            const data = await res.json();
+            if (data.current_weather) {
+              setWeather({
+                temp: data.current_weather.temperature,
+                description: '°C Local Weather',
+              });
             }
-          );
+          } catch (e) {
+            console.error('Weather fetch failed', e);
+          }
+        },
+        () => {
+          fetch('https://api.open-meteo.com/v1/forecast?latitude=23.81&longitude=90.41&current_weather=true')
+            .then(res => res.json())
+            .then(data => setWeather({ temp: data.current_weather.temperature, description: '°C (Dhaka)' }))
+            .catch(console.error);
         }
-
-      } catch (error: any) {
-        if (error.response?.status !== 401) toast.error('Failed to load dashboard data');
-      } finally {
-        setIsLoading(false);
-        clearTimeout(timeout);
-      }
-    };
-    fetchData();
-    return () => clearTimeout(timeout);
+      );
+    }
   }, [user]);
 
   const monthLabel = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });

@@ -29,8 +29,16 @@
 @layer components {
   /* Clean card — white bg, 1px border, subtle shadow */
   .card {
-    @apply bg-white border border-zinc-100 rounded-xl;
+    @apply bg-white border border-zinc-100 rounded-xl transition-all duration-200 ease-out;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  .card-hover {
+    @apply hover:border-zinc-200 hover:-translate-y-[2px] cursor-pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .card-hover:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04), 0 2px 8px rgba(0,0,0,0.03);
   }
 
   /* Pill badge */
@@ -41,26 +49,27 @@
   /* Clean input */
   .input {
     @apply w-full px-3 py-2 bg-white border border-zinc-200 rounded-lg text-sm
-           focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500
-           placeholder:text-zinc-400 transition-colors;
+           focus:outline-none focus:ring-4 focus:ring-zinc-900/10 focus:border-zinc-900
+           hover:border-zinc-300 placeholder:text-zinc-400 transition-all duration-200;
   }
 
   /* Primary button */
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white text-sm font-medium
-           rounded-lg hover:bg-zinc-800 transition-colors active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-zinc-900 text-white text-sm font-medium
+           rounded-lg hover:bg-zinc-800 transition-all duration-200 active:scale-[0.97] hover:shadow-md;
   }
 
   /* Secondary button */
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-zinc-700 text-sm font-medium
-           border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-white text-zinc-700 text-sm font-medium
+           border border-zinc-200 rounded-lg hover:bg-zinc-50 hover:border-zinc-300 
+           transition-all duration-200 active:scale-[0.97];
   }
 
   /* Ghost button */
   .btn-ghost {
-    @apply inline-flex items-center gap-2 px-3 py-1.5 text-zinc-500 text-sm font-medium
-           rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-colors;
+    @apply inline-flex items-center justify-center gap-2 px-3 py-1.5 text-zinc-500 text-sm font-medium
+           rounded-lg hover:bg-zinc-100 hover:text-zinc-900 transition-all duration-200 active:scale-[0.97];
   }
 
   /* Sidebar nav item */
@@ -98,11 +107,11 @@
 
   /* Fade in */
   .animate-in {
-    animation: fadeSlideIn 0.2s ease-out forwards;
+    animation: fadeSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
