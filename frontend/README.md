@@ -2,14 +2,13 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com)
-[![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.x-ff0055?style=flat-square&logo=framer)](https://framer.com/motion)
 
-The visual heart of SpendGuard. A premium, high-fidelity dashboard built with Next.js 14, focused on providing a fluid and intuitive user experience for personal finance management.
+The visual heart of SpendGuard. A minimal, high-information-density dashboard built with Next.js 14, focused on providing a clean and intuitive user experience for personal finance management.
 
 ---
 
 ## ✨ Features
-- **Premium UI/UX**: Modern glassmorphism design with animated backgrounds and spring-physics interactions.
+- **Minimal UI/UX**: Clean, professional design with a focus on data density and usability.
 - **Dynamic Charts**: Interactive financial trends and category breakdowns using Recharts.
 - **Smart Transactions**: Full CRUD support with search, filtering, and pagination.
 - **CSV Bulk Import**: Drag-and-drop interface for batch transaction processing.
@@ -45,7 +44,6 @@ The application will be available at [http://localhost:3000](http://localhost:30
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4.x
-- **Animations**: Framer Motion
 - **State Management**: Zustand (Persistent)
 - **Data Fetching**: Axios
 - **Charts**: Recharts

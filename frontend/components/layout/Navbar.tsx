@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Wallet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/lib/stores/authStore';
 
@@ -16,9 +16,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -35,21 +33,21 @@ export default function Navbar() {
   if (isDashboard) return null;
 
   return (
-    <nav
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4',
-        isScrolled 
-          ? 'bg-white/80 backdrop-blur-lg shadow-soft py-3' 
-          : 'bg-transparent'
-      )}
-    >
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className={cn(
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-200',
+      isScrolled
+        ? 'bg-white border-b border-zinc-200'
+        : 'bg-transparent'
+    )}>
+      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group hover:opacity-90 transition-opacity duration-300">
-          <img src="/logo.svg" alt="SpendGuard Logo" className="w-10 h-10 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" />
+        <Link href="/" className="flex items-center gap-2">
+          <div className="w-6 h-6 bg-zinc-900 rounded-md flex items-center justify-center">
+            <Wallet className="w-3.5 h-3.5 text-white" />
+          </div>
           <span className={cn(
-            "text-xl font-bold tracking-tight transition-colors duration-300",
-            isScrolled ? "text-slate-900" : "text-white"
+            'text-sm font-semibold transition-colors',
+            isScrolled ? 'text-zinc-900' : 'text-white'
           )}>
             SpendGuard
           </span>
@@ -57,14 +55,14 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         {!isAuthPage && (
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-all duration-300 transform hover:text-primary-500 hover:-translate-y-0.5 hover:scale-105 inline-block",
-                  isScrolled ? "text-slate-600" : "text-white/80"
+                  'text-sm transition-colors',
+                  isScrolled ? 'text-zinc-500 hover:text-zinc-900' : 'text-white/70 hover:text-white'
                 )}
               >
                 {link.name}
@@ -74,11 +72,11 @@ export default function Navbar() {
         )}
 
         {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2">
           {mounted && isAuthenticated ? (
             <Link
               href="/dashboard"
-              className="px-6 py-2.5 text-sm font-bold bg-primary-600 text-white rounded-lg shadow-lg shadow-primary-600/20 hover:bg-primary-700 hover:shadow-primary-600/40 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-105 active:translate-y-0"
+              className="px-3 py-1.5 text-sm font-medium bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors"
             >
               Dashboard
             </Link>
@@ -87,52 +85,49 @@ export default function Navbar() {
               <Link
                 href="/auth/login"
                 className={cn(
-                  "px-5 py-2 text-sm font-semibold rounded-lg transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-105",
-                  isScrolled 
-                    ? "text-slate-700 hover:bg-slate-100" 
-                    : "text-white hover:bg-white/10"
+                  'px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
+                  isScrolled ? 'text-zinc-600 hover:bg-zinc-100' : 'text-white/80 hover:text-white'
                 )}
               >
-                Sign In
+                Sign in
               </Link>
               <Link
                 href="/auth/register"
-                className="px-5 py-2 text-sm font-semibold bg-primary-600 text-white rounded-lg shadow-lg shadow-primary-600/20 hover:bg-primary-700 hover:shadow-primary-600/40 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-105"
+                className="px-3 py-1.5 text-sm font-medium bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors"
               >
-                Get Started
+                Get started
               </Link>
             </>
           )}
         </div>
 
         {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden p-2 text-slate-600 transition-all duration-300 hover:scale-110 hover:bg-slate-500/10 rounded-xl"
+        <button
+          className={cn('md:hidden p-1.5 rounded-lg', isScrolled ? 'text-zinc-600' : 'text-white')}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6 transition-transform duration-300 hover:rotate-90" /> : <Menu className={cn("w-6 h-6 transition-transform duration-300", isScrolled ? "text-slate-900" : "text-white")} />}
+          {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-t border-slate-100 shadow-xl p-6 md:hidden animate-slide-down">
-          <div className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-lg font-medium text-slate-600 hover:text-primary-600 transition-all duration-300 transform hover:translate-x-2 inline-block"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <hr className="border-slate-100" />
+        <div className="md:hidden bg-white border-t border-zinc-100 px-6 py-4 space-y-1">
+          {!isAuthPage && navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="block py-2 text-sm text-zinc-600 hover:text-zinc-900"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {link.name}
+            </Link>
+          ))}
+          <div className="pt-3 border-t border-zinc-100 flex flex-col gap-2">
             {mounted && isAuthenticated ? (
               <Link
                 href="/dashboard"
-                className="w-full py-4 text-center font-bold bg-primary-600 text-white rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] hover:bg-primary-700 hover:shadow-primary-600/40"
+                className="py-2 text-center text-sm font-medium bg-zinc-900 text-white rounded-lg"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Dashboard
@@ -141,17 +136,17 @@ export default function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="text-lg font-medium text-slate-600 hover:text-primary-600 transition-all duration-300 transform hover:translate-x-2 inline-block"
+                  className="py-2 text-center text-sm text-zinc-600"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Sign In
+                  Sign in
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="w-full py-3 text-center font-bold bg-primary-600 text-white rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02] hover:bg-primary-700 hover:shadow-primary-600/40"
+                  className="py-2 text-center text-sm font-medium bg-zinc-900 text-white rounded-lg"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Get Started
+                  Get started
                 </Link>
               </>
             )}

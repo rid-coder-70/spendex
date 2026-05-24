@@ -19,126 +19,95 @@ export default function AnalyticsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
+    const fetch = async () => {
       try {
         const now = new Date();
-        const month = now.getMonth() + 1;
-        const year = now.getFullYear();
-
-        // Fetch monthly summary
-        const summaryRes = await analyticsAPI.getMonthlySummary(month, year);
-        if (summaryRes.success) {
-          setSummary(summaryRes.data || null);
-        }
-
-        // Fetch spending trends
-        const trendsRes = await analyticsAPI.getSpendingTrends(6);
-        if (trendsRes.success) {
-          setTrends(trendsRes.data || []);
-        }
-
-        // Fetch category breakdown
-        const categoryRes = await analyticsAPI.getCategoryBreakdown({ type: 'expense' });
-        if (categoryRes.success) {
-          setCategoryBreakdown(categoryRes.data || []);
-        }
-
-        // Fetch top merchants
-        const merchantsRes = await analyticsAPI.getTopMerchants({ limit: 5 });
-        if (merchantsRes.success) {
-          setTopMerchants(merchantsRes.data || []);
-        }
+        const [summaryRes, trendsRes, categoryRes, merchantsRes] = await Promise.all([
+          analyticsAPI.getMonthlySummary(now.getMonth() + 1, now.getFullYear()),
+          analyticsAPI.getSpendingTrends(6),
+          analyticsAPI.getCategoryBreakdown({ type: 'expense' }),
+          analyticsAPI.getTopMerchants({ limit: 5 }),
+        ]);
+        if (summaryRes.success) setSummary(summaryRes.data || null);
+        if (trendsRes.success) setTrends(trendsRes.data || []);
+        if (categoryRes.success) setCategoryBreakdown(categoryRes.data || []);
+        if (merchantsRes.success) setTopMerchants(merchantsRes.data || []);
       } catch (error) {
         console.error('Failed to fetch analytics:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
-    fetchAnalytics();
+    fetch();
   }, []);
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-gray-600">Loading analytics...</p>
+      <div className="space-y-4 animate-in">
+        <div className="h-5 skeleton w-32 rounded" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {[1,2,3,4].map(i => <div key={i} className="h-24 skeleton rounded-xl" />)}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="h-64 skeleton rounded-xl" />
+          <div className="h-64 skeleton rounded-xl" />
+        </div>
       </div>
     );
   }
 
   const savingsRate = summary?.total_income > 0
-    ? ((summary.net_savings / summary.total_income) * 100)
+    ? (summary.net_savings / summary.total_income) * 100
     : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 pb-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-        <p className="text-gray-600 mt-1">
-          Detailed insights into your spending patterns for {getMonthName(summary?.month || 1)} {summary?.year}
+        <h1 className="text-base font-semibold text-zinc-900">Analytics</h1>
+        <p className="text-xs text-zinc-400 mt-0.5">
+          {getMonthName(summary?.month || 1)} {summary?.year} — spending insights
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Total Income"
-          value={formatCurrency(summary?.total_income || 0)}
-          icon={DollarSign}
-          iconColor="bg-green-500"
-        />
-        <StatCard
-          title="Total Expenses"
-          value={formatCurrency(summary?.total_expenses || 0)}
-          icon={TrendingUp}
-          iconColor="bg-red-500"
-        />
-        <StatCard
-          title="Savings Rate"
-          value={`${savingsRate.toFixed(1)}%`}
-          icon={Target}
-          iconColor="bg-blue-500"
-        />
-        <StatCard
-          title="Avg Daily Expense"
-          value={formatCurrency(summary?.average_daily_expense || 0)}
-          icon={AlertCircle}
-          iconColor="bg-purple-500"
-        />
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard title="Total Income"      value={formatCurrency(summary?.total_income || 0)}          icon={DollarSign}   iconColor="bg-emerald-500" />
+        <StatCard title="Total Expenses"    value={formatCurrency(summary?.total_expenses || 0)}        icon={TrendingUp}   iconColor="bg-red-500" />
+        <StatCard title="Savings Rate"      value={`${savingsRate.toFixed(1)}%`}                        icon={Target}       iconColor="bg-blue-500" />
+        <StatCard title="Daily Avg Expense" value={formatCurrency(summary?.average_daily_expense || 0)} icon={AlertCircle}  iconColor="bg-violet-500" />
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <MonthlySpendingChart data={trends} />
         <CategoryPieChart data={categoryBreakdown} />
       </div>
 
-      {/* Category Breakdown & Top Merchants */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Breakdown + Top Merchants */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <CategoryBreakdownList data={categoryBreakdown.slice(0, 8)} />
 
-        {/* Top Merchants */}
         <Card>
           <CardHeader>
-            <CardTitle>Top Merchants</CardTitle>
+            <CardTitle>Top merchants</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {topMerchants.map((merchant, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">{merchant.merchant}</p>
-                    <p className="text-sm text-gray-500">
-                      {merchant.transaction_count} transactions
-                    </p>
+          <CardContent className="p-0">
+            {topMerchants.length === 0 ? (
+              <p className="text-xs text-zinc-400 px-5 py-4">No data yet.</p>
+            ) : (
+              <div className="divide-y divide-zinc-100">
+                {topMerchants.map((m, i) => (
+                  <div key={i} className="flex items-center justify-between px-5 py-3">
+                    <div>
+                      <p className="text-sm font-medium text-zinc-900">{m.merchant}</p>
+                      <p className="text-xs text-zinc-400">{m.transaction_count} transactions</p>
+                    </div>
+                    <p className="text-sm font-semibold text-zinc-900">{formatCurrency(m.total_amount)}</p>
                   </div>
-                  <p className="font-semibold text-gray-900">
-                    {formatCurrency(merchant.total_amount)}
-                  </p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -147,39 +116,36 @@ export default function AnalyticsPage() {
       {summary?.top_expense_category && (
         <Card>
           <CardHeader>
-            <CardTitle>Key Insights</CardTitle>
+            <CardTitle>Insights</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-sm text-blue-900">
-                  💡 Your top expense category is <strong>{summary.top_expense_category.name}</strong> at{' '}
-                  {formatCurrency(summary.top_expense_category.amount)} (
-                  {summary.top_expense_category.percentage.toFixed(1)}% of total expenses)
+          <CardContent className="space-y-2">
+            <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
+              <p className="text-xs text-blue-800">
+                Top category: <strong>{summary.top_expense_category.name}</strong> —{' '}
+                {formatCurrency(summary.top_expense_category.amount)} ({summary.top_expense_category.percentage.toFixed(1)}%)
+              </p>
+            </div>
+            {savingsRate >= 20 && (
+              <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-lg">
+                <p className="text-xs text-emerald-800">
+                  You're saving {savingsRate.toFixed(1)}% of your income — great work!
                 </p>
               </div>
-              {savingsRate >= 20 && (
-                <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                  <p className="text-sm text-green-900">
-                    ✅ Great job! You're saving {savingsRate.toFixed(1)}% of your income this month.
-                  </p>
-                </div>
-              )}
-              {savingsRate < 20 && savingsRate > 0 && (
-                <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-sm text-yellow-900">
-                    ⚠️ Your savings rate is {savingsRate.toFixed(1)}%. Consider reducing expenses to reach the recommended 20% savings rate.
-                  </p>
-                </div>
-              )}
-              {savingsRate <= 0 && (
-                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-                  <p className="text-sm text-red-900">
-                    🚨 You spent more than you earned this month. Review your expenses and create a budget to avoid overspending.
-                  </p>
-                </div>
-              )}
-            </div>
+            )}
+            {savingsRate < 20 && savingsRate > 0 && (
+              <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
+                <p className="text-xs text-amber-800">
+                  Savings rate is {savingsRate.toFixed(1)}%. Aim for 20%+ to build financial stability.
+                </p>
+              </div>
+            )}
+            {savingsRate <= 0 && (
+              <div className="p-3 bg-red-50 border border-red-100 rounded-lg">
+                <p className="text-xs text-red-800">
+                  You spent more than you earned this month. Review your expenses.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}

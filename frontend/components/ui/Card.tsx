@@ -7,12 +7,12 @@ interface CardProps {
   hover?: boolean;
 }
 
-export function Card({ children, className, hover = true }: CardProps) {
+export function Card({ children, className, hover = false }: CardProps) {
   return (
     <div
       className={cn(
-        'glass rounded-[2rem] p-8',
-        hover && 'hover-card-premium',
+        'card',
+        hover && 'transition-shadow hover:shadow-md',
         className
       )}
     >
@@ -23,7 +23,7 @@ export function Card({ children, className, hover = true }: CardProps) {
 
 export function CardHeader({ children, className }: CardProps) {
   return (
-    <div className={cn('mb-4', className)}>
+    <div className={cn('px-5 py-4 border-b border-zinc-100', className)}>
       {children}
     </div>
   );
@@ -31,7 +31,7 @@ export function CardHeader({ children, className }: CardProps) {
 
 export function CardTitle({ children, className }: CardProps) {
   return (
-    <h3 className={cn('text-lg font-semibold text-gray-900', className)}>
+    <h3 className={cn('text-sm font-semibold text-zinc-900', className)}>
       {children}
     </h3>
   );
@@ -39,7 +39,7 @@ export function CardTitle({ children, className }: CardProps) {
 
 export function CardContent({ children, className }: CardProps) {
   return (
-    <div className={cn('', className)}>
+    <div className={cn('p-5', className)}>
       {children}
     </div>
   );

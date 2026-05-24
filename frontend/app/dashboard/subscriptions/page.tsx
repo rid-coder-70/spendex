@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { RefreshCcw, XCircle, CheckCircle } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import EmptyState from '@/components/ui/EmptyState';
 import { subscriptionsAPI } from '@/lib/api';
 import { Subscription } from '@/types';
@@ -22,151 +21,114 @@ export default function SubscriptionsPage() {
         subscriptionsAPI.getAll(),
         subscriptionsAPI.getStats(),
       ]);
-
-      if (subsRes.success) {
-        setSubscriptions(subsRes.data || []);
-      }
-      if (statsRes.success) {
-        setStats(statsRes.data);
-      }
-    } catch (error) {
-      console.error('Failed to fetch subscriptions:', error);
+      if (subsRes.success) setSubscriptions(subsRes.data || []);
+      if (statsRes.success) setStats(statsRes.data);
+    } catch {
       toast.error('Failed to load subscriptions');
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchSubscriptions();
-  }, []);
+  useEffect(() => { fetchSubscriptions(); }, []);
 
-  const handleCancelSubscription = async (id: number) => {
-    if (!confirm('Are you sure you want to mark this subscription as cancelled?')) {
-      return;
-    }
-
+  const handleCancel = async (id: number) => {
+    if (!confirm('Mark this subscription as cancelled?')) return;
     try {
       await subscriptionsAPI.update(id, { is_active: false });
-      toast.success('Subscription cancelled successfully');
+      toast.success('Subscription cancelled');
       fetchSubscriptions();
-    } catch (error) {
-      console.error('Failed to cancel subscription:', error);
+    } catch {
       toast.error('Failed to cancel subscription');
     }
   };
 
-  const handleDetectSubscriptions = async () => {
+  const handleDetect = async () => {
     try {
       setIsLoading(true);
       await subscriptionsAPI.detect();
-      toast.success('Subscription detection complete');
+      toast.success('Detection complete');
       fetchSubscriptions();
-    } catch (error) {
-      console.error('Failed to detect subscriptions:', error);
-      toast.error('Failed to detect subscriptions');
+    } catch {
+      toast.error('Detection failed');
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <p className="text-gray-600">Loading subscriptions...</p>
-      </div>
-    );
-  }
-
-  const activeSubscriptions = subscriptions.filter((s) => s.is_active);
-  const inactiveSubscriptions = subscriptions.filter((s) => !s.is_active);
+  const active   = subscriptions.filter(s => s.is_active);
+  const inactive = subscriptions.filter(s => !s.is_active);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 pb-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Subscriptions</h1>
-          <p className="text-gray-600 mt-1">
-            Track your recurring payments and subscriptions
-          </p>
+          <h1 className="text-base font-semibold text-zinc-900">Subscriptions</h1>
+          <p className="text-xs text-zinc-400 mt-0.5">Track your recurring payments</p>
         </div>
-        <Button onClick={handleDetectSubscriptions}>
-          <RefreshCcw className="w-4 h-4 mr-2" />
-          Detect Subscriptions
-        </Button>
+        <button onClick={handleDetect} className="btn-secondary text-xs py-1.5">
+          <RefreshCcw className="w-3.5 h-3.5" />
+          Detect
+        </button>
       </div>
 
       {/* Stats */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">Total Subscriptions</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {stats.total_subscriptions}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">Active Subscriptions</p>
-                <p className="text-3xl font-bold text-green-600">
-                  {stats.active_subscriptions}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-center">
-                <p className="text-sm text-gray-600 mb-2">Monthly Cost</p>
-                <p className="text-3xl font-bold text-primary-700">
-                  {formatCurrency(stats.total_monthly_cost)}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: 'Total',    value: stats.total_subscriptions,              color: 'text-zinc-900' },
+            { label: 'Active',   value: stats.active_subscriptions,             color: 'text-emerald-600' },
+            { label: 'Monthly',  value: formatCurrency(stats.total_monthly_cost), color: 'text-blue-600' },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="card p-4 text-center">
+              <p className={`text-xl font-semibold ${color}`}>{value}</p>
+              <p className="text-xs text-zinc-400 mt-1">{label}</p>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* Active Subscriptions */}
-      {activeSubscriptions.length > 0 && (
+      {/* Loading */}
+      {isLoading && (
+        <div className="card overflow-hidden">
+          {[1,2,3].map(i => (
+            <div key={i} className="flex items-center gap-3 px-5 py-3 border-b border-zinc-100 last:border-0">
+              <div className="w-8 h-8 skeleton rounded-full" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 skeleton w-32 rounded" />
+                <div className="h-2.5 skeleton w-20 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Active subscriptions */}
+      {!isLoading && active.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Active Subscriptions</CardTitle>
+            <CardTitle>Active</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {activeSubscriptions.map((subscription) => (
-                <div
-                  key={subscription.id}
-                  className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle className="w-6 h-6 text-green-600" />
+          <CardContent className="p-0">
+            <div className="divide-y divide-zinc-100">
+              {active.map(sub => (
+                <div key={sub.id} className="flex items-center justify-between px-5 py-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
+                      <CheckCircle className="w-4 h-4 text-emerald-500" />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">
-                        {subscription.merchant}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {formatCurrency(subscription.amount)} / {subscription.frequency}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Next billing: {formatDate(subscription.next_billing_date || '')}
+                      <p className="text-sm font-medium text-zinc-900">{sub.merchant}</p>
+                      <p className="text-xs text-zinc-400">
+                        {formatCurrency(sub.amount)} / {sub.frequency} · Next: {formatDate(sub.next_billing_date || '')}
                       </p>
                     </div>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleCancelSubscription(subscription.id)}
+                  <button
+                    onClick={() => handleCancel(sub.id)}
+                    className="btn-secondary text-xs py-1 text-red-500 hover:bg-red-50 hover:border-red-200"
                   >
                     Cancel
-                  </Button>
+                  </button>
                 </div>
               ))}
             </div>
@@ -174,32 +136,24 @@ export default function SubscriptionsPage() {
         </Card>
       )}
 
-      {/* Inactive Subscriptions */}
-      {inactiveSubscriptions.length > 0 && (
+      {/* Cancelled subscriptions */}
+      {!isLoading && inactive.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Cancelled Subscriptions</CardTitle>
+            <CardTitle>Cancelled</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {inactiveSubscriptions.map((subscription) => (
-                <div
-                  key={subscription.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-lg opacity-60"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                      <XCircle className="w-6 h-6 text-gray-600" />
+          <CardContent className="p-0">
+            <div className="divide-y divide-zinc-100">
+              {inactive.map(sub => (
+                <div key={sub.id} className="flex items-center justify-between px-5 py-3 opacity-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center">
+                      <XCircle className="w-4 h-4 text-zinc-400" />
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900">
-                        {subscription.merchant}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {formatCurrency(subscription.amount)} / {subscription.frequency}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Cancelled on: {formatDate(subscription.cancelled_at || '')}
+                      <p className="text-sm font-medium text-zinc-700">{sub.merchant}</p>
+                      <p className="text-xs text-zinc-400">
+                        {formatCurrency(sub.amount)} / {sub.frequency} · Cancelled {formatDate(sub.cancelled_at || '')}
                       </p>
                     </div>
                   </div>
@@ -210,21 +164,16 @@ export default function SubscriptionsPage() {
         </Card>
       )}
 
-      {/* Empty State */}
-      {subscriptions.length === 0 && (
-        <Card>
-          <CardContent className="py-12">
-            <EmptyState
-              icon={RefreshCcw}
-              title="No subscriptions detected"
-              description="We haven't found any recurring subscriptions yet. Click 'Detect Subscriptions' to scan your transactions."
-              action={{
-                label: 'Detect Subscriptions',
-                onClick: handleDetectSubscriptions,
-              }}
-            />
-          </CardContent>
-        </Card>
+      {/* Empty */}
+      {!isLoading && subscriptions.length === 0 && (
+        <div className="card p-10">
+          <EmptyState
+            icon={RefreshCcw}
+            title="No subscriptions found"
+            description="Click 'Detect' to scan your transactions for recurring charges."
+            action={{ label: 'Detect Subscriptions', onClick: handleDetect }}
+          />
+        </div>
       )}
     </div>
   );

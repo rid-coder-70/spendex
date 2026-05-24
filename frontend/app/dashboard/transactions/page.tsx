@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, Suspense } from 'react';
-import { Plus, FileDown, CreditCard } from 'lucide-react';
+import { Plus, FileDown, CreditCard, Search } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionModal from '@/components/transactions/TransactionModal';
@@ -13,30 +13,26 @@ import { cn } from '@/lib/utils';
 
 function TransactionsContent() {
   const searchParams = useSearchParams();
-  const initialSearch = searchParams.get('q') || '';
-  
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
   const [filterType, setFilterType] = useState<'all' | 'expense' | 'income'>('all');
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Update searchTerm if q param changes
   useEffect(() => {
     const q = searchParams.get('q');
     if (q) setSearchTerm(q);
   }, [searchParams]);
 
-  const fetchTransactions = async (page: number = 1, search: string = '', type: string = 'all') => {
+  const fetchTransactions = async (page = 1, search = '', type = 'all') => {
     setIsLoading(true);
     try {
       const filters: any = { page, limit: 20 };
       if (search) filters.merchant = search;
       if (type !== 'all') filters.type = type;
-      
       const response = await transactionsAPI.getAll(filters);
       if (response.success) {
         setTransactions(response.data.items || []);
@@ -51,80 +47,60 @@ function TransactionsContent() {
   };
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      fetchTransactions(1, searchTerm, filterType);
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
+    const t = setTimeout(() => fetchTransactions(1, searchTerm, filterType), 400);
+    return () => clearTimeout(t);
   }, [searchTerm, filterType]);
 
-  const handleEdit = (transaction: Transaction) => {
-    setSelectedTransaction(transaction);
-    setIsModalOpen(true);
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      await transactionsAPI.delete(id);
-      fetchTransactions(currentPage, searchTerm, filterType);
-    } catch (error) {
-      console.error('Failed to delete transaction:', error);
-    }
-  };
-
-  const handleSuccess = () => {
-    fetchTransactions(currentPage, searchTerm, filterType);
-  };
-
-  const handleAddNew = () => {
-    setSelectedTransaction(null);
-    setIsModalOpen(true);
-  };
+  const handleEdit  = (t: Transaction) => { setSelectedTransaction(t); setIsModalOpen(true); };
+  const handleDelete = async (id: number) => { await transactionsAPI.delete(id); fetchTransactions(currentPage, searchTerm, filterType); };
+  const handleSuccess = () => fetchTransactions(currentPage, searchTerm, filterType);
+  const handleAddNew  = () => { setSelectedTransaction(null); setIsModalOpen(true); };
 
   return (
-    <div className="space-y-10 animate-fade-in pb-20">
+    <div className="space-y-4 pb-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">Transactions</h1>
-          <p className="text-slate-500 font-medium mt-2">Manage and monitor every penny</p>
+          <h1 className="text-base font-semibold text-zinc-900">Transactions</h1>
+          <p className="text-xs text-zinc-400 mt-0.5">Manage and monitor every payment</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" className="bg-slate-100 text-slate-600 font-bold hover:bg-slate-200">
-            <FileDown className="w-5 h-5 mr-2" />
+        <div className="flex items-center gap-2">
+          <button className="btn-secondary text-xs py-1.5">
+            <FileDown className="w-3.5 h-3.5" />
             Export
-          </Button>
-          <Button onClick={handleAddNew} className="shadow-xl shadow-primary-600/20 py-4 px-8">
-            <Plus className="w-5 h-5 mr-2" />
-            Add New
-          </Button>
+          </button>
+          <button onClick={handleAddNew} className="btn-primary text-xs py-1.5">
+            <Plus className="w-3.5 h-3.5" />
+            Add
+          </button>
         </div>
       </div>
 
-      {/* Filters & Search */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="md:col-span-2 relative">
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-2">
+        {/* Search */}
+        <div className="relative flex-1 max-w-xs">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
           <input
             type="text"
-            placeholder="Search by merchant or description..."
-            className="input-field pl-12 h-14"
+            placeholder="Search merchant or description…"
+            className="input pl-8 text-sm"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          </div>
         </div>
-        <div className="flex p-1.5 bg-slate-100 rounded-2xl md:col-span-2">
-          {(['all', 'expense', 'income'] as const).map((type) => (
+
+        {/* Type filter tabs */}
+        <div className="flex p-1 bg-zinc-100 rounded-lg gap-0.5 h-fit">
+          {(['all', 'expense', 'income'] as const).map(type => (
             <button
               key={type}
               onClick={() => setFilterType(type)}
               className={cn(
-                "flex-1 py-2.5 rounded-xl text-sm font-bold capitalize transition-all",
-                filterType === type 
-                  ? "bg-white text-primary-600 shadow-sm" 
-                  : "text-slate-500 hover:text-slate-700"
+                'px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-all',
+                filterType === type
+                  ? 'bg-white text-zinc-900 shadow-sm'
+                  : 'text-zinc-500 hover:text-zinc-700'
               )}
             >
               {type}
@@ -133,27 +109,31 @@ function TransactionsContent() {
         </div>
       </div>
 
-      {/* Transaction List */}
+      {/* List */}
       {isLoading ? (
-        <div className="space-y-4">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-20 bg-white rounded-3xl border border-slate-50 animate-pulse" />
+        <div className="card overflow-hidden">
+          {[1,2,3,4,5].map(i => (
+            <div key={i} className="flex items-center gap-3 px-5 py-3 border-b border-zinc-100 last:border-0">
+              <div className="w-8 h-8 skeleton rounded-lg" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3 skeleton w-40 rounded" />
+                <div className="h-2.5 skeleton w-24 rounded" />
+              </div>
+              <div className="h-3 skeleton w-16 rounded" />
+            </div>
           ))}
         </div>
-      ) : (transactions?.length || 0) === 0 ? (
-        <div className="bg-white rounded-[3rem] shadow-2xl shadow-slate-200/40 p-20 border border-slate-50">
+      ) : transactions.length === 0 ? (
+        <div className="card p-10">
           <EmptyState
             icon={CreditCard}
             title="No transactions found"
-            description={searchTerm ? "Try adjusting your filters or search term." : "Start by adding your first transaction."}
-            action={{
-              label: 'Add Transaction',
-              onClick: handleAddNew,
-            }}
+            description={searchTerm ? 'Try adjusting your filters.' : 'Add your first transaction to get started.'}
+            action={{ label: 'Add Transaction', onClick: handleAddNew }}
           />
         </div>
       ) : (
-        <div className="bg-white rounded-[3rem] shadow-2xl shadow-slate-200/40 overflow-hidden border border-slate-50">
+        <div className="card overflow-hidden">
           <TransactionList
             transactions={transactions}
             onEdit={handleEdit}
@@ -162,34 +142,31 @@ function TransactionsContent() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="px-10 py-8 border-t border-slate-50 flex items-center justify-between bg-slate-50/30">
-              <p className="text-sm font-bold text-slate-400">
-                Page <span className="text-slate-900">{currentPage}</span> of <span className="text-slate-900">{totalPages}</span>
+            <div className="px-5 py-3 border-t border-zinc-100 flex items-center justify-between">
+              <p className="text-xs text-zinc-400">
+                Page {currentPage} of {totalPages}
               </p>
-              <div className="flex gap-3">
-                <Button
-                  variant="ghost"
+              <div className="flex gap-2">
+                <button
+                  className="btn-secondary text-xs py-1"
                   disabled={currentPage === 1}
                   onClick={() => fetchTransactions(currentPage - 1, searchTerm, filterType)}
-                  className="bg-white border border-slate-200 text-slate-600 disabled:opacity-50"
                 >
                   Previous
-                </Button>
-                <Button
-                  variant="ghost"
+                </button>
+                <button
+                  className="btn-secondary text-xs py-1"
                   disabled={currentPage === totalPages}
                   onClick={() => fetchTransactions(currentPage + 1, searchTerm, filterType)}
-                  className="bg-white border border-slate-200 text-slate-600 disabled:opacity-50"
                 >
                   Next
-                </Button>
+                </button>
               </div>
             </div>
           )}
         </div>
       )}
 
-      {/* Transaction Modal */}
       <TransactionModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -202,7 +179,7 @@ function TransactionsContent() {
 
 export default function TransactionsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="h-5 skeleton w-32 rounded animate-in" />}>
       <TransactionsContent />
     </Suspense>
   );

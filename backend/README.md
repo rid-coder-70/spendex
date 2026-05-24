@@ -9,7 +9,7 @@ The engine behind SpendGuard. A robust RESTful API built with Node.js, Express, 
 ---
 
 ## 🛠️ Features
-- **RESTful API**: 25+ clean endpoints for financial management.
+- **RESTful API**: Clean endpoints for financial management.
 - **JWT Security**: Secure user authentication and authorization.
 - **PostgreSQL Integration**: Optimized database schema with indexing and triggers.
 - **Automated Tasks**: Cron jobs for weekly/monthly financial reports.

@@ -2,7 +2,7 @@
   <img src="./docs/images/banner.png" alt="SpendGuard Banner" width="100%">
 </p>
 
-# 🌌 SpendGuard — Premium Finance Management System
+# 🌌 SpendGuard — Personal Finance Management System
 
 <p align="center">
   <img src="./frontend/public/logo.svg" alt="SpendGuard Logo" width="120">
@@ -13,7 +13,7 @@
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%2017-4169E1?style=for-the-badge&logo=postgresql)](https://postgresql.org)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
 
-SpendGuard is a professional-grade personal finance management application designed with a "premium-first" approach. It combines high-end aesthetics (glassmorphism, animated mesh backgrounds) with robust financial tracking, automated reports, and intelligent data analysis.
+SpendGuard is a clean, minimal personal finance management application. It features a compact, professional SaaS interface alongside robust financial tracking, automated reports, and intelligent data analysis.
 
 ---
 
@@ -27,7 +27,7 @@ SpendGuard is built as a modular full-stack application, providing a seamless br
 - **📈 Subscription Intelligence**: Automatically detect and track recurring subscriptions with pattern recognition.
 - **📩 Automated Reporting**: Receive weekly and monthly financial summaries directly in your inbox.
 - **📥 CSV Bulk Import**: Batch process 1000+ transactions with intelligent auto-categorization.
-- **📱 Responsive Design**: Fully optimized experience across mobile, tablet, and desktop with a premium UI/UX.
+- **📱 Responsive Design**: Fully optimized experience across mobile, tablet, and desktop with a clean, content-focused UI.
 
 ---
 
@@ -37,7 +37,7 @@ The project is organized into two primary micro-modules:
 
 | Component | Responsibility | Technology |
 | :--- | :--- | :--- |
-| [**🖥️ Frontend**](./frontend/README.md) | User Interface & Experience | Next.js 14, Tailwind CSS, Framer Motion |
+| [**🖥️ Frontend**](./frontend/README.md) | User Interface & Experience | Next.js 14, Tailwind CSS |
 | [**⚙️ Backend**](./backend/README.md) | Business Logic & API Layer | Node.js, Express, PostgreSQL |
 
 ---
@@ -46,8 +46,8 @@ The project is organized into two primary micro-modules:
 
 ### Frontend
 - **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS 4.x + Glassmorphism Design System
-- **Animations**: Framer Motion & Lucide Icons
+- **Styling**: Tailwind CSS 4.x
+- **Icons**: Lucide React
 - **State Management**: Zustand (Persistent Auth Store)
 - **Charts**: Recharts
 
