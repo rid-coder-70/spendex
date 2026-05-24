@@ -2,11 +2,8 @@
   <img src="./docs/images/banner.png" alt="SpendGuard Banner" width="100%">
 </p>
 
-# 🌌 SpendGuard — Personal Finance Management System
+# SpendGuard — Personal Finance Management System
 
-<p align="center">
-  <img src="./frontend/public/logo.svg" alt="SpendGuard Logo" width="120">
-</p>
 
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js%2014-black?style=for-the-badge&logo=next.js)](https://frontend.spendguard.app)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20Express-339933?style=for-the-badge&logo=nodedotjs)](https://api.spendguard.app)
