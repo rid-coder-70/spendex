@@ -10,6 +10,8 @@
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "test": "jest --forceExit --passWithNoTests",
+    "test:watch": "jest --watch",
     "seed:test": "ts-node src/scripts/seedTestData.ts",
     "seed:subscriptions": "ts-node src/scripts/seedSubscriptionData.ts",
     "lint": "eslint . --ext .ts",
@@ -49,12 +51,24 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
     "eslint": "^10.3.0",
+    "jest": "^30.4.2",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "roots": ["<rootDir>/tests"],
+    "testMatch": ["**/*.test.ts"],
+    "moduleFileExtensions": ["ts", "js", "json"]
+  }
 }
