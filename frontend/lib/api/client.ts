@@ -1,14 +1,13 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-// Automatically ensure the API URL ends with /api
 const getBaseURL = () => {
   const envUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!envUrl) return 'http://localhost:5000/api';
   
-  // Remove trailing slash if present
+
   const normalizedUrl = envUrl.endsWith('/') ? envUrl.slice(0, -1) : envUrl;
   
-  // Append /api if not present
+
   return normalizedUrl.endsWith('/api') ? normalizedUrl : `${normalizedUrl}/api`;
 };
 
@@ -25,7 +24,6 @@ class APIClient {
       },
     });
 
-    // Request interceptor to add auth token
     this.client.interceptors.request.use(
       (config) => {
         const token = this.getToken();
@@ -36,13 +34,10 @@ class APIClient {
       },
       (error) => Promise.reject(error)
     );
-
-    // Response interceptor to handle errors
     this.client.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
         if (error.response?.status === 401) {
-          // Token expired or invalid
           this.clearToken();
           this.clearAuthCookie();
           if (typeof window !== 'undefined') {
@@ -57,11 +52,9 @@ class APIClient {
   private getToken(): string | null {
     if (typeof window === 'undefined') return null;
     
-    // Try localStorage first
     const localToken = localStorage.getItem('token');
     if (localToken) return localToken;
     
-    // Fallback to cookie
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=');

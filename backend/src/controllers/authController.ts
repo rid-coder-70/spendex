@@ -53,7 +53,6 @@ export class AuthController {
         },
       });
 
-      // Send welcome email (don't wait for it)
       ReportService.sendWelcomeEmail(user.name, user.email).catch((err) =>
         console.error('Failed to send welcome email:', err)
       );

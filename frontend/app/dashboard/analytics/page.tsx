@@ -65,7 +65,6 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-5 pb-8">
-      {/* Header */}
       <div>
         <h1 className="text-base font-semibold text-zinc-900">Analytics</h1>
         <p className="text-xs text-zinc-400 mt-0.5">
@@ -73,7 +72,6 @@ export default function AnalyticsPage() {
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard title="Total Income"      value={formatCurrency(summary?.total_income || 0)}          icon={DollarSign}   iconColor="bg-emerald-500" />
         <StatCard title="Total Expenses"    value={formatCurrency(summary?.total_expenses || 0)}        icon={TrendingUp}   iconColor="bg-red-500" />
@@ -81,13 +79,11 @@ export default function AnalyticsPage() {
         <StatCard title="Daily Avg Expense" value={formatCurrency(summary?.average_daily_expense || 0)} icon={AlertCircle}  iconColor="bg-violet-500" />
       </div>
 
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <MonthlySpendingChart data={trends} />
         <CategoryPieChart data={categoryBreakdown} />
       </div>
 
-      {/* Breakdown + Top Merchants */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <CategoryBreakdownList data={categoryBreakdown.slice(0, 8)} />
 
@@ -115,7 +111,6 @@ export default function AnalyticsPage() {
         </Card>
       </div>
 
-      {/* Insights */}
       {summary?.top_expense_category && (
         <Card>
           <CardHeader>

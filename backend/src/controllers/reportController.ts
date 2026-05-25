@@ -3,7 +3,6 @@ import { ReportService } from '../services/reportService';
 import { MonthlyReportJob, SubscriptionDetectionJob } from '../jobs';
 
 export class ReportController {
-  // Generate and view monthly report (without sending email)
   static async generateReport(req: Request, res: Response) {
     try {
       if (!req.user) {
@@ -51,7 +50,6 @@ export class ReportController {
     }
   }
 
-  // Send monthly report via email
   static async sendReport(req: Request, res: Response) {
     try {
       if (!req.user) {
@@ -109,7 +107,6 @@ export class ReportController {
     }
   }
 
-  // Trigger monthly report job manually (admin only - for testing)
   static async triggerMonthlyReportJob(req: Request, res: Response) {
     try {
       if (!req.user) {
@@ -143,7 +140,6 @@ export class ReportController {
     }
   }
 
-  // Trigger subscription detection job manually
   static async triggerSubscriptionJob(req: Request, res: Response) {
     try {
       if (!req.user) {

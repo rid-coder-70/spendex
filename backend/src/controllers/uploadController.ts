@@ -37,7 +37,7 @@ export class UploadController {
       const fileSize = req.file.size;
       const originalName = req.file.originalname;
 
-      console.log(`📁 Processing CSV file: ${originalName} (${fileSize} bytes)`);
+      console.log(`Processing CSV file: ${originalName} (${fileSize} bytes)`);
 
       const uploadRecord = await UploadHistoryModel.create({
         user_id: req.user.id,
@@ -71,7 +71,7 @@ export class UploadController {
       }
 
       console.log(
-        `📊 Parsed ${parseResult.totalRows} rows: ${parseResult.validTransactions.length} valid, ${parseResult.errors.length} errors`
+        `Parsed ${parseResult.totalRows} rows: ${parseResult.validTransactions.length} valid, ${parseResult.errors.length} errors`
       );
 
       let importedCount = 0;
@@ -103,7 +103,7 @@ export class UploadController {
 
           importedCount++;
         } catch (error: any) {
-          console.error(`❌ Error importing transaction ${i + 1}:`, error);
+          console.error(`Error importing transaction ${i + 1}:`, error);
           importErrors.push({
             index: i + 1,
             error: error.message,
@@ -149,7 +149,7 @@ export class UploadController {
         },
       });
     } catch (error: any) {
-      console.error('❌ CSV upload error:', error);
+      console.error('CSV upload error:', error);
 
       if (uploadId) {
         await UploadHistoryModel.update(uploadId, {

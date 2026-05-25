@@ -7,7 +7,6 @@ import Button from '@/components/ui/Button';
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Background Decorations */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-40">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary-100 rounded-full blur-[120px]"></div>
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary-100 rounded-full blur-[120px]"></div>
@@ -39,8 +38,7 @@ export default function NotFound() {
             Go back to previous page
           </button>
         </div>
-
-        {/* Footer */}
+        
         <p className="mt-20 text-xs text-slate-400 font-bold uppercase tracking-widest">
           Error Code: SG_PAGE_NOT_FOUND
         </p>

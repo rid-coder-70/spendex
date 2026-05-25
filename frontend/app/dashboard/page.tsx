@@ -35,7 +35,6 @@ export default function DashboardPage() {
 
   const now = new Date();
   
-  // SWR Fetchers
   const { data: summaryRes, isLoading: isSummaryLoading } = useSWR(
     user ? ['monthlySummary', now.getMonth() + 1, now.getFullYear()] : null,
     ([, m, y]) => analyticsAPI.getMonthlySummary(m as number, y as number)
@@ -103,7 +102,6 @@ export default function DashboardPage() {
   return (
     <div className="space-y-5 pb-8">
 
-      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-lg font-semibold text-zinc-900">
@@ -130,7 +128,6 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <StatCard
           title="Total Income"
@@ -158,7 +155,6 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Recent Transactions */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -217,7 +213,6 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
       <div>
         <p className="section-label mb-3">Quick actions</p>
         <div className="grid grid-cols-3 gap-3">

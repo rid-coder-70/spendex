@@ -18,19 +18,17 @@ const pool = new Pool({
   connectionTimeoutMillis: 10000, 
 });
 
-// Log connection attempt (safely)
 if (isProduction) {
   const connectionSource = process.env.DATABASE_URL ? 'DATABASE_URL' : 'manual config';
-  console.log(`📡 Attempting DB connection via ${connectionSource}...`);
+  console.log(`Attempting DB connection via ${connectionSource}...`);
 }
 
 pool.on('connect', () => {
-  console.log('✅ Connected to PostgreSQL database');
+  console.log('Connected to PostgreSQL database');
 });
 
 pool.on('error', (err) => {
-  console.error('❌ Unexpected error on idle client', err);
-  // Don't exit process in production unless absolutely necessary
+  console.error('Unexpected error on idle client', err);
   if (!isProduction) {
     process.exit(-1);
   }

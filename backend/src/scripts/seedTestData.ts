@@ -42,13 +42,13 @@ async function seedCategories(): Promise<Record<string, number>> {
     nameToId[result.rows[0].name] = result.rows[0].id;
   }
 
-  console.log(`✅ Seeded ${categories.length} categories`);
+  console.log(`Seeded ${categories.length} categories`);
   return nameToId;
 }
 
 async function seedTestData() {
   try {
-    console.log('🌱 Seeding test data...');
+    console.log('Seeding test data...');
 
     console.log('Creating categories...');
     const catIds = await seedCategories();
@@ -63,7 +63,7 @@ async function seedTestData() {
     );
     const userResult = await query('SELECT * FROM users WHERE email = $1', ['test@example.com']);
     const user = userResult.rows[0];
-    console.log('✅ Test user ready:', user.email);
+    console.log('Test user ready:', user.email);
 
     console.log('Creating sample transactions...');
 
@@ -174,8 +174,8 @@ async function seedTestData() {
       await TransactionModel.create(transaction);
     }
 
-    console.log(`✅ Created ${transactions.length} sample transactions`);
-    console.log('\n📊 Test Data Summary:');
+    console.log(`Created ${transactions.length} sample transactions`);
+    console.log('\n Test Data Summary:');
     console.log('==========================================');
     console.log('Email: test@example.com');
     console.log('Password: Test123!');
@@ -184,7 +184,7 @@ async function seedTestData() {
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding test data:', error);
+    console.error('Error seeding test data:', error);
     process.exit(1);
   }
 }

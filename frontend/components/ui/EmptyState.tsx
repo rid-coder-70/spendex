@@ -20,7 +20,6 @@ export default function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="text-center py-20 px-6 bg-slate-50/50 rounded-[2.5rem] border-2 border-dashed border-slate-200 relative overflow-hidden group">
-      {/* Background Decorations */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-primary-100 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700"></div>
       
       <div className="relative z-10 max-w-sm mx-auto">

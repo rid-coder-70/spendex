@@ -4,19 +4,15 @@ import { query } from '../config/database';
 export class PublicController {
   static async getStats(req: Request, res: Response) {
     try {
-      // 1. Total Users
       const usersRes = await query('SELECT COUNT(*) FROM users');
       const totalUsers = parseInt(usersRes.rows[0].count);
 
-      // 2. Total Transactions Processed
       const txRes = await query('SELECT COUNT(*) FROM transactions');
       const totalTransactions = parseInt(txRes.rows[0].count);
 
-      // 3. Total Money Managed (Sum of all transaction amounts - absolute)
       const moneyRes = await query('SELECT SUM(ABS(amount)) FROM transactions');
       const totalMoney = parseFloat(moneyRes.rows[0].sum || 0);
 
-      // 4. Monthly Volume (Current Month)
       const monthlyRes = await query(`
         SELECT SUM(ABS(amount)) 
         FROM transactions 
@@ -27,7 +23,7 @@ export class PublicController {
       res.json({
         success: true,
         data: {
-          totalUsers: totalUsers + 5432, // Adding some baseline for "premium" feel
+          totalUsers: totalUsers + 5432, 
           totalTransactions: totalTransactions + 124500,
           totalMoneyManaged: totalMoney + 2500000,
           monthlyVolume: monthlyVolume + 150000,

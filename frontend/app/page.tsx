@@ -35,7 +35,6 @@ export default function Home() {
 
       <main className="flex-1">
 
-        {/* ── Hero ── */}
         <section className="pt-28 pb-20 px-6 border-b border-zinc-100">
           <div className="max-w-3xl mx-auto text-center">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-zinc-200 text-xs font-medium text-zinc-500 mb-6">
@@ -69,7 +68,6 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Social proof */}
             <div className="mt-10 flex items-center justify-center gap-6 text-xs text-zinc-400">
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
@@ -88,13 +86,10 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ── App Preview ── */}
         <section className="py-16 px-6 bg-zinc-50 border-b border-zinc-100">
           <div className="max-w-4xl mx-auto">
             {/* Minimal browser frame mockup */}
             <div className="bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden">
-              {/* Browser chrome */}
               <div className="flex items-center gap-1.5 px-4 py-3 border-b border-zinc-100 bg-zinc-50">
                 <div className="w-2.5 h-2.5 rounded-full bg-zinc-200" />
                 <div className="w-2.5 h-2.5 rounded-full bg-zinc-200" />
@@ -104,9 +99,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Dashboard preview */}
               <div className="flex h-72">
-                {/* Sidebar preview */}
                 <div className="w-36 border-r border-zinc-100 p-3 space-y-1 hidden sm:block">
                   {['Dashboard', 'Transactions', 'Analytics', 'Subscriptions', 'Upload CSV'].map((item, i) => (
                     <div
@@ -118,10 +111,7 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-
-                {/* Main content preview */}
                 <div className="flex-1 p-4 space-y-3">
-                  {/* Stats row */}
                   <div className="grid grid-cols-4 gap-2">
                     {[
                       { label: 'Income', val: '৳45,000', color: 'bg-emerald-50' },
@@ -137,7 +127,6 @@ export default function Home() {
                     ))}
                   </div>
 
-                  {/* Transactions list */}
                   <div className="bg-white border border-zinc-100 rounded-lg overflow-hidden">
                     <div className="px-3 py-2 border-b border-zinc-100">
                       <div className="h-2 w-28 bg-zinc-200 rounded" />
@@ -161,7 +150,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Features ── */}
         <section id="features" className="py-16 px-6 border-b border-zinc-100">
           <div className="max-w-4xl mx-auto">
             <div className="mb-10">
@@ -191,7 +179,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── How it works ── */}
         <section id="how-it-works" className="py-16 px-6 bg-zinc-50 border-b border-zinc-100">
           <div className="max-w-4xl mx-auto">
             <div className="mb-10">
@@ -215,8 +202,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ── Testimonials ── */}
         <section className="py-16 px-6 border-b border-zinc-100">
           <div className="max-w-4xl mx-auto">
             <div className="mb-10">
@@ -262,7 +247,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── CTA ── */}
         <section className="py-20 px-6">
           <div className="max-w-xl mx-auto text-center">
             <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mb-3">

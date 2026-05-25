@@ -40,7 +40,6 @@ export default function Navbar() {
         : 'bg-transparent'
     )}>
       <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="w-6 h-6 bg-zinc-900 rounded-md flex items-center justify-center">
             <Wallet className="w-3.5 h-3.5 text-white" />
@@ -53,7 +52,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
         {!isAuthPage && (
           <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
@@ -71,7 +69,6 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Auth Buttons */}
         <div className="hidden md:flex items-center gap-2">
           {mounted && isAuthenticated ? (
             <Link
@@ -101,7 +98,6 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className={cn('md:hidden p-1.5 rounded-lg', isScrolled ? 'text-zinc-600' : 'text-white')}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -109,8 +105,6 @@ export default function Navbar() {
           {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
-
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-zinc-100 px-6 py-4 space-y-1">
           {!isAuthPage && navLinks.map((link) => (

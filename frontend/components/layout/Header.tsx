@@ -74,7 +74,6 @@ export default function Header({ onMenuToggle }: HeaderProps) {
   return (
     <header className="h-14 bg-white border-b border-zinc-100 px-4 flex items-center justify-between gap-4 sticky top-0 z-30 shrink-0">
 
-      {/* Mobile menu toggle */}
       <button
         onClick={onMenuToggle}
         className="lg:hidden p-1.5 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg transition-colors"
@@ -82,7 +81,6 @@ export default function Header({ onMenuToggle }: HeaderProps) {
         <Menu className="w-4 h-4" />
       </button>
 
-      {/* Search */}
       <div className="hidden md:flex flex-1 max-w-xs relative" ref={searchRef}>
         <div className="relative w-full">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 w-3.5 h-3.5" />
@@ -97,7 +95,6 @@ export default function Header({ onMenuToggle }: HeaderProps) {
           />
         </div>
 
-        {/* Dropdown results */}
         {showResults && results.length > 0 && (
           <div className="absolute top-full left-0 w-full mt-1 bg-white border border-zinc-200 rounded-xl shadow-lg overflow-hidden z-50 animate-in">
             <div className="px-3 py-2 border-b border-zinc-100">
@@ -127,11 +124,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
           </div>
         )}
       </div>
-
-      {/* Right side */}
       <div className="flex items-center gap-1 ml-auto">
-
-        {/* Notifications */}
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
@@ -188,7 +181,6 @@ export default function Header({ onMenuToggle }: HeaderProps) {
 
         <div className="w-px h-5 bg-zinc-200 mx-1 hidden sm:block" />
 
-        {/* User */}
         <Link href="/dashboard/settings" className="flex items-center gap-2 pl-1 group">
           <div className="hidden sm:block text-right">
             <p className="text-xs font-medium text-zinc-800 leading-none">{user?.name}</p>

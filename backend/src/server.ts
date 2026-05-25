@@ -15,7 +15,6 @@ let server: any;
 
 const initializeDatabase = async () => {
   try {
-    // Check if users table exists
     const checkTableQuery = `
       SELECT EXISTS (
         SELECT FROM information_schema.tables 
@@ -25,9 +24,7 @@ const initializeDatabase = async () => {
     const res = await query(checkTableQuery);
     
     if (!res.rows[0].exists) {
-      console.log('📂 Database is empty. Initializing schema...');
-      // Read schema.sql from the root database folder
-      // In production, the path might be different, so we try multiple locations
+      console.log('Database is empty. Initializing schema...');
       const schemaPaths = [
         path.join(__dirname, '../../database/schema.sql'),
         path.join(__dirname, '../database/schema.sql'),
@@ -45,30 +42,26 @@ const initializeDatabase = async () => {
 
       if (schemaSql) {
         await query(schemaSql);
-        console.log('✅ Database initialized successfully');
+        console.log('Database initialized successfully');
       } else {
-        console.warn('⚠️ schema.sql not found. Please initialize database manually.');
+        console.warn('schema.sql not found. Please initialize database manually.');
       }
     }
   } catch (error) {
-    console.error('❌ Database initialization failed:', error);
+    console.error('Database initialization failed:', error);
   }
 };
 
 const startServer = async () => {
   try {
-    // 1. Initialize Database Tables
     await initializeDatabase();
 
-    // 2. Initialize Email Service
     EmailService.initialize();
     
-    // 3. Start background jobs
     JobScheduler.startAll();
 
-    // 4. Seed Categories
     await CategoryModel.seedDefaults();
-    console.log('✅ Default categories seeded');
+    console.log('Default categories seeded');
   } catch (error: any) {
     console.error('Failed during startup:', error);
   }
@@ -76,7 +69,7 @@ const startServer = async () => {
   server = app.listen(PORT, () => {
     console.log(`
 ╔═══════════════════════════════════════╗
-║     💰 SpendGuard API Server         ║
+║     SpendGuard API Server         ║
 ║     Environment: ${process.env.NODE_ENV?.padEnd(18)}║
 ║     Port: ${PORT}                         ║
 ║     URL: http://localhost:${PORT}       ║
@@ -88,10 +81,10 @@ const startServer = async () => {
 startServer();
 
 const gracefulShutdown = () => {
-  console.log('\n🛑 Received shutdown signal, closing server...');
+  console.log('\nReceived shutdown signal, closing server...');
   if (server) {
     server.close(() => {
-      console.log('✅ Server closed successfully');
+      console.log('Server closed successfully');
       process.exit(0);
     });
   } else {
@@ -99,7 +92,7 @@ const gracefulShutdown = () => {
   }
 
   setTimeout(() => {
-    console.error('❌ Forced shutdown');
+    console.error('Forced shutdown');
     process.exit(1);
   }, 10000);
 };

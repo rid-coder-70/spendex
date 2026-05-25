@@ -69,12 +69,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex h-screen overflow-hidden bg-app">
-      {/* Desktop Sidebar */}
       <aside className="hidden lg:block w-56 shrink-0">
         <Sidebar />
       </aside>
 
-      {/* Mobile Sidebar */}
       {isMobileMenuOpen && (
         <>
           <div
@@ -87,7 +85,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </>
       )}
 
-      {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <Header onMenuToggle={() => setIsMobileMenuOpen(prev => !prev)} />
         <main className="flex-1 overflow-y-auto scrollbar-thin">

@@ -65,14 +65,12 @@ export default function UploadPage() {
 
   return (
     <div className="space-y-4 max-w-3xl pb-8">
-      {/* Header */}
       <div>
         <h1 className="text-base font-semibold text-zinc-900">Upload CSV</h1>
         <p className="text-xs text-zinc-400 mt-0.5">Bulk import your transactions via CSV</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Upload area */}
         <div className="md:col-span-2">
           <Card>
             <CardContent className="p-0">
@@ -119,7 +117,6 @@ export default function UploadPage() {
           </Card>
         </div>
 
-        {/* Requirements */}
         <div>
           <Card>
             <CardHeader>
@@ -147,7 +144,6 @@ export default function UploadPage() {
         </div>
       </div>
 
-      {/* Results */}
       {uploadResult && (
         <Card className="animate-in">
           <CardHeader>

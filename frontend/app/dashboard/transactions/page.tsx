@@ -25,7 +25,6 @@ function TransactionsContent() {
     if (q) setSearchTerm(q);
   }, [searchParams]);
 
-  // SWR Fetcher
   const { data: transactionsRes, isLoading } = useSWR(
     ['transactions', currentPage, searchTerm, filterType],
     async ([, page, search, type]) => {
@@ -52,7 +51,6 @@ function TransactionsContent() {
 
   return (
     <div className="space-y-4 pb-8">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-base font-semibold text-zinc-900">Transactions</h1>
@@ -70,9 +68,7 @@ function TransactionsContent() {
         </div>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-2">
-        {/* Search */}
         <div className="relative flex-1 max-w-xs">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
           <input
@@ -83,8 +79,6 @@ function TransactionsContent() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
-        {/* Type filter tabs */}
         <div className="flex p-1 bg-zinc-100 rounded-lg gap-0.5 h-fit">
           {(['all', 'expense', 'income'] as const).map(type => (
             <button
@@ -103,7 +97,6 @@ function TransactionsContent() {
         </div>
       </div>
 
-      {/* List */}
       {isLoading ? (
         <div className="card overflow-hidden">
           {[1,2,3,4,5].map(i => (
@@ -134,7 +127,6 @@ function TransactionsContent() {
             onDelete={handleDelete}
           />
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="px-5 py-3 border-t border-zinc-100 flex items-center justify-between">
               <p className="text-xs text-zinc-400">

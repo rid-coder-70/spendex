@@ -41,7 +41,7 @@ export class ReportService {
     month: number,
     year: number
   ): Promise<MonthlyReportData> {
-    console.log(`📊 Generating report for user ${userId} - ${month}/${year}`);
+    console.log(`Generating report for user ${userId} - ${month}/${year}`);
 
     const userSql = 'SELECT name, email FROM users WHERE id = $1';
     const userResult = await query(userSql, [userId]);
@@ -249,13 +249,13 @@ export class ReportService {
 
       if (sent) {
         console.log(
-          `✅ Monthly report sent to ${reportData.userEmail} for ${month}/${year}`
+          `Monthly report sent to ${reportData.userEmail} for ${month}/${year}`
         );
       }
 
       return sent;
     } catch (error) {
-      console.error('❌ Failed to send monthly report:', error);
+      console.error('Failed to send monthly report:', error);
       return false;
     }
   }
@@ -273,18 +273,18 @@ export class ReportService {
 
       const sent = await EmailService.sendTemplateEmail(
         email,
-        'Welcome to SpendGuard! 🎉',
+        'Welcome to SpendGuard!',
         'welcome',
         data
       );
 
       if (sent) {
-        console.log(`✅ Welcome email sent to ${email}`);
+        console.log(`Welcome email sent to ${email}`);
       }
 
       return sent;
     } catch (error) {
-      console.error('❌ Failed to send welcome email:', error);
+      console.error('Failed to send welcome email:', error);
       return false;
     }
   }
@@ -297,7 +297,7 @@ export class ReportService {
     sent: number;
     failed: number;
   }> {
-    console.log(`📧 Sending monthly reports for ${month}/${year} to all users...`);
+    console.log(`Sending monthly reports for ${month}/${year} to all users...`);
 
     const usersSql = `
       SELECT id, name, email 
@@ -327,13 +327,13 @@ export class ReportService {
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {
-        console.error(`❌ Failed to send report to user ${user.id}:`, error);
+        console.error(`Failed to send report to user ${user.id}:`, error);
         failed++;
       }
     }
 
     console.log(
-      `📊 Monthly reports: ${sent} sent, ${failed} failed out of ${users.length} users`
+      `Monthly reports: ${sent} sent, ${failed} failed out of ${users.length} users`
     );
 
     return {

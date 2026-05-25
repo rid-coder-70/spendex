@@ -73,13 +73,10 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-4 max-w-2xl pb-8">
-      {/* Header */}
       <div>
         <h1 className="text-base font-semibold text-zinc-900">Settings</h1>
         <p className="text-xs text-zinc-400 mt-0.5">Manage your account preferences</p>
       </div>
-
-      {/* Profile */}
       <Card>
         <CardHeader>
           <CardTitle>Profile</CardTitle>
@@ -120,7 +117,6 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Preferences */}
       <Card>
         <CardHeader>
           <CardTitle>Preferences</CardTitle>
@@ -157,7 +153,6 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Notifications */}
       <Card>
         <CardHeader>
           <CardTitle>Notifications</CardTitle>
@@ -185,14 +180,12 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Actions */}
       <div className="flex items-center justify-between pt-1">
         <Button onClick={handleSave} isLoading={isSaving}>
           {isSaving ? 'Saving…' : 'Save changes'}
         </Button>
       </div>
 
-      {/* Danger Zone */}
       <div className="border border-red-200 rounded-xl p-4 bg-red-50">
         <h3 className="text-sm font-semibold text-red-600 mb-1">Danger zone</h3>
         <p className="text-xs text-red-500 mb-3">Deleting your account is irreversible.</p>

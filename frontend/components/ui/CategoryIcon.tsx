@@ -93,7 +93,7 @@ export default function CategoryIcon({ iconName, className = "w-6 h-6" }: Catego
     return <Tag className={className} />;
   }
 
-  // Normalize icon name: lowercase, remove hyphens and spaces
+
   const normalizedName = iconName.toLowerCase().replace(/[-_ ]/g, '').trim();
   const IconComponent = iconMap[normalizedName] || iconMap[iconName.toLowerCase().trim()];
 
@@ -101,6 +101,6 @@ export default function CategoryIcon({ iconName, className = "w-6 h-6" }: Catego
     return <IconComponent className={className} />;
   }
 
-  // Fallback to text if it's an emoji not in our map
+
   return <span className="text-xl leading-none">{iconName}</span>;
 }

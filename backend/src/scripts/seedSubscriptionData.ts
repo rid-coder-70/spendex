@@ -7,7 +7,7 @@ dotenv.config();
 
 async function seedSubscriptionData() {
   try {
-    console.log('🌱 Seeding subscription test data...');
+    console.log('Seeding subscription test data...');
 
     const userId = 1; 
 
@@ -128,11 +128,11 @@ async function seedSubscriptionData() {
       }
     }
 
-    console.log(`✅ Created ${totalCreated} subscription transactions`);
-    console.log('🔍 Running subscription detection...');
+    console.log(`Created ${totalCreated} subscription transactions`);
+    console.log('Running subscription detection...');
     const result = await SubscriptionDetectorService.detectSubscriptions(userId);
 
-    console.log('\n📊 Subscription Detection Results:');
+    console.log('\nSubscription Detection Results:');
     console.log('==========================================');
     console.log(`New subscriptions detected: ${result.new_subscriptions}`);
     console.log(`Updated subscriptions: ${result.updated_subscriptions}`);
@@ -140,7 +140,7 @@ async function seedSubscriptionData() {
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding subscription data:', error);
+    console.error('Error seeding subscription data:', error);
     process.exit(1);
   }
 }

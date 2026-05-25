@@ -21,7 +21,7 @@ export class SubscriptionDetectorService {
 
     const patterns = await this.findRecurringPatterns(userId);
 
-    console.log(`📊 Found ${patterns.length} potential recurring patterns`);
+    console.log(`Found ${patterns.length} potential recurring patterns`);
 
     let newCount = 0;
     let updatedCount = 0;
@@ -101,7 +101,7 @@ export class SubscriptionDetectorService {
     await this.markInactiveSubscriptions(userId);
 
     console.log(
-      `✅ Subscription detection complete: ${newCount} new, ${updatedCount} updated`
+      `Subscription detection complete: ${newCount} new, ${updatedCount} updated`
     );
 
     return {

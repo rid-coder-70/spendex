@@ -101,9 +101,9 @@ export const deleteUploadedFile = (filePath: string): void => {
   try {
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
-      console.log(`✅ Deleted file: ${filePath}`);
+      console.log(`Deleted file: ${filePath}`);
     }
   } catch (error) {
-    console.error(`❌ Error deleting file: ${filePath}`, error);
+    console.error(`Error deleting file: ${filePath}`, error);
   }
 };

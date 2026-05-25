@@ -1,4 +1,4 @@
-# 🖥️ SpendGuard — Frontend Dashboard
+# SpendGuard — Frontend Dashboard
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com)
@@ -7,7 +7,7 @@ The visual heart of SpendGuard. A minimal, high-information-density dashboard bu
 
 ---
 
-## ✨ Features
+## Features
 - **Minimal UI/UX**: Clean, professional design with a focus on data density and usability.
 - **Dynamic Charts**: Interactive financial trends and category breakdowns using Recharts.
 - **Smart Transactions**: Full CRUD support with search, filtering, and pagination.
@@ -17,7 +17,7 @@ The visual heart of SpendGuard. A minimal, high-information-density dashboard bu
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1. Install Dependencies
 ```bash
@@ -40,7 +40,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 - **Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4.x
@@ -51,7 +51,7 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 ```
 frontend/
 ├── app/              # Next.js App Router (Pages & Layouts)
@@ -70,7 +70,7 @@ frontend/
 
 ---
 
-## 🧩 Scripts
+## Scripts
 
 | Command | Description |
 | :--- | :--- |
@@ -81,7 +81,7 @@ frontend/
 
 ---
 
-## 🔗 Related Links
-- [⚙️ Backend README](../backend/README.md)
-- [🌌 Main README](../README.md)
-- [📝 WEEK 8 Summary](../docs/WEEK8_SUMMARY.md)
+## Related Links
+- [Backend README](../backend/README.md)
+- [Main README](../README.md)
+- [WEEK 8 Summary](../docs/WEEK8_SUMMARY.md)

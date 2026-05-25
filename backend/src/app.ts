@@ -101,7 +101,7 @@ app.use((req: Request, res: Response) => {
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error('❌ Error:', err);
+  console.error('Error:', err);
   
   const statusCode = (err as any).statusCode || 500;
   

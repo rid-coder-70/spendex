@@ -49,8 +49,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
 
   return (
     <div className="flex flex-col h-full bg-white border-r border-zinc-100 text-zinc-700">
-
-      {/* Logo */}
       <div className="h-14 flex items-center justify-between px-4 border-b border-zinc-100 shrink-0">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-6 h-6 bg-zinc-900 rounded-md flex items-center justify-center">
@@ -66,7 +64,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
         </button>
       </div>
 
-      {/* User pill */}
       <div className="px-3 py-3 border-b border-zinc-100 shrink-0">
         <div className="flex items-center gap-2.5 px-2 py-2 rounded-lg bg-zinc-50">
           <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center text-white text-xs font-semibold shrink-0">
@@ -79,7 +76,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
         </div>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto scrollbar-thin">
         <p className="section-label px-2 mb-2">Menu</p>
         {navItems.map((item) => {
@@ -101,7 +97,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
         })}
       </nav>
 
-      {/* Logout */}
       <div className="px-3 py-3 border-t border-zinc-100 shrink-0">
         <button
           onClick={handleLogout}

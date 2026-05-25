@@ -14,32 +14,32 @@ SpendGuard is a clean, minimal personal finance management application. It featu
 
 ---
 
-## 🚀 Project Overview
+## Project Overview
 
 SpendGuard is built as a modular full-stack application, providing a seamless bridge between a secure Node.js RESTful API and a modern Next.js frontend.
 
-### ✨ Key Features
-- **📊 Interactive Analytics**: Visualize your spending trends with high-fidelity charts and category-wise breakdowns.
-- **🛡️ Secure Authentication**: JWT-based security with persistent sessions and protected dashboard routing.
-- **📈 Subscription Intelligence**: Automatically detect and track recurring subscriptions with pattern recognition.
-- **📩 Automated Reporting**: Receive weekly and monthly financial summaries directly in your inbox.
-- **📥 CSV Bulk Import**: Batch process 1000+ transactions with intelligent auto-categorization.
-- **📱 Responsive Design**: Fully optimized experience across mobile, tablet, and desktop with a clean, content-focused UI.
+### Key Features
+- **Interactive Analytics**: Visualize your spending trends with high-fidelity charts and category-wise breakdowns.
+- **Secure Authentication**: JWT-based security with persistent sessions and protected dashboard routing.
+- **Subscription Intelligence**: Automatically detect and track recurring subscriptions with pattern recognition.
+- **Automated Reporting**: Receive weekly and monthly financial summaries directly in your inbox.
+- **CSV Bulk Import**: Batch process 1000+ transactions with intelligent auto-categorization.
+- **Responsive Design**: Fully optimized experience across mobile, tablet, and desktop with a clean, content-focused UI.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The project is organized into two primary micro-modules:
 
 | Component | Responsibility | Technology |
 | :--- | :--- | :--- |
-| [**🖥️ Frontend**](./frontend/README.md) | User Interface & Experience | Next.js 14, Tailwind CSS |
-| [**⚙️ Backend**](./backend/README.md) | Business Logic & API Layer | Node.js, Express, PostgreSQL |
+| [**Frontend**](./frontend/README.md) | User Interface & Experience | Next.js 14, Tailwind CSS |
+| [**Backend**](./backend/README.md) | Business Logic & API Layer | Node.js, Express, PostgreSQL |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework**: Next.js 14 (App Router)
@@ -57,7 +57,7 @@ The project is organized into two primary micro-modules:
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -67,8 +67,8 @@ The project is organized into two primary micro-modules:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/spendguard.git
-   cd spendguard
+   git clone https://github.com/rid-coder-70/spendx.git
+   cd spendx
    ```
 
 2. **Setup Backend**
@@ -79,25 +79,25 @@ The project is organized into two primary micro-modules:
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 For detailed information on specific modules, refer to our comprehensive documentation:
-- 🗺️ **[Full Setup Guide](./docs/SETUP.md)**
-- 📡 **[API Documentation](./docs/api/README.md)**
-- 🗄️ **[Database Schema](./database/schema.sql)**
-- 🚀 **[Deployment Guide](./docs/DEPLOYMENT.md)**
-- 📧 **[Email Configuration](./docs/EMAIL_SETUP.md)**
+- **[Full Setup Guide](./docs/SETUP.md)**
+- **[API Documentation](./docs/api/README.md)**
+- **[Database Schema](./database/schema.sql)**
+- **[Deployment Guide](./docs/DEPLOYMENT.md)**
+- **[Email Configuration](./docs/EMAIL_SETUP.md)**
 
 ---
 
-## 📜 Development History
+## Development History
 This project was developed over 8 weeks. Detailed summaries of each phase can be found in the [docs/](./docs/) directory:
 - [Week 8: Final Dashboard & Polishing](./docs/WEEK8_SUMMARY.md)
 - [Deployment Readiness](./docs/DEPLOYMENT.md)
 
 ---
 
-## ⚖️ License
+## License
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ---

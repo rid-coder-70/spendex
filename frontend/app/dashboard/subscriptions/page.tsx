@@ -53,7 +53,6 @@ export default function SubscriptionsPage() {
 
   return (
     <div className="space-y-4 pb-8">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-base font-semibold text-zinc-900">Subscriptions</h1>
@@ -65,7 +64,6 @@ export default function SubscriptionsPage() {
         </button>
       </div>
 
-      {/* Stats */}
       {stats && (
         <div className="grid grid-cols-3 gap-3">
           {[
@@ -80,8 +78,6 @@ export default function SubscriptionsPage() {
           ))}
         </div>
       )}
-
-      {/* Loading */}
       {isLoading && (
         <div className="card overflow-hidden">
           {[1,2,3].map(i => (
@@ -95,8 +91,6 @@ export default function SubscriptionsPage() {
           ))}
         </div>
       )}
-
-      {/* Active subscriptions */}
       {!isLoading && active.length > 0 && (
         <Card>
           <CardHeader>
@@ -130,7 +124,6 @@ export default function SubscriptionsPage() {
         </Card>
       )}
 
-      {/* Cancelled subscriptions */}
       {!isLoading && inactive.length > 0 && (
         <Card>
           <CardHeader>
@@ -158,7 +151,6 @@ export default function SubscriptionsPage() {
         </Card>
       )}
 
-      {/* Empty */}
       {!isLoading && subscriptions.length === 0 && (
         <div className="card p-10">
           <EmptyState

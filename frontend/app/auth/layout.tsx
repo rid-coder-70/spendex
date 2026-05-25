@@ -6,8 +6,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen bg-zinc-50 flex items-center justify-center p-6">
       <div className="w-full max-w-sm animate-in">
-
-        {/* Back link */}
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-700 transition-colors mb-6"
@@ -16,7 +14,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           Back to home
         </Link>
 
-        {/* Logo */}
         <div className="mb-6">
           <Link href="/" className="inline-flex items-center gap-2">
             <div className="w-7 h-7 bg-zinc-900 rounded-lg flex items-center justify-center">
@@ -26,7 +23,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           </Link>
         </div>
 
-        {/* Card */}
         <div className="card p-6">
           {children}
         </div>

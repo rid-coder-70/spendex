@@ -10,7 +10,6 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
 
-          {/* Brand */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 bg-zinc-900 rounded-md flex items-center justify-center">
@@ -23,7 +22,6 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Product */}
           <div>
             <p className="text-xs font-semibold text-zinc-900 mb-3">Product</p>
             <ul className="space-y-2">
@@ -37,7 +35,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
           <div>
             <p className="text-xs font-semibold text-zinc-900 mb-3">Company</p>
             <ul className="space-y-2">
@@ -51,7 +48,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div>
             <p className="text-xs font-semibold text-zinc-900 mb-3">Stay updated</p>
             <p className="text-xs text-zinc-500 mb-3">Financial tips and product updates.</p>
@@ -71,7 +67,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-zinc-400">© {year} SpendGuard. All rights reserved.</p>
           <div className="flex gap-4">

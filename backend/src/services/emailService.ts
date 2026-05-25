@@ -16,7 +16,7 @@ export class EmailService {
 
   static initialize(): boolean {
     if (!validateEmailConfig()) {
-      console.log('📧 Email service disabled - credentials not configured');
+      console.log('Email service disabled - credentials not configured');
       return false;
     }
 
@@ -28,33 +28,33 @@ export class EmailService {
         auth: emailConfig.auth,
       });
 
-      console.log('✅ Email service initialized');
+      console.log('Email service initialized');
       return true;
     } catch (error) {
-      console.error('❌ Failed to initialize email service:', error);
+      console.error('Failed to initialize email service:', error);
       return false;
     }
   }
 
   static async verifyConnection(): Promise<boolean> {
     if (!this.transporter) {
-      console.log('📧 Email transporter not initialized');
+      console.log('Email transporter not initialized');
       return false;
     }
 
     try {
       await this.transporter.verify();
-      console.log('✅ Email server connection verified');
+      console.log('Email server connection verified');
       return true;
     } catch (error) {
-      console.error('❌ Email server connection failed:', error);
+      console.error('Email server connection failed:', error);
       return false;
     }
   }
 
   static async sendEmail(options: EmailOptions): Promise<boolean> {
     if (!this.transporter) {
-      console.log('📧 Email service not available - skipping email');
+      console.log('Email service not available - skipping email');
       return false;
     }
 
@@ -68,10 +68,10 @@ export class EmailService {
       };
 
       const info = await this.transporter.sendMail(mailOptions);
-      console.log(`✅ Email sent: ${info.messageId}`);
+      console.log(`Email sent: ${info.messageId}`);
       return true;
     } catch (error) {
-      console.error('❌ Failed to send email:', error);
+      console.error('Failed to send email:', error);
       return false;
     }
   }

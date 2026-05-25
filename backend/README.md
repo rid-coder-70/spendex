@@ -1,4 +1,4 @@
-# ⚙️ SpendGuard — Backend API
+# SpendGuard — Backend API
 
 [![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=flat-square&logo=express)](https://expressjs.com)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?style=flat-square&logo=postgresql)](https://postgresql.org)
@@ -8,7 +8,7 @@ The engine behind SpendGuard. A robust RESTful API built with Node.js, Express, 
 
 ---
 
-## 🛠️ Features
+## Features
 - **RESTful API**: Clean endpoints for financial management.
 - **JWT Security**: Secure user authentication and authorization.
 - **PostgreSQL Integration**: Optimized database schema with indexing and triggers.
@@ -18,7 +18,7 @@ The engine behind SpendGuard. A robust RESTful API built with Node.js, Express, 
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1. Install Dependencies
 ```bash
@@ -56,7 +56,7 @@ npm run dev
 
 ---
 
-## 🧩 Scripts
+## Scripts
 
 | Command | Description |
 | :--- | :--- |
@@ -67,7 +67,7 @@ npm run dev
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 ```
 backend/
 ├── src/
@@ -84,7 +84,7 @@ backend/
 
 ---
 
-## 🔗 Related Links
-- [🖥️ Frontend README](../frontend/README.md)
-- [🌌 Main README](../README.md)
-- [🚀 Deployment Guide](../docs/DEPLOYMENT.md)
+## Related Links
+- [Frontend README](../frontend/README.md)
+- [Main README](../README.md)
+- [Deployment Guide](../docs/DEPLOYMENT.md)
