@@ -33,13 +33,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: backend/package-lock.json
 
       - name: Install dependencies
         working-directory: ./backend
-        run: npm install
+        run: npm ci
 
       - name: TypeScript build
         working-directory: ./backend
@@ -49,3 +49,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5433/spendguard_test
           JWT_SECRET: ci_test_secret
           EMAIL_ENABLED: "false"
+          MONTHLY_REPORT_ENABLED: "false"
+          FRONTEND_URL: "http://localhost:3000"
+          MAX_FILE_SIZE: "5242880"
+          ALLOWED_FILE_TYPES: "text/csv,application/vnd.ms-excel"
