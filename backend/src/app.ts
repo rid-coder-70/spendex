@@ -13,6 +13,7 @@ import analyticsRoutes from './routes/analyticsRoutes';
 import subscriptionRoutes from './routes/subscriptionRoutes';
 import reportRoutes from './routes/reportRoutes';
 import publicRoutes from './routes/publicRoutes';
+import webhookRoutes from './routes/webhook.routes';
 
 dotenv.config();
 
@@ -90,6 +91,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/public', publicRoutes);
+app.use('/api/webhooks', webhookRoutes);
 
 app.use((req: Request, res: Response) => {
   res.status(404).json({
