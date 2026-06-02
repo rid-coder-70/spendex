@@ -22,27 +22,40 @@ const app: Application = express();
 app.use(helmet());
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: 'Too many requests from this IP, please try again later.',
 });
 app.use('/api/', limiter);
 
-// Allowed origins: localhost for dev + FRONTEND_URL env var for production (set on Render)
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
-];
+const envFrontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : null;
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (Postman, curl, mobile apps)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+      
+      // Strip trailing slash from incoming origin just in case
+      const cleanOrigin = origin.replace(/\/$/, '');
+      
+      // Allowed exact matches
+      const allowedExact = [
+        'http://localhost:3000',
+        'http://localhost:3001',
+      ];
+      
+      if (envFrontendUrl) allowedExact.push(envFrontendUrl);
+      
+      if (allowedExact.includes(cleanOrigin)) {
         return callback(null, true);
       }
+      
+      // Fallback: allow any Vercel deployment preview or main domain for SpendGuard
+      if (cleanOrigin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      
       callback(new Error(`CORS blocked: ${origin} not in allowed list`));
     },
     credentials: true,
