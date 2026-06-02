@@ -6,9 +6,15 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  build:
-    name: Build & Type Check
+  # ─────────────────────────────────────────
+  # JOB 1: Backend — Build & Type Check
+  # ─────────────────────────────────────────
+  backend:
+    name: 🔧 Backend — Build & Type Check
     runs-on: ubuntu-latest
 
     services:
@@ -30,7 +36,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -53,3 +59,92 @@ jobs:
           FRONTEND_URL: "http://localhost:3000"
           MAX_FILE_SIZE: "5242880"
           ALLOWED_FILE_TYPES: "text/csv,application/vnd.ms-excel"
+
+      - name: Verify dist output exists
+        run: |
+          echo "✅ Checking compiled output..."
+          ls backend/dist/server.js
+          echo "Build artifacts verified."
+
+  # ─────────────────────────────────────────
+  # JOB 2: Backend — Security Audit
+  # ─────────────────────────────────────────
+  audit:
+    name: 🔒 Security Audit
+    runs-on: ubuntu-latest
+    needs: backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Backend — npm audit
+        working-directory: ./backend
+        run: npm audit --audit-level=high || true
+
+      - name: Frontend — npm audit
+        working-directory: ./frontend
+        run: npm audit --audit-level=high || true
+
+  # ─────────────────────────────────────────
+  # JOB 3: Frontend — Build Check
+  # ─────────────────────────────────────────
+  frontend:
+    name: 🎨 Frontend — Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Next.js build
+        working-directory: ./frontend
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:5000/api
+
+  # ─────────────────────────────────────────
+  # JOB 4: Summary — All checks passed
+  # ─────────────────────────────────────────
+  summary:
+    name: ✅ All Checks Passed
+    runs-on: ubuntu-latest
+    needs: [backend, frontend, audit]
+    if: always()
+
+    steps:
+      - name: Check all jobs
+        run: |
+          echo "Backend  : ${{ needs.backend.result }}"
+          echo "Frontend : ${{ needs.frontend.result }}"
+          echo "Audit    : ${{ needs.audit.result }}"
+
+          if [[ "${{ needs.backend.result }}" != "success" ]]; then
+            echo "❌ Backend build failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.frontend.result }}" != "success" ]]; then
+            echo "❌ Frontend build failed"
+            exit 1
+          fi
+
+          echo "✅ All CI checks passed successfully!"
