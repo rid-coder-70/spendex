@@ -9,6 +9,8 @@ import { apiClient } from '@/lib/api/client';
 import { validateEmail, validatePassword } from '@/lib/utils';
 import { toast } from '@/lib/stores/toastStore';
 import { cn } from '@/lib/utils';
+import { Eye, EyeOff } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -17,6 +19,8 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string; confirmPassword?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -85,23 +89,64 @@ export default function RegisterPage() {
           { id: 'email',           label: 'Email',           type: 'email',    placeholder: 'you@example.com' },
           { id: 'password',        label: 'Password',        type: 'password', placeholder: '••••••••' },
           { id: 'confirmPassword', label: 'Confirm password', type: 'password', placeholder: '••••••••' },
-        ].map(({ id, label, type, placeholder }) => (
-          <div key={id}>
-            <label htmlFor={id} className="block text-xs font-medium text-zinc-600 mb-1">{label}</label>
-            <input
-              type={type}
-              id={id}
-              name={id}
-              value={formData[id as keyof typeof formData]}
-              onChange={handleChange}
-              className={cn('input', errors[id as keyof typeof errors] && 'border-red-400 focus:border-red-400')}
-              placeholder={placeholder}
-            />
-            {errors[id as keyof typeof errors] && (
-              <p className="mt-1 text-xs text-red-500">{errors[id as keyof typeof errors]}</p>
-            )}
-          </div>
-        ))}
+        ].map(({ id, label, type, placeholder }) => {
+          const isPasswordField = type === 'password';
+          const isConfirm = id === 'confirmPassword';
+          const showState = isConfirm ? showConfirmPassword : showPassword;
+          const setShowState = isConfirm ? setShowConfirmPassword : setShowPassword;
+          const inputType = isPasswordField ? (showState ? 'text' : 'password') : type;
+
+          return (
+            <div key={id}>
+              <label htmlFor={id} className="block text-xs font-medium text-zinc-600 mb-1">{label}</label>
+              <div className="relative">
+                <input
+                  type={inputType}
+                  id={id}
+                  name={id}
+                  value={formData[id as keyof typeof formData]}
+                  onChange={handleChange}
+                  className={cn('input', isPasswordField && 'pr-10', errors[id as keyof typeof errors] && 'border-red-400 focus:border-red-400')}
+                  placeholder={placeholder}
+                />
+                {isPasswordField && (
+                  <button
+                    type="button"
+                    onClick={() => setShowState(!showState)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none transition-colors"
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {showState ? (
+                        <motion.div
+                          key="eye-off"
+                          initial={{ opacity: 0, scale: 0.8, rotate: -45 }}
+                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                          exit={{ opacity: 0, scale: 0.8, rotate: 45 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <EyeOff size={16} />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="eye"
+                          initial={{ opacity: 0, scale: 0.8, rotate: 45 }}
+                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                          exit={{ opacity: 0, scale: 0.8, rotate: -45 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <Eye size={16} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                )}
+              </div>
+              {errors[id as keyof typeof errors] && (
+                <p className="mt-1 text-xs text-red-500">{errors[id as keyof typeof errors]}</p>
+              )}
+            </div>
+          );
+        })}
 
         <button
           type="submit"

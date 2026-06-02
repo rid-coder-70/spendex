@@ -26,7 +26,8 @@ const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return 'Good morning';
   if (hour < 18) return 'Good afternoon';
-  return 'Good evening';
+  if (hour < 20) return 'Good evening';
+  return 'Good night';
 };
 
 export default function DashboardPage() {
@@ -58,30 +59,50 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!user) return;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          try {
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`);
-            const data = await res.json();
-            if (data.current_weather) {
-              setWeather({
-                temp: data.current_weather.temperature,
-                description: '°C Local Weather',
-              });
-            }
-          } catch (e) {
-            console.error('Weather fetch failed', e);
-          }
-        },
-        () => {
-          fetch('https://api.open-meteo.com/v1/forecast?latitude=23.81&longitude=90.41&current_weather=true')
-            .then(res => res.json())
-            .then(data => setWeather({ temp: data.current_weather.temperature, description: '°C (Dhaka)' }))
-            .catch(console.error);
+    
+    const fetchWeather = async () => {
+      try {
+        const geoRes = await fetch('https://get.geojs.io/v1/ip/geo.json');
+        if (!geoRes.ok) throw new Error('Geo API failed');
+        
+        const geoData = await geoRes.json();
+        const lat = Number(geoData.latitude);
+        const lon = Number(geoData.longitude);
+        const city = geoData.city || geoData.region || geoData.country || 'Local';
+        
+        if (isNaN(lat) || isNaN(lon)) throw new Error('Invalid coordinates');
+        
+        const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        if (!weatherRes.ok) throw new Error('Weather API failed');
+        
+        const weatherData = await weatherRes.json();
+        
+        if (weatherData.current_weather) {
+          setWeather({
+            temp: weatherData.current_weather.temperature,
+            description: `°C (${city})`,
+          });
+          return;
         }
-      );
-    }
+      } catch (e) {
+        // Silently catch the primary fetch failure to avoid Next.js error overlays
+      }
+      
+      // Fallback
+      try {
+        const fallbackRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.81&longitude=90.41&current_weather=true');
+        if (fallbackRes.ok) {
+          const fallbackData = await fallbackRes.json();
+          if (fallbackData.current_weather) {
+            setWeather({ temp: fallbackData.current_weather.temperature, description: '°C (Dhaka)' });
+          }
+        }
+      } catch (e) {
+        // Silently catch the fallback failure as well (e.g., if adblocker blocks open-meteo)
+      }
+    };
+
+    fetchWeather();
   }, [user]);
 
   const monthLabel = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });

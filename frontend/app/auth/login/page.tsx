@@ -8,6 +8,8 @@ import { authAPI } from '@/lib/api';
 import { apiClient } from '@/lib/api/client';
 import { validateEmail } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { Eye, EyeOff } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -16,6 +18,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -83,15 +86,46 @@ export default function LoginPage() {
 
         <div>
           <label htmlFor="password" className="block text-xs font-medium text-zinc-600 mb-1">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className={cn('input', errors.password && 'border-red-400 focus:border-red-400')}
-            placeholder="••••••••"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className={cn('input pr-10', errors.password && 'border-red-400 focus:border-red-400')}
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 focus:outline-none transition-colors"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {showPassword ? (
+                  <motion.div
+                    key="eye-off"
+                    initial={{ opacity: 0, scale: 0.8, rotate: -45 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotate: 45 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <EyeOff size={16} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="eye"
+                    initial={{ opacity: 0, scale: 0.8, rotate: 45 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotate: -45 }}
+                    transition={{ duration: 0.15 }}
+                  >
+                    <Eye size={16} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
           {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password}</p>}
         </div>
 
