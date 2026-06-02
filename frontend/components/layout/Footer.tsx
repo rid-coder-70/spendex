@@ -25,10 +25,15 @@ export default function Footer() {
           <div>
             <p className="text-xs font-semibold text-zinc-900 mb-3">Product</p>
             <ul className="space-y-2">
-              {['Features', 'How it Works', 'Pricing', 'Dashboard'].map(item => (
-                <li key={item}>
-                  <Link href="#" className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors">
-                    {item}
+              {[
+                { label: 'Features', href: '/features' },
+                { label: 'How it Works', href: '/how-it-works' },
+                { label: 'Pricing', href: '/pricing' },
+                { label: 'Dashboard', href: '/dashboard' },
+              ].map(item => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors">
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -38,10 +43,15 @@ export default function Footer() {
           <div>
             <p className="text-xs font-semibold text-zinc-900 mb-3">Company</p>
             <ul className="space-y-2">
-              {['About Us', 'Careers', 'Privacy Policy', 'Terms of Service'].map(item => (
-                <li key={item}>
-                  <Link href="#" className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors">
-                    {item}
+              {[
+                { label: 'About Us', href: '/about' },
+                { label: 'Careers', href: '/careers' },
+                { label: 'Privacy Policy', href: '/privacy' },
+                { label: 'Terms of Service', href: '/terms' },
+              ].map(item => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-xs text-zinc-500 hover:text-zinc-900 transition-colors">
+                    {item.label}
                   </Link>
                 </li>
               ))}
@@ -70,11 +80,8 @@ export default function Footer() {
         <div className="pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-zinc-400">© {year} SpendGuard. All rights reserved.</p>
           <div className="flex gap-4">
-            {['Privacy', 'Terms', 'Cookies'].map(item => (
-              <Link key={item} href="#" className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors">
-                {item}
-              </Link>
-            ))}
+            <Link href="/privacy" className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors">Privacy</Link>
+            <Link href="/terms" className="text-xs text-zinc-400 hover:text-zinc-700 transition-colors">Terms</Link>
           </div>
         </div>
       </div>
