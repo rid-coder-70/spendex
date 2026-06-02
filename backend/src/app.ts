@@ -28,14 +28,25 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// Build allowed origins list from env + hardcoded fallbacks
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://spendguard-one.vercel.app',
+  'https://spendguard-ecru.vercel.app',
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+];
+
 app.use(
   cors({
-    origin: [
-      process.env.FRONTEND_URL || 'http://localhost:3000',
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'https://spendguard-ecru.vercel.app'
-    ],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
     credentials: true,
   })
 );
