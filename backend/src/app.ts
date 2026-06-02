@@ -28,24 +28,22 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
-// Build allowed origins list from env + hardcoded fallbacks
+// Allowed origins: localhost for dev + FRONTEND_URL env var for production (set on Render)
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
-  'https://spendguard-one.vercel.app',
-  'https://spendguard-ecru.vercel.app',
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, Postman)
+      // Allow requests with no origin (Postman, curl, mobile apps)
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      callback(new Error(`CORS: origin ${origin} not allowed`));
+      callback(new Error(`CORS blocked: ${origin} not in allowed list`));
     },
     credentials: true,
   })
