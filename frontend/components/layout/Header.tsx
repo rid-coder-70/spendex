@@ -61,11 +61,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
     }
   };
 
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: 'New Subscription Detected', message: 'We found a new recurring charge for Netflix.', time: '2h ago', unread: true },
-    { id: 2, title: 'Monthly Budget Alert', message: 'You reached 80% of your Food & Dining budget.', time: '5h ago', unread: true },
-    { id: 3, title: 'Weekly Summary Ready', message: 'Your financial overview for last week is ready.', time: '1d ago', unread: false },
-  ]);
+  const [notifications, setNotifications] = useState<{ id: number; title: string; message: string; time: string; unread: boolean }[]>([]);
 
   const unreadCount = notifications.filter(n => n.unread).length;
   const markAllAsRead = () => setNotifications(notifications.map(n => ({ ...n, unread: false })));

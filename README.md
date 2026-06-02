@@ -90,14 +90,7 @@ For detailed information on specific modules, refer to our comprehensive documen
 - **[Deployment Guide](./docs/DEPLOYMENT.md)**
 - **[Email Configuration](./docs/EMAIL_SETUP.md)**
 
----
 
-## Development History
-This project was developed over 8 weeks. Detailed summaries of each phase can be found in the [docs/](./docs/) directory:
-- [Week 8: Final Dashboard & Polishing](./docs/WEEK8_SUMMARY.md)
-- [Deployment Readiness](./docs/DEPLOYMENT.md)
-
----
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.
