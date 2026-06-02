@@ -1,14 +1,14 @@
 {
-  "name": "SpendGuard Premium",
+  "name": "SpendGuard",
   "short_name": "SpendGuard",
-  "description": "Premium Intelligent Expense Tracking",
+  "description": "Track expenses, manage subscriptions, and gain financial insights.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#2563eb",
+  "theme_color": "#18181b",
   "icons": [
     {
-      "src": "/icons/icon.svg",
+      "src": "/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
