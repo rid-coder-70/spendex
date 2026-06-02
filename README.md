@@ -9,6 +9,8 @@
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20Express-339933?style=for-the-badge&logo=nodedotjs)](https://api.spendguard.app)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%2017-4169E1?style=for-the-badge&logo=postgresql)](https://postgresql.org)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
+[![CI](https://github.com/rid-coder-70/spendex/actions/workflows/ci.yml/badge.svg)](https://github.com/rid-coder-70/spendex/actions/workflows/ci.yml)
+
 
 SpendGuard is a clean, minimal personal finance management application. It features a compact, professional SaaS interface alongside robust financial tracking, automated reports, and intelligent data analysis.
 
