@@ -5,10 +5,10 @@ import Footer from '@/components/layout/Footer';
 import { Heart, Target, Lightbulb, Users, ArrowRight, Code2, Globe, Mail } from 'lucide-react';
 
 const values = [
-  { icon: Heart, title: 'Built with care', desc: 'Every feature in SpendGuard was built by someone who wanted better personal finance tooling — not just another CRUD app.', color: 'bg-rose-50 text-rose-500' },
-  { icon: Target, title: 'Focused on clarity', desc: 'We believe financial software should show you exactly what you need and hide everything that distracts you.', color: 'bg-blue-50 text-blue-500' },
-  { icon: Lightbulb, title: 'Smart by default', desc: 'Auto-categorization, subscription detection, trend forecasting — intelligence that works without manual configuration.', color: 'bg-amber-50 text-amber-500' },
-  { icon: Users, title: 'Privacy first', desc: 'We don\'t sell your data, share it with third parties, or use it for advertising. Your finances are your business.', color: 'bg-emerald-50 text-emerald-500' },
+  { icon: Heart,     title: 'Built with care',      desc: "Every feature in SpendGuard was built by someone who wanted better personal finance tooling — not just another CRUD app.",                             color: 'bg-rose-50',    iconColor: 'text-rose-500',    hoverIcon: 'group-hover:bg-rose-500'    },
+  { icon: Target,    title: 'Focused on clarity',   desc: 'We believe financial software should show you exactly what you need and hide everything that distracts you.',                                     color: 'bg-blue-50',    iconColor: 'text-blue-500',    hoverIcon: 'group-hover:bg-blue-500'    },
+  { icon: Lightbulb, title: 'Smart by default',     desc: 'Auto-categorization, subscription detection, trend forecasting — intelligence that works without manual configuration.',                          color: 'bg-amber-50',   iconColor: 'text-amber-500',   hoverIcon: 'group-hover:bg-amber-500'   },
+  { icon: Users,     title: 'Privacy first',        desc: "We don't sell your data, share it with third parties, or use it for advertising. Your finances are your business.",                               color: 'bg-emerald-50', iconColor: 'text-emerald-500', hoverIcon: 'group-hover:bg-emerald-500' },
 ];
 
 const team = [
@@ -61,11 +61,11 @@ export default function AboutPage() {
               <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Our values</p>
               <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">What we stand for</h2>
             </div>
-            <div className="grid sm:grid-cols-2 gap-5">
-              {values.map(({ icon: Icon, title, desc, color }) => (
-                <div key={title} className="card p-6 hover:border-zinc-300 transition-all">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${color.split(' ')[0]}`}>
-                    <Icon className={`w-5 h-5 ${color.split(' ')[1]}`} />
+            <div className="grid sm:grid-cols-2 gap-4">
+              {values.map(({ icon: Icon, title, desc, color, iconColor, hoverIcon }) => (
+                <div key={title} className="feature-card group">
+                  <div className={`feature-icon ${color} ${hoverIcon} transition-all duration-300`}>
+                    <Icon className={`w-5 h-5 ${iconColor} group-hover:text-white transition-colors duration-300`} />
                   </div>
                   <h3 className="text-sm font-semibold text-zinc-900 mb-2">{title}</h3>
                   <p className="text-xs text-zinc-500 leading-relaxed">{desc}</p>
@@ -84,21 +84,42 @@ export default function AboutPage() {
             </div>
             <div className="flex justify-center">
               {team.map(({ name, role, bio, initials, github, linkedin, email }) => (
-                <div key={name} className="card p-8 max-w-sm w-full text-center">
-                  <div className="w-20 h-20 rounded-full bg-zinc-900 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div key={name} className="testimonial-card p-8 max-w-sm w-full text-center group">
+                  {/* Avatar with ring on hover */}
+                  <div className="testimonial-avatar w-20 h-20 text-2xl font-bold mx-auto mb-4">
                     {initials}
                   </div>
                   <h3 className="text-base font-semibold text-zinc-900 mb-0.5">{name}</h3>
                   <p className="text-xs text-blue-600 font-medium mb-3">{role}</p>
-                  <p className="text-xs text-zinc-500 leading-relaxed mb-5">{bio}</p>
-                  <div className="flex justify-center gap-3">
-                    <a href={github} target="_blank" rel="noreferrer" className="p-2 rounded-lg border border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors">
+                  <p className="text-xs text-zinc-500 leading-relaxed mb-5 relative z-10">{bio}</p>
+                  {/* Social icons — individual color glow on hover */}
+                  <div className="flex justify-center gap-3 relative z-10">
+                    <a
+                      href={github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-2 rounded-lg border border-zinc-200 text-zinc-500 transition-all duration-300
+                                 hover:text-zinc-900 hover:border-zinc-400 hover:bg-zinc-50 hover:-translate-y-0.5
+                                 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+                    >
                       <Code2 className="w-4 h-4" />
                     </a>
-                    <a href={linkedin} target="_blank" rel="noreferrer" className="p-2 rounded-lg border border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors">
+                    <a
+                      href={linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-2 rounded-lg border border-zinc-200 text-zinc-500 transition-all duration-300
+                                 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 hover:-translate-y-0.5
+                                 hover:shadow-[0_4px_12px_rgba(59,130,246,0.2)]"
+                    >
                       <Globe className="w-4 h-4" />
                     </a>
-                    <a href={`mailto:${email}`} className="p-2 rounded-lg border border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:border-zinc-400 transition-colors">
+                    <a
+                      href={`mailto:${email}`}
+                      className="p-2 rounded-lg border border-zinc-200 text-zinc-500 transition-all duration-300
+                                 hover:text-emerald-600 hover:border-emerald-300 hover:bg-emerald-50 hover:-translate-y-0.5
+                                 hover:shadow-[0_4px_12px_rgba(16,185,129,0.2)]"
+                    >
                       <Mail className="w-4 h-4" />
                     </a>
                   </div>
@@ -115,14 +136,16 @@ export default function AboutPage() {
               <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Timeline</p>
               <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">Our journey</h2>
             </div>
-            <div className="space-y-4">
-              {milestones.map(({ year, event }) => (
-                <div key={event} className="flex gap-4 items-start">
-                  <div className="shrink-0 w-20 text-right">
-                    <span className="text-xs font-semibold text-blue-600">{year}</span>
+            <div className="space-y-3">
+              {milestones.map(({ year, event }, index) => (
+                <div key={event} className="step-card flex gap-4 items-start">
+                  {/* Step number replaced with year badge */}
+                  <div className="shrink-0">
+                    <span className="step-number text-[10px] w-auto px-2.5 h-7 flex items-center">
+                      {year}
+                    </span>
                   </div>
-                  <div className="w-px bg-zinc-200 self-stretch mx-2" />
-                  <p className="text-sm text-zinc-700 leading-relaxed pb-4">{event}</p>
+                  <p className="step-title text-xs font-normal text-zinc-600 leading-relaxed pt-1">{event}</p>
                 </div>
               ))}
             </div>
@@ -132,14 +155,18 @@ export default function AboutPage() {
         {/* CTA */}
         <section className="py-16 px-6">
           <div className="max-w-xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mb-3">Join thousands already using SpendGuard</h2>
+            <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mb-3">
+              Join thousands already using SpendGuard
+            </h2>
             <p className="text-sm text-zinc-500 mb-6">Start for free. No card required. Be in control of your money.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/auth/register" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors">
-                Get started free <ArrowRight className="w-4 h-4" />
+              <Link href="/auth/register" className="btn-primary px-5 py-2.5">
+                <span className="relative z-10 flex items-center gap-2">
+                  Get started free <ArrowRight className="w-4 h-4" />
+                </span>
               </Link>
-              <Link href="/careers" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-zinc-700 text-sm font-medium border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors">
-                We&apos;re hiring →
+              <Link href="/careers" className="btn-secondary px-5 py-2.5">
+                <span className="relative z-10">We&apos;re hiring →</span>
               </Link>
             </div>
           </div>

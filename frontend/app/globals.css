@@ -60,8 +60,8 @@
     @apply opacity-100;
   }
   .feature-card:hover .feature-icon {
-    @apply bg-blue-600 text-white scale-110;
-    box-shadow: 0 6px 16px rgba(59,130,246,0.35);
+    @apply scale-110;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
   }
   .feature-card:hover .feature-icon svg {
     @apply text-white;
