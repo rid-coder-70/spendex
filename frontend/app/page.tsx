@@ -55,16 +55,16 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/auth/register"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors"
+                className="btn-primary px-5 py-2.5"
               >
-                Get started free
+                <span>Get started free</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="#how-it-works"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-zinc-700 text-sm font-medium border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors"
+                className="btn-secondary px-5 py-2.5"
               >
-                See how it works
+                <span>See how it works</span>
               </Link>
             </div>
 
@@ -167,8 +167,8 @@ export default function Home() {
                 { title: 'Mobile Ready',         desc: 'Fully responsive — works perfectly on any screen size.',                      icon: Smartphone },
                 { title: 'Trend Analysis',       desc: 'Track your net worth over time and forecast future spending.',                 icon: TrendingUp },
               ].map(({ title, desc, icon: Icon }) => (
-                <div key={title} className="card p-5 hover:border-zinc-300 hover:shadow-sm transition-all">
-                  <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center mb-3">
+                <div key={title} className="feature-card">
+                  <div className="feature-icon">
                     <Icon className="w-4 h-4 text-zinc-600" />
                   </div>
                   <h3 className="text-sm font-semibold text-zinc-900 mb-1">{title}</h3>
@@ -186,16 +186,16 @@ export default function Home() {
               <h2 className="text-2xl font-bold text-zinc-900 tracking-tight">Up and running in minutes</h2>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 { step: '01', title: 'Create account', desc: 'Sign up for free in under 60 seconds.' },
                 { step: '02', title: 'Add data',        desc: 'Enter transactions manually or upload a CSV.' },
                 { step: '03', title: 'Get insights',    desc: 'See categorized spending and trends instantly.' },
                 { step: '04', title: 'Take control',    desc: 'Make better decisions with clear financial data.' },
               ].map(({ step, title, desc }) => (
-                <div key={step} className="relative">
-                  <span className="text-[11px] font-semibold text-zinc-400">{step}</span>
-                  <h3 className="text-sm font-semibold text-zinc-900 mt-2 mb-1">{title}</h3>
+                <div key={step} className="step-card">
+                  <span className="step-number">{step}</span>
+                  <h3 className="step-title">{title}</h3>
                   <p className="text-xs text-zinc-500 leading-relaxed">{desc}</p>
                 </div>
               ))}
@@ -216,24 +216,35 @@ export default function Home() {
                   author: 'Sarah Jenkins',
                   role: 'Product Designer',
                   initials: 'SJ',
+                  stars: 5,
                 },
                 {
                   quote: 'The predictive analytics saved me from three bad decisions in my first month.',
                   author: 'Michael Chen',
                   role: 'Founder @ TechFlow',
                   initials: 'MC',
+                  stars: 5,
                 },
                 {
                   quote: 'Unmatched speed and simplicity. This is the standard for how fintech should feel.',
                   author: 'Emma Rodriguez',
                   role: 'Venture Partner',
                   initials: 'ER',
+                  stars: 5,
                 },
               ].map(t => (
-                <div key={t.author} className="card p-5">
-                  <p className="text-sm text-zinc-700 leading-relaxed mb-4">"{t.quote}"</p>
+                <div key={t.author} className="testimonial-card">
+                  {/* Star rating */}
+                  <div className="flex gap-0.5 mb-3">
+                    {Array.from({ length: t.stars }).map((_, i) => (
+                      <svg key={i} className="w-3 h-3 text-amber-400 fill-amber-400" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-sm text-zinc-700 leading-relaxed mb-4 relative z-10">&ldquo;{t.quote}&rdquo;</p>
                   <div className="flex items-center gap-2.5 border-t border-zinc-100 pt-4">
-                    <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center text-white text-xs font-semibold shrink-0">
+                    <div className="testimonial-avatar">
                       {t.initials}
                     </div>
                     <div>
@@ -258,16 +269,16 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/auth/register"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition-colors"
+                className="btn-primary px-5 py-2.5"
               >
-                Get started free
+                <span>Get started free</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="#"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-zinc-700 text-sm font-medium border border-zinc-200 rounded-lg hover:bg-zinc-50 transition-colors"
+                className="btn-secondary px-5 py-2.5"
               >
-                Book a demo
+                <span>Book a demo</span>
               </Link>
             </div>
           </div>

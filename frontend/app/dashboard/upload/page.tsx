@@ -108,7 +108,7 @@ export default function UploadPage() {
                     <p className="text-xs text-zinc-400 mb-4">CSV files up to 10MB</p>
                     <label className="btn-primary px-4 py-2 text-sm rounded-lg cursor-pointer">
                       <input type="file" accept=".csv" onChange={handleFileChange} className="hidden" />
-                      Select file
+                      <span className="relative z-10">Select file</span>
                     </label>
                   </div>
                 )}

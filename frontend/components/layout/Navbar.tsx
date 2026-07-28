@@ -73,26 +73,31 @@ export default function Navbar() {
           {mounted && isAuthenticated ? (
             <Link
               href="/dashboard"
-              className="px-3 py-1.5 text-sm font-medium bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors"
+              className="btn-primary px-3 py-1.5"
             >
-              Dashboard
+              <span className="relative z-10">Dashboard</span>
             </Link>
           ) : (
             <>
               <Link
                 href="/auth/login"
                 className={cn(
-                  'px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
-                  isScrolled ? 'text-zinc-600 hover:bg-zinc-100' : 'text-white/80 hover:text-white'
+                  'px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 relative overflow-hidden active:scale-[0.96]',
+                  isScrolled
+                    ? 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                    : 'text-white/80 hover:text-white hover:bg-white/10'
                 )}
               >
                 Sign in
               </Link>
               <Link
                 href="/auth/register"
-                className="px-3 py-1.5 text-sm font-medium bg-white text-zinc-900 rounded-lg hover:bg-zinc-100 transition-colors"
+                className={cn(
+                  'btn-primary px-3 py-1.5',
+                  !isScrolled && 'bg-white text-zinc-900'
+                )}
               >
-                Get started
+                <span className="relative z-10">Get started</span>
               </Link>
             </>
           )}
@@ -121,26 +126,26 @@ export default function Navbar() {
             {mounted && isAuthenticated ? (
               <Link
                 href="/dashboard"
-                className="py-2 text-center text-sm font-medium bg-zinc-900 text-white rounded-lg"
+                className="btn-primary py-2 text-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Dashboard
+                <span className="relative z-10">Dashboard</span>
               </Link>
             ) : (
               <>
                 <Link
                   href="/auth/login"
-                  className="py-2 text-center text-sm text-zinc-600"
+                  className="py-2 text-center text-sm text-zinc-600 hover:text-zinc-900 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Sign in
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="py-2 text-center text-sm font-medium bg-zinc-900 text-white rounded-lg"
+                  className="btn-primary py-2 text-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Get started
+                  <span className="relative z-10">Get started</span>
                 </Link>
               </>
             )}

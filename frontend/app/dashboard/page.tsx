@@ -144,8 +144,10 @@ export default function DashboardPage() {
           href="/dashboard/transactions"
           className="btn-primary text-xs py-2 px-3"
         >
-          <PlusCircle className="w-3.5 h-3.5" />
-          Add transaction
+          <span className="relative z-10 flex items-center gap-1.5">
+            <PlusCircle className="w-3.5 h-3.5" />
+            Add transaction
+          </span>
         </Link>
       </div>
 
@@ -193,7 +195,7 @@ export default function DashboardPage() {
             <div className="py-12 text-center">
               <p className="text-sm text-zinc-400">No transactions yet.</p>
               <Link href="/dashboard/transactions" className="btn-primary mt-3 mx-auto text-xs">
-                Add your first transaction
+                <span className="relative z-10">Add your first transaction</span>
               </Link>
             </div>
           ) : (

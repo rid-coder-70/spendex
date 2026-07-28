@@ -58,12 +58,16 @@ function TransactionsContent() {
         </div>
         <div className="flex items-center gap-2">
           <button className="btn-secondary text-xs py-1.5">
-            <FileDown className="w-3.5 h-3.5" />
-            Export
+            <span className="relative z-10 flex items-center gap-1.5">
+              <FileDown className="w-3.5 h-3.5" />
+              Export
+            </span>
           </button>
           <button onClick={handleAddNew} className="btn-primary text-xs py-1.5">
-            <Plus className="w-3.5 h-3.5" />
-            Add
+            <span className="relative z-10 flex items-center gap-1.5">
+              <Plus className="w-3.5 h-3.5" />
+              Add
+            </span>
           </button>
         </div>
       </div>
@@ -138,14 +142,14 @@ function TransactionsContent() {
                   disabled={currentPage === 1}
                   onClick={() => setCurrentPage(currentPage - 1)}
                 >
-                  Previous
+                  <span className="relative z-10">Previous</span>
                 </button>
                 <button
                   className="btn-secondary text-xs py-1"
                   disabled={currentPage === totalPages}
                   onClick={() => setCurrentPage(currentPage + 1)}
                 >
-                  Next
+                  <span className="relative z-10">Next</span>
                 </button>
               </div>
             </div>
