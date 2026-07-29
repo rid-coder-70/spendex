@@ -5,8 +5,10 @@ import { Upload, FileText, CheckCircle, XCircle, Download } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { transactionsAPI } from '@/lib/api';
+import { useSWRConfig } from 'swr';
 
 export default function UploadPage() {
+  const { mutate } = useSWRConfig();
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState<any>(null);
@@ -40,7 +42,14 @@ export default function UploadPage() {
     setUploadResult(null);
     try {
       const response = await transactionsAPI.uploadCSV(file);
-      if (response.success) setUploadResult(response.data);
+      if (response.success) {
+        setUploadResult(response.data);
+        // Invalidate all dashboard SWR caches so totals update immediately
+        const now = new Date();
+        await mutate(['monthlySummary', now.getMonth() + 1, now.getFullYear()]);
+        await mutate('recentTransactions');
+        await mutate('subscriptionStats');
+      }
     } catch (error: any) {
       setUploadResult({
         total_rows: 0,

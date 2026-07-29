@@ -151,31 +151,35 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard
-          title="Total Income"
-          value={formatCurrency(summary?.total_income || 0)}
-          icon={TrendingUp}
-          iconColor="bg-emerald-500"
-        />
-        <StatCard
-          title="Total Expenses"
-          value={formatCurrency(summary?.total_expenses || 0)}
-          icon={TrendingDown}
-          iconColor="bg-red-500"
-        />
-        <StatCard
-          title="Net Savings"
-          value={formatCurrency(summary?.net_savings || 0)}
-          icon={PiggyBank}
-          iconColor="bg-blue-500"
-        />
-        <StatCard
-          title="Subscriptions"
-          value={subscriptionStats?.active_subscriptions?.toString() || '0'}
-          icon={Wallet}
-          iconColor="bg-violet-500"
-        />
+
+      <div>
+        <p className="section-label mb-3">This month · {monthLabel}</p>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <StatCard
+            title="Income"
+            value={formatCurrency(summary?.total_income || 0)}
+            icon={TrendingUp}
+            iconColor="bg-emerald-500"
+          />
+          <StatCard
+            title="Expenses"
+            value={formatCurrency(summary?.total_expenses || 0)}
+            icon={TrendingDown}
+            iconColor="bg-red-500"
+          />
+          <StatCard
+            title="Net Savings"
+            value={formatCurrency(summary?.net_savings || 0)}
+            icon={PiggyBank}
+            iconColor="bg-blue-500"
+          />
+          <StatCard
+            title="Subscriptions"
+            value={subscriptionStats?.active_subscriptions?.toString() || '0'}
+            icon={Wallet}
+            iconColor="bg-violet-500"
+          />
+        </div>
       </div>
 
       <Card>

@@ -49,6 +49,50 @@ function TransactionsContent() {
   };
   const handleAddNew  = () => { setSelectedTransaction(null); setIsModalOpen(true); };
 
+  const handleExport = async () => {
+    try {
+      // Fetch all transactions (up to 1000) respecting current filters
+      const filters: any = { page: 1, limit: 1000 };
+      if (searchTerm) filters.merchant = searchTerm;
+      if (filterType !== 'all') filters.type = filterType;
+
+      const res = await transactionsAPI.getAll(filters);
+      const rows: Transaction[] = res?.data?.items || [];
+
+      if (rows.length === 0) {
+        alert('No transactions to export.');
+        return;
+      }
+
+      const headers = ['Date', 'Description', 'Merchant', 'Category', 'Type', 'Amount', 'Payment Method', 'Notes'];
+      const csvRows = [
+        headers.join(','),
+        ...rows.map(t => [
+          t.transaction_date ? new Date(t.transaction_date).toISOString().split('T')[0] : '',
+          `"${(t.description || '').replace(/"/g, '""')}"`,
+          `"${(t.merchant || '').replace(/"/g, '""')}"`,
+          `"${(t.category_name || 'Uncategorized').replace(/"/g, '""')}"`,
+          t.type,
+          t.type === 'expense' ? `-${t.amount}` : `${t.amount}`,
+          `"${(t.payment_method || '').replace(/"/g, '""')}"`,
+          `"${(t.notes || '').replace(/"/g, '""')}"`
+        ].join(','))
+      ];
+
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const today = new Date().toISOString().split('T')[0];
+      link.href = url;
+      link.download = `transactions_${today}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      alert('Failed to export transactions. Please try again.');
+    }
+  };
+
   return (
     <div className="space-y-4 pb-8">
       <div className="flex items-center justify-between">
@@ -57,7 +101,7 @@ function TransactionsContent() {
           <p className="text-xs text-zinc-400 mt-0.5">Manage and monitor every payment</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="btn-secondary text-xs py-1.5">
+          <button onClick={handleExport} className="btn-secondary text-xs py-1.5">
             <span className="relative z-10 flex items-center gap-1.5">
               <FileDown className="w-3.5 h-3.5" />
               Export
